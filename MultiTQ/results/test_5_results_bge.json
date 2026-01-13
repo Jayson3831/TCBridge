@@ -1,0 +1,250 @@
+[
+  [
+    {
+      "idx": 0,
+      "type": "Bridge",
+      "question_text": "Which nation visited Cambodia on 2009-11-10?",
+      "entities": [
+        "Cambodia"
+      ],
+      "subquestions": [],
+      "qd_logprob": 0,
+      "ori": 1,
+      "facts": "Thailand Make a visit Cambodia in 2009-11-10.\nChina Host a visit Cambodia in 2009-10-20.\nCambodia Host a visit Thailand in 2009-11-10.\nThailand Host a visit Cambodia in 2009-11-30.\nThailand Make a visit Cambodia in 2009-11-11.\nCambodia Host a visit Thailand in 2009-11-11.\nChina Host a visit Cambodia in 2009-12-20.\nChina Host a visit Cambodia in 2009-07-09.\nThailand Host a visit Cambodia in 2009-10-25.\nThailand Host a visit Cambodia in 2009-03-11.\nAbhisit Vejjajiva Make a visit Cambodia in 2009-11-09.\nChina Host a visit Cambodia in 2010-03-10.\nThailand Make a visit Cambodia in 2009-11-14.\nAbhisit Vejjajiva Make a visit Cambodia in 2009-11-04.\nCambodia Host a visit Thailand in 2009-11-14.",
+      "answer": [
+        "Thailand 2009-11-10"
+      ],
+      "question": "Which nation visited Cambodia on 2009-11-10?"
+    },
+    {
+      "idx": 1,
+      "question_text": "On 10 Nov 2009, which country paid a visit to Cambodia?",
+      "entities": [],
+      "subquestions": [
+        0
+      ],
+      "gold_answer": [
+        "Thailand"
+      ],
+      "answer_type": "entity",
+      "qlabel": "Single",
+      "time_level": "day",
+      "qtype": "equal",
+      "answer": [
+        "Thailand 2009-11-10"
+      ],
+      "question": "On 10 Nov 2009, which country paid a visit to Cambodia?"
+    }
+  ],
+  [
+    {
+      "idx": 0,
+      "type": "Bridge",
+      "question_text": "Which entity paid a visit to China on 2013-05-08?",
+      "entities": [
+        "China"
+      ],
+      "subquestions": [],
+      "qd_logprob": 0,
+      "ori": 1,
+      "facts": "China Make a visit Middle East in 2013-05-08.\nChina Host a visit South Korea in 2013-05-12.\nMiddle East Host a visit China in 2013-05-08.\nJapan Make a visit China in 2013-08-05.\nChina Host a visit Foreign Affairs (India) in 2013-05-15.\nChina Host a visit Japan in 2013-08-05.\nChina Host a visit Foreign Affairs (India) in 2013-05-13.\nChina Host a visit Foreign Affairs (India) in 2013-05-03.\nChina Host a visit Barack Obama in 2013-05-08.\nChina Host a visit Mahmoud Abbas in 2013-05-08.\nSouth Korea Make a visit China in 2013-05-12.\nChina Host a visit Government Official (Russia) in 2013-12-05.\nChina Host a visit Iran in 2013-10-13.\nChina Host a visit Government Official (Taiwan) in 2013-10-12.\nChina Host a visit Catherine Ashton in 2013-05-01.",
+      "answer": [
+        "Barack Obama 2013-05-08",
+        "Mahmoud Abbas 2013-05-08"
+      ],
+      "question": "Which entity paid a visit to China on 2013-05-08?"
+    },
+    {
+      "idx": 1,
+      "question_text": "Who visited China on 8 May 2013?",
+      "entities": [],
+      "subquestions": [
+        0
+      ],
+      "gold_answer": [
+        "Benjamin Netanyahu",
+        "Antonis Samaras",
+        "Mahmoud Abbas",
+        "Barack Obama"
+      ],
+      "answer_type": "entity",
+      "qlabel": "Single",
+      "time_level": "day",
+      "qtype": "equal",
+      "answer": [
+        "Barack Obama 2013-05-08",
+        "Mahmoud Abbas 2013-05-08"
+      ],
+      "question": "Who visited China on 8 May 2013?"
+    }
+  ],
+  [
+    {
+      "idx": 0,
+      "type": "Bridge",
+      "question_text": "Which country inflicted suffering on Iraq through conventional military forces on 2010-06-13?",
+      "entities": [
+        "Iraq"
+      ],
+      "subquestions": [],
+      "qd_logprob": 0,
+      "ori": 1,
+      "facts": "Iran Use conventional military force Iraq in 2010-06-13.\nIraq Use conventional military force Iran in 2010-03-05.\nFrance Use conventional military force Iraq in 2014-08-10.\nFrance Use conventional military force Iraq in 2014-10-08.\nFrance Use conventional military force Iraq in 2014-10-05.\nJapan Provide military aid Iraq in 2010-08-03.\nNaval (United States) Use conventional military force Iraq in 2010-11-13.\nJapan Provide military aid Iraq in 2010-08-05.\nFrance Use conventional military force Iraq in 2015-04-10.\nIraq Use conventional military force France in 2011-05-10.\nHuman Rights Watch Investigate Iraq in 2010-05-03.\nFrance Demonstrate military or police power Iraq in 2010-11-11.\nFrance Use conventional military force Iraq in 2014-10-01.\nSudan Use conventional military force Iraq in 2012-11-10.\nFrance Use conventional military force Iraq in 2007-05-09.",
+      "answer": [
+        "Iran 2010-06-13"
+      ],
+      "question": "Which country inflicted suffering on Iraq through conventional military forces on 2010-06-13?"
+    },
+    {
+      "idx": 1,
+      "question_text": "Which country made Iraq suffer from conventional military forces on 13 June 2010?",
+      "entities": [],
+      "subquestions": [
+        0
+      ],
+      "gold_answer": [
+        "Iran"
+      ],
+      "answer_type": "entity",
+      "qlabel": "Single",
+      "time_level": "day",
+      "qtype": "equal",
+      "answer": [
+        "Iran 2010-06-13"
+      ],
+      "question": "Which country made Iraq suffer from conventional military forces on 13 June 2010?"
+    }
+  ],
+  [
+    {
+      "idx": 0,
+      "type": "Anchor",
+      "question_text": "What is the date when China praised Yoshihiko Noda?",
+      "entities": [
+        "Yoshihiko Noda",
+        "China"
+      ],
+      "subquestions": [],
+      "qd_logprob": 0,
+      "ori": 2,
+      "facts": [
+        "China Praise or endorse Yoshihiko Noda in 2011-08-29.",
+        "Yoshihiko Noda Praise or endorse China in 2011-11-04.",
+        "Yoshihiko Noda Praise or endorse China in 2011-11-03.",
+        "China Host a visit Yoshihiko Noda in 2011-12-16.",
+        "China Host a visit Yoshihiko Noda in 2011-12-29.",
+        "China Host a visit Yoshihiko Noda in 2011-12-03.",
+        "China Host a visit Yoshihiko Noda in 2011-12-14.",
+        "China Host a visit Yoshihiko Noda in 2011-12-28.",
+        "China Host a visit Yoshihiko Noda in 2011-12-20.",
+        "China Host a visit Yoshihiko Noda in 2011-12-02."
+      ],
+      "most_relevant_date": "2011-08-29",
+      "earliest_date": "2011-08-29",
+      "latest_date": "2011-12-29",
+      "question": "What is the date when China praised Yoshihiko Noda?"
+    },
+    {
+      "idx": 1,
+      "type": "Bridge",
+      "question_text": "Which country was the first to be praised by China after #t?",
+      "entities": [
+        "China"
+      ],
+      "subquestions": [],
+      "qd_logprob": 0,
+      "ori": 2,
+      "facts": "China Praise or endorse Thailand in 2011-04-29.\nChina Praise or endorse France in 2011-06-29.\nChina Praise or endorse France in 2011-08-31.\nChina Praise or endorse Japan in 2011-12-29.\nChina Praise or endorse Japan in 2011-10-28.\nChina Praise or endorse South Africa in 2011-09-30.\nChina Praise or endorse France in 2011-09-01.\nChina Praise or endorse Kazakhstan in 2011-12-20.\nChina Praise or endorse South Korea in 2011-07-21.\nChina Praise or endorse Iran in 2011-09-15.\nChina Praise or endorse Sudan in 2011-08-09.\nChina Praise or endorse Ethiopia in 2011-08-16.\nChina Praise or endorse South Korea in 2011-05-31.\nChina Praise or endorse United Arab Emirates in 2011-07-14.\nChina Praise or endorse African Union in 2011-09-25.",
+      "answer": [
+        "France 2011-08-31"
+      ],
+      "question": "Which country was the first to be praised by China after 2011-08-29?"
+    },
+    {
+      "idx": 2,
+      "question_text": "After Yoshihiko Noda, which country was the first to be praised by China?",
+      "entities": [],
+      "subquestions": [
+        0,
+        1
+      ],
+      "gold_answer": [
+        "France"
+      ],
+      "answer_type": "entity",
+      "qlabel": "Multiple",
+      "time_level": "day",
+      "qtype": "after_first",
+      "answer": [
+        "France 2011-08-31"
+      ],
+      "question": "After Yoshihiko Noda, which country was the first to be praised by China?"
+    }
+  ],
+  [
+    {
+      "idx": 0,
+      "type": "Anchor",
+      "question_text": "What is the date when Xi Jinping made optimistic remarks about Malaysia?",
+      "entities": [
+        "Xi Jinping",
+        "Malaysia"
+      ],
+      "subquestions": [],
+      "qd_logprob": 0,
+      "ori": 2,
+      "facts": [
+        "Xi Jinping Make optimistic comment Malaysia in 2014-11-10.",
+        "China Make optimistic comment Malaysia in 2009-11-12.",
+        "China Make optimistic comment Malaysia in 2014-05-27.",
+        "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-10-01.",
+        "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-10-04.",
+        "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-09-26.",
+        "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-10-03.",
+        "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-09-30.",
+        "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-10-02.",
+        "Malaysia Make optimistic comment China in 2009-11-11."
+      ],
+      "most_relevant_date": "2014-11-10",
+      "earliest_date": "2009-11-11",
+      "latest_date": "2014-11-10",
+      "question": "What is the date when Xi Jinping made optimistic remarks about Malaysia?"
+    },
+    {
+      "idx": 1,
+      "type": "Bridge",
+      "question_text": "Which country made optimistic remarks about Malaysia last before #t?",
+      "entities": [
+        "Malaysia"
+      ],
+      "subquestions": [],
+      "qd_logprob": 0,
+      "ori": 2,
+      "facts": "Xi Jinping Make optimistic comment Malaysia in 2014-11-10.\nChina Make optimistic comment Malaysia in 2014-04-01.\nChina Make optimistic comment Malaysia in 2014-03-31.\nChina Make optimistic comment Malaysia in 2014-05-28.\nChina Make optimistic comment Malaysia in 2014-05-27.\nChina Make optimistic comment Malaysia in 2014-05-29.\nChina Make optimistic comment Malaysia in 2014-09-06.\nChina Make optimistic comment Malaysia in 2009-11-12.\nChina Make optimistic comment Malaysia in 2014-03-26.\nChina Make optimistic comment Malaysia in 2014-06-24.\nMalaysia Make optimistic comment China in 2009-11-10.\nMalaysia Make optimistic comment China in 2009-11-11.\nThailand Make optimistic comment Malaysia in 2013-11-20.\nMalaysia Make optimistic comment China in 2015-04-23.\nMalaysia Make optimistic comment China in 2009-11-12.",
+      "answer": [
+        "China 2014-09-06"
+      ],
+      "question": "Which country made optimistic remarks about Malaysia last before 2014-11-10?"
+    },
+    {
+      "idx": 2,
+      "question_text": "Before Xi Jinping, who was the last country to make optimistic remarks about Malaysia?",
+      "entities": [],
+      "subquestions": [
+        0,
+        1
+      ],
+      "gold_answer": [
+        "China"
+      ],
+      "answer_type": "entity",
+      "qlabel": "Multiple",
+      "time_level": "day",
+      "qtype": "before_last",
+      "answer": [
+        "China 2014-09-06"
+      ],
+      "question": "Before Xi Jinping, who was the last country to make optimistic remarks about Malaysia?"
+    }
+  ]
+]

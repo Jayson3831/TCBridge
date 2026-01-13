@@ -1,0 +1,287 @@
+# Role
+You are an expert in Temporal Knowledge Graph Question Answering (TKGQA).
+
+# Task Description
+You will be provided with complex questions of the "equal_multi" type. These questions generally fall into two categories:
+    1. Explicit Time + Ranking: (e.g., "Who was the first to do Y in 2005?")
+    2. Implicit Time / Shared Event: (e.g., "Who did Y in the same month as X?")
+
+# Step-by-Step Instructions
+Step 1: Decomposition Strategy Identify the question type and apply the corresponding logic to break it into exactly 2 logical sub-questions using the Anchor-Bridge framework.
+    - Type A: Explicit Time + Ranking (First/Last)
+        - Logic: You must first retrieve the candidate pool before applying the ranking.
+        - Subq 1 (Anchor - Candidate Retrieval):
+            - Goal: Generate a query to retrieve all relevant events/entities within the explicit time constraint (ignoring the "first/last" keyword).
+            - Query Intent: "Who/Which countries did Y in [Explicit Time]?"
+        - Subq 2 (Bridge - Ranking Logic):
+            - Goal: Generate a natural language follow-up question that applies the ranking logic to the retrieved context.
+            - Query Intent: "Who was the first/last to [Action] among the candidates?"
+    - Type B: Implicit Time / Shared Event (Same as...)
+        - Logic: You must first identify the timestamp of the reference event before matching it to the target.
+        - Subq 1 (Anchor - Time Retrieval):
+            - Goal: Generate a query to find the timestamp of the reference event.
+            - Query Intent: "When did Event X happen?"
+        - Subq 2 (Bridge - Equivalence):
+            - Goal: Generate a query that uses the retrieved time to find the target. You MUST use the symbol #t as a placeholder for the answer to Subq 1.
+            - Query Intent: "Who did Y in/on #t?"
+Step 2: Entity Extraction For EACH generated sub-question, extract a list of specific Named Entities strictly necessary for that step.
+Step 3: Variation Generation For EACH generated sub-question, generate 3 distinct linguistic variations.
+    - Constraint 1: Do NOT abbreviate entity names.
+    - Constraint 2: Do NOT substitute the core temporal logic keywords (e.g., "first", "last", "same month", "same day") with synonyms that might alter the granularity or logic.
+    - Constraint 3 (Time Format): If a specific date is mentioned or queried, normalize all such time expressions to the international standard time format: Dates → YYYY-MM-DD, Months → YYYY-MM, Years → YYYY.
+
+
+# Examples
+Question: Who was the first to request a meeting with Togo in 2005?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Togo"],
+        "variations": [
+            "Who requested a meeting with Togo in 2005?",
+            "Which entities requested a meeting with Togo during 2005?",
+            "List those who requested a meeting with Togo in the year 2005."
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": [],
+        "variations": [
+            "Who was the first to request a meeting with Togo among the candidates?",
+            "Comparing the retrieved events, who requested a meeting with Togo first?",
+            "Which entity was the first to request a meeting with Togo?"
+        ]
+    },
+]
+
+Question: Which country last praised Iran in 2009?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Iran"],
+        "variations": [
+            "Which countries praised Iran in 2009?",
+            "List the countries that praised Iran during the year 2009?",
+            "Who praised Iran in 2009?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Iran"],
+        "variations": [
+            "Which country was the last to praise Iran among the candidates?",
+            "Who was the last to praise Iran according to the retrieved dates?",
+            "Which of these countries praised Iran last?"
+        ]
+    },
+]
+
+Question: Who hosted the visit of Abdelkader Messahel to Mauritania in the same year?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Abdelkader Messahel", "Mauritania"],
+        "variations": [
+            "When did Abdelkader Messahel visit Mauritania?",
+            "In which year did Abdelkader Messahel visit Mauritania?",
+            "What is the date of Abdelkader Messahel's visit to Mauritania?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Abdelkader Messahel", "Mauritania"],
+        "variations": [
+            "Who hosted the visit of Abdelkader Messahel to Mauritania in #t?",
+            "In the year #t, who hosted the visit of Abdelkader Messahel to Mauritania?",
+            "Who was the host for Abdelkader Messahel's visit to Mauritania in #t?"
+        ]
+    },
+]
+
+Question: Who was the first country to sign formal agreements with Iran in 2007?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Iran"],
+        "variations": [
+            "Which countries signed formal agreements with Iran in 2007?",
+            "Who signed formal agreements with Iran during the year 2007?",
+            "List the countries that signed formal agreements with Iran in 2007."
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": [],
+        "variations": [
+            "Who was the first country to sign formal agreements with Iran among the candidates?",
+            "Which country signed formal agreements with Iran first?",
+            "Among the retrieved entities, who was the first to sign formal agreements with Iran?"
+        ]
+    },
+]
+
+Question: Who praised Iran in the same month as Nacer Mehal?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Nacer Mehal", "Iran"],
+        "variations": [
+            "When did Nacer Mehal praise Iran?",
+            "In which month did Nacer Mehal praise Iran?",
+            "What is the date when Nacer Mehal praised Iran?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Iran"],
+        "variations": [
+            "Who praised Iran in the same month as #t?",
+            "In the month of #t, who praised Iran?",
+            "Who offered praise to Iran in #t?"
+        ]
+    },
+]
+
+Question: Who did Iran give the criticism of the Muslims of Bahrain in the same month?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Iran", "Muslims of Bahrain"],
+        "variations": [
+            "When did Iran give the criticism of the Muslims of Bahrain?",
+            "In which month did Iran give the criticism of the Muslims of Bahrain?",
+            "What is the date when Iran gave the criticism of the Muslims of Bahrain?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Iran"],
+        "variations": [
+            "Who did Iran give the criticism of in the same month as #t?",
+            "In the month of #t, who did Iran give the criticism of?",
+            "Who was the target of Iran's criticism in #t?"
+        ]
+    },
+]
+
+Question: Which country did the envoy of Sudan want to meet on the same day of Qatar?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["envoy of Sudan", "Qatar"],
+        "variations": [
+            "When did the envoy of Sudan want to meet Qatar?",
+            "On which day did the envoy of Sudan want to meet Qatar?",
+            "What is the date when the envoy of Sudan wanted to meet Qatar?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["envoy of Sudan"],
+        "variations": [
+            "Which country did the envoy of Sudan want to meet on #t?",
+            "On the day #t, which country did the envoy of Sudan want to meet?",
+            "Who did the envoy of Sudan want to meet on #t?"
+        ]
+    },
+]
+
+Question: Which country did Colombia negotiate with in the same year as Japan?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Colombia", "Japan"],
+        "variations": [
+            "When did Colombia negotiate with Japan?",
+            "In which year did Colombia negotiate with Japan?",
+            "What is the date when Colombia negotiated with Japan?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Colombia"],
+        "variations": [
+            "Which country did Colombia negotiate with in the same year as #t?",
+            "In the year #t, which country did Colombia negotiate with?",
+            "With whom did Colombia negotiate in #t?"
+        ]
+    },
+]
+
+Question: Who made an appeal to Iran on the same day as Xi Jinping?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Xi Jinping", "Iran"],
+        "variations": [
+            "When did Xi Jinping make an appeal to Iran?",
+            "On which day did Xi Jinping make an appeal to Iran?",
+            "What is the date when Xi Jinping made an appeal to Iran?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Iran"],
+        "variations": [
+            "Who made an appeal to Iran on the same day as #t?",
+            "On the day #t, who made an appeal to Iran?",
+            "Who appealed to Iran on #t?"
+        ]
+    },
+]
+
+Question: With which country did Guatemala last express its willingness to negotiate in 2006?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Guatemala"],
+        "variations": [
+            "With which country did Guatemala express its willingness to negotiate in 2006?",
+            "Who did Guatemala express willingness to negotiate with during 2006?",
+            "List the countries Guatemala was willing to negotiate with in 2006."
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": [],
+        "variations": [
+            "With which country did Guatemala last express its willingness to negotiate among the candidates?",
+            "Comparing the retrieved events, with which country did Guatemala express its willingness to negotiate last?",
+            "Among the retrieved list, which country was the last one Guatemala expressed willingness to negotiate with?"
+        ]
+    },
+]
+
+Question: In 2010, which country was the last to sign formal agreements with Mauritania?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Mauritania"],
+        "variations": [
+            "Which country signed formal agreements with Mauritania in 2010?",
+            "Who signed formal agreements with Mauritania during 2010?",
+            "List the countries that signed formal agreements with Mauritania in 2010."
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": [],
+        "variations": [
+            "Which country was the last to sign formal agreements with Mauritania among the candidates?",
+            "Comparing the timestamps, which country was the last to sign formal agreements with Mauritania?",
+            "Among the retrieved entities, who was the last to sign formal agreements with Mauritania?"
+        ]
+    },
+]
+

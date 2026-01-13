@@ -1,0 +1,161 @@
+# Role
+You are an expert in Temporal Knowledge Graph Question Answering (TKGQA).
+
+# Task Description
+You will be provided with complex questions of the "before_last" type (e.g., "Before Event X, who was the last to do Y?"). Your goal is to decompose the question into a logical chain using the Anchor-Bridge framework, identifying the prerequisite timestamp and then performing the temporal ranking.
+
+# Step-by-Step Instructions
+Step 1: Decomposition Strategy Break the input question into exactly 2 logical sub-questions based on the following definitions:
+    - Subq 1 (Anchor - Reference Retrieval)
+        - Definition: The step responsible for retrieving the prerequisite information required to set the timeline.
+        - Logic: Identify the reference event (Event X) mentioned in the "Before..." clause and query its timestamp.
+        - Goal: "When did Event X happen?"
+    - Subq 2 (Bridge - Filtering & Ranking)
+        - Definition: The step responsible for deriving the final answer by applying logical constraints to the Anchor's result.
+        - Logic: Use the retrieved timestamp (represented as #t) to strictly filter candidate events (must be before #t) AND apply the ranking logic (must be the last among them).
+        - Goal: "Who was the last to do Y before #t?" (You MUST use the symbol #t as a placeholder).
+Step 2: Entity Extraction For EACH generated sub-question, extract a list of specific Named Entities (Countries, Organizations, Persons, Locations) that are strictly necessary to answer that specific step.
+Step 3: Variation Generation For EACH generated sub-question, generate 3 distinct linguistic variations.
+    - Constraint 1: Do NOT abbreviate entity names.
+    - Constraint 2: Do NOT substitute the core temporal logic keywords ("before", "last") with synonyms that might alter the granularity (e.g., do not change "last" to "most recent" if it implies a different data context, keep it consistent).
+
+
+# Examples
+Question: Which country was the last to express optimism about the leader of Ukraine, before Iran?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Iran", "leader of Ukraine"],
+        "variations": [
+            "When did Iran express optimism about the leader of Ukraine?",
+            "At what time did Iran express optimism about the leader of Ukraine?",
+            "What is the date when Iran expressed optimism about the leader of Ukraine?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["leader of Ukraine"],
+        "variations": [
+            "Which country was the last to express optimism about the leader of Ukraine before #t?",
+            "Before #t, which country was the last to express optimism about the leader of Ukraine?",
+            "Who expressed optimism about the leader of Ukraine last before #t?"
+        ]
+    },
+]
+
+Question: Before France, who last wished to meet with Nuri al-Maliki?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["France", "Nuri al-Maliki"],
+        "variations": [
+            "When did France wish to meet with Nuri al-Maliki?",
+            "At what time did France wish to meet with Nuri al-Maliki?",
+            "What is the date when France wished to meet with Nuri al-Maliki?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Nuri al-Maliki"],
+        "variations": [
+            "Who last wished to meet with Nuri al-Maliki before #t?",
+            "Before #t, who last wished to meet with Nuri al-Maliki?",
+            "Who was the last to wish to meet with Nuri al-Maliki before #t?"
+        ]
+    },
+]
+
+Question: Before Tony Blair, which country last did France decline?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["France", "Tony Blair"],
+        "variations": [
+            "When did France decline Tony Blair?",
+            "At what time did France decline Tony Blair?",
+            "What is the date when France declined Tony Blair?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["France"],
+        "variations": [
+            "Which country did France decline last before #t?",
+            "Before #t, which country did France decline last?",
+            "Which country was the last that France declined before #t?"
+        ]
+    },
+]
+
+Question: Who was the last country to be attacked with small arms and light weapons by the Brazilian military before Colombia?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Colombia", "Brazilian military"],
+        "variations": [
+            "When was Colombia attacked with small arms and light weapons by the Brazilian military?",
+            "At what time was Colombia attacked with small arms and light weapons by the Brazilian military?",
+            "What is the date when Colombia was attacked with small arms and light weapons by the Brazilian military?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Brazilian military"],
+        "variations": [
+            "Who was the last country to be attacked with small arms and light weapons by the Brazilian military before #t?",
+            "Before #t, who was the last country to be attacked with small arms and light weapons by the Brazilian military?",
+            "Which country was attacked with small arms and light weapons by the Brazilian military last before #t?"
+        ]
+    },
+]
+
+Question: Who was the last person Winston Peters wanted to meet before Timor-Leste?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Winston Peters", "Timor-Leste"],
+        "variations": [
+            "When did Winston Peters want to meet Timor-Leste?",
+            "At what time did Winston Peters want to meet Timor-Leste?",
+            "What is the date when Winston Peters wanted to meet Timor-Leste?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Winston Peters"],
+        "variations": [
+            "Who was the last person Winston Peters wanted to meet before #t?",
+            "Before #t, who was the last person Winston Peters wanted to meet?",
+            "Who did Winston Peters want to meet last before #t?"
+        ]
+    },
+]
+
+Question: Before Ali Muhammad Mujawar, which country last recommended Japan?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Ali Muhammad Mujawar", "Japan"],
+        "variations": [
+            "When did Ali Muhammad Mujawar recommend Japan?",
+            "At what time did Ali Muhammad Mujawar recommend Japan?",
+            "What is the date when Ali Muhammad Mujawar recommended Japan?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Japan"],
+        "variations": [
+            "Which country last recommended Japan before #t?",
+            "Before #t, which country last recommended Japan?",
+            "Which country was the last to recommend Japan before #t?"
+        ]
+    },
+]
+

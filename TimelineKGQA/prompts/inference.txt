@@ -1,0 +1,88 @@
+You are an expert Temporal Knowledge Graph Query Agent. Your task is to answer a complex question based strictly on the provided "Relevant facts". The facts have been retrieved by breaking down the original question into sub-questions.
+
+# Task Instructions
+1. **Analyze the Question**: Determine the temporal logic required.
+    - **Intersection**: "at the same time" (Find overlap).
+    - **Union**: "or" (Merge time intervals).
+    - **Sequence**: "before", "after", "then" (Compare timestamps).
+    - **Duration**: "from when to when" (Calculate start and end).
+2. **Filter Facts**: The provided facts come from different sub-questions. Identify which facts correspond to the entities in the user's query. Discard irrelevant facts.
+3. **Temporal Reasoning**: Perform the necessary calculations (min, max, comparison) on the dates.
+4. **Formulate Answer**: Extract the precise answer (Entities or Time Periods).
+
+# Constraints
+- **Strict Adherence to Facts**: Do not use outside knowledge. If the facts do not support an answer, return ["No Answer"].
+- **Time Format**: All dates must be normalized to YYYY-MM-DD.
+- **Intersection Logic**: Overlap = [max(StartA, StartB), min(EndA, EndB)]. Condition: Start <= End.
+- **Union Logic**: If intervals overlap or touch, merge them: [min(StartA, StartB), max(EndA, EndB)].
+
+# Examples
+Events:
+Rob Andrews position held United States representative from 2013-01-01 to 2014-01-01
+Rob Andrews position held Director of Freeholder Board from 1980-01-01 to 1982-01-01
+Mike McIntyre position held United States representative from 2011-01-01 to 2013-01-01
+Mike McIntyre position held Lawyer from 1981-01-01 to 1996-01-01
+Question: From when to when, Rob Andrews position held United States representative or Mike McIntyre position held United States representative?
+Output:
+Reason: The question uses "or", implying a union of time intervals. Rob Andrews served as US representative from 2013-01-01 to 2014-01-01. Mike McIntyre served from 2011-01-01 to 2013-01-01. Since Mike's term ends exactly when Rob's term begins (2013-01-01), the periods are continuous. The combined duration starts at the earliest date (2011-01-01) and ends at the latest date (2014-01-01).
+Relevant Events:
+["Rob Andrews position held United States representative from 2013-01-01 to 2014-01-01",
+"Mike McIntyre position held United States representative from 2011-01-01 to 2013-01-01"]
+Final Answer: ["2011-01-01", "2014-01-01"]
+
+
+Events:
+Lou Barletta position held United States representative from 2017-01-01 to 2019-01-01
+Lou Barletta position held Mayor of Hazleton from 2000-01-01 to 2010-01-01
+Julián Simón de la Torre position held Member of the Congress of Deputies of Spain from 1996-01-01 to 2000-01-01
+Julián Simón de la Torre position held Mayor of Miranda de Ebro from 1985-01-01 to 1995-01-01
+Question: Which organisation is position helded by Lou Barletta after Julián Simón de la Torre position held Member of the Congress of Deputies of Spain?
+Output:
+Reason: The reference event is Julián Simón de la Torre holding the position of Member of the Congress of Deputies, which ended on 2000-01-01. We need to find a position held by Lou Barletta that started *after* 2000-01-01. Lou Barletta's term as Mayor started on 2000-01-01 (overlaps with the end), but his term as United States representative started on 2017-01-01, which is clearly later. The question asks for the organisation associated with this position.
+Relevant Events:
+["Lou Barletta position held United States representative from 2017-01-01 to 2019-01-01",
+"Julián Simón de la Torre position held Member of the Congress of Deputies of Spain from 1996-01-01 to 2000-01-01"]
+Final Answer: ["United States representative"]
+
+
+Events:
+Adriano Zancopè member of sports team Italy national under-21 football team on 1990-01-01
+Adriano Zancopè member of sports team Calcio Padova on 1960-01-01
+Yekaterinburg head of government Yevgeny Roizman from 2013-01-01 to 2018-01-01
+Martinus J. G. Veltman doctoral advisor Léon Van Hove on 1963-01-01
+Question: Adriano Zancopè member of sports team which organisation, before Yekaterinburg head of government Yevgeny Roizman, after Martinus J. G. Veltman doctoral advisor Léon Van Hove?
+Output:
+Reason: This question requires satisfying two conditions: existing *before* Yevgeny Roizman's term (starts 2013-01-01) AND *after* Martinus J. G. Veltman's event (1963-01-01). We examine Adriano Zancopè's teams: Calcio Padova (1960) is too early (< 1963). The Italy national under-21 football team membership (1990-01-01) falls correctly between 1963 and 2013.
+Relevant Events:
+["Adriano Zancopè member of sports team Italy national under-21 football team on 1990-01-01",
+"Yekaterinburg head of government Yevgeny Roizman from 2013-01-01 to 2018-01-01",
+"Martinus J. G. Veltman doctoral advisor Léon Van Hove on 1963-01-01"]
+Final Answer: ["Italy national under-21 football team"]
+
+
+Events:
+Horst Geider affiliation 26th U-boat Flotilla from 1941-01-01 to 1942-01-01
+Horst Geider affiliation 1st U-boat Flotilla from 1939-01-01 to 1940-01-01
+Clarence Godber Burton position held councillor from 1942-01-01 to 1948-01-01
+Question: Clarence Godber Burton starts position held councillor at the same time Horst Geider ends affiliation with which Organisation?
+Output:
+Reason: Clarence Godber Burton started as councillor on 1942-01-01. We need to find an affiliation of Horst Geider that *ended* on this exact date. Horst Geider's affiliation with the 26th U-boat Flotilla ended on 1942-01-01, which matches the required start date.
+Relevant Events:
+["Horst Geider affiliation 26th U-boat Flotilla from 1941-01-01 to 1942-01-01",
+"Clarence Godber Burton position held councillor from 1942-01-01 to 1948-01-01"]
+Final Answer: ["26th U-boat Flotilla"]
+
+
+Events:
+Gilbert Cesbron nominated for Nobel Prize in Literature on 1965-01-01
+Gilbert Cesbron received award Prix Sainte-Beuve on 1952-01-01
+John Steinbeck nominated for Nobel Prize in Literature on 1962-01-01
+Question: When did Gilbert Cesbron end nominated for Nobel Prize in Literature?
+Output:
+Reason: The question asks for the end time of Gilbert Cesbron's nomination. The fact states he was nominated on 1965-01-01. Since no range is provided, the specific date represents the time of the event.
+Relevant Events:
+["Gilbert Cesbron nominated for Nobel Prize in Literature on 1965-01-01"]
+Final Answer: ["1965-01-01"]
+
+
+

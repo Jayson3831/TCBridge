@@ -1,0 +1,161 @@
+# Role
+You are an expert in Temporal Knowledge Graph Question Answering (TKGQA).
+
+# Task Description
+You will be provided with complex questions of the "after_first" type (e.g., "After Event X, who was the first to do Y?"). Your goal is to decompose the question into a logical chain using the Anchor-Bridge framework, identifying the prerequisite timestamp and then performing the temporal ranking.
+
+# Step-by-Step Instructions
+Step 1: Decomposition Strategy Break the input question into exactly 2 logical sub-questions based on the following definitions:
+    - Subq 1 (Anchor - Reference Retrieval)
+        - Definition: The step responsible for retrieving the prerequisite information required to set the timeline.
+        - Logic: Identify the reference event (Event X) mentioned in the "After..." clause and query its timestamp.
+        - Goal: "When did Event X happen?"
+    - Subq 2 (Bridge - Filtering & Ranking)
+        - Definition: The step responsible for deriving the final answer by applying logical constraints to the Anchor's result.
+        - Logic: Use the retrieved timestamp (represented as #t) to strictly filter candidate events (must be after #t) AND apply the ranking logic (must be the first among them).
+        - Goal: "Who was the first to do Y after #t?" (You MUST use the symbol #t as a placeholder).
+Step 2: Entity Extraction For EACH generated sub-question, extract a list of specific Named Entities (Countries, Organizations, Persons, Locations) that are strictly necessary to answer that specific step.
+Step 3: Variation Generation For EACH generated sub-question, generate 3 distinct linguistic variations. These should rephrase the question (changing grammatical structure or synonyms) while strictly preserving the original meaning and logic.
+    - Constraint 1: Do NOT abbreviate entity names.
+    - Constraint 2: Do NOT substitute the core temporal logic keywords ("after", "first") with synonyms that might alter the granularity (e.g., do not change "first" to "earliest" if it implies a different data type, keep it consistent).
+
+
+# Examples
+Question: After the International Monetary Fund, with which country did Japan first express its intention to negotiate?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Japan", "International Monetary Fund"],
+        "variations": [
+            "When did Japan express its intention to negotiate with the International Monetary Fund?",
+            "At what time did Japan express its intention to negotiate with the International Monetary Fund?",
+            "What is the date when Japan expressed its intention to negotiate with the International Monetary Fund?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Japan"],
+        "variations": [
+            "With which country did Japan express its intention to negotiate first after #t?",
+            "After #t, with which country did Japan first express its intention to negotiate?",
+            "Which country was the first that Japan expressed its intention to negotiate with after #t?"
+        ]
+    },
+]
+
+Question: Who was the first to visit France after the Royal Administration of Wallis and Futuna?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Royal Administration of Wallis and Futuna", "France"],
+        "variations": [
+            "When did the Royal Administration of Wallis and Futuna visit France?",
+            "At what time did the Royal Administration of Wallis and Futuna visit France?",
+            "What is the date when the Royal Administration of Wallis and Futuna visited France?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["France"],
+        "variations": [
+            "Who was the first to visit France after #t?",
+            "After #t, who was the first to visit France?",
+            "Who visited France first after #t?"
+        ]
+    },
+]
+
+Question: After the Navy of the United States, which country did Iran accuse first?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Iran", "Navy of the United States"],
+        "variations": [
+            "When did Iran accuse the Navy of the United States?",
+            "At what time did Iran accuse the Navy of the United States?",
+            "What is the date when Iran accused the Navy of the United States?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Iran"],
+        "variations": [
+            "Which country did Iran accuse first after #t?",
+            "After #t, which country did Iran accuse first?",
+            "Which country was the first accused by Iran after #t?"
+        ]
+    },
+]
+
+Question: Who was the first to visit Japan after the Russian Union of Industrialists and Entrepreneurs?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Russian Union of Industrialists and Entrepreneurs", "Japan"],
+        "variations": [
+            "When did the Russian Union of Industrialists and Entrepreneurs visit Japan?",
+            "At what time did the Russian Union of Industrialists and Entrepreneurs visit Japan?",
+            "What is the date when the Russian Union of Industrialists and Entrepreneurs visited Japan?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["Japan"],
+        "variations": [
+            "Who was the first to visit Japan after #t?",
+            "After #t, who was the first to visit Japan?",
+            "Who visited Japan first after #t?"
+        ]
+    },
+]
+
+Question: Who was the first to investigate France after Sean R. Parnell?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Sean R. Parnell", "France"],
+        "variations": [
+            "When did Sean R. Parnell investigate France?",
+            "At what time did Sean R. Parnell investigate France?",
+            "What is the date when Sean R. Parnell investigated France?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["France"],
+        "variations": [
+            "Who was the first to investigate France after #t?",
+            "After #t, who was the first to investigate France?",
+            "Who investigated France first after #t?"
+        ]
+    },
+]
+
+Question: Which country was the first to sign an agreement with South Korea after Eletrobras?
+Output:
+[
+    {
+        "subq_type": "Anchor",
+        "entities": ["Eletrobras", "South Korea"],
+        "variations": [
+            "When did Eletrobras sign an agreement with South Korea?",
+            "At what time did Eletrobras sign an agreement with South Korea?",
+            "What is the date when Eletrobras signed an agreement with South Korea?"
+        ]
+    },
+    {
+        "subq_type": "Bridge",
+        "entities": ["South Korea"],
+        "variations": [
+            "Which country was the first to sign an agreement with South Korea after #t?",
+            "After #t, which country was the first to sign an agreement with South Korea?",
+            "Which country signed an agreement with South Korea first after #t?"
+        ]
+    },
+]
+

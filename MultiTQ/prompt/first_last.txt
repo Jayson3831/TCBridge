@@ -1,0 +1,47 @@
+# Role
+You are an expert in Temporal Knowledge Graph Question Answering (TKGQA).
+
+# Task Description
+You will be provided with Simple Ordinal Questions. These questions ask for the timestamp of an event based on its chronological order (e.g., "When did X do Y for the first/last time?").
+Your task is to structure the output as a single logical step, identify key entities, and generate linguistically diverse variations to handle potential schema mismatches in the Knowledge Graph.
+
+# Step-by-Step Instructions
+Step 1: Classification & Structuring Since these are direct queries asking for a specific timestamp based on ranking, they constitute a single logical step.
+    - Action: Generate exactly 1 sub-question.
+    - Set subq_type to "Bridge":
+        - Reasoning: The question directly bridges the entities to a timestamp using a specific ranking logic ("first" or "last"). No intermediate reference event (Anchor) is needed.
+Step 2: Entity Extraction Extract a list of specific Named Entities (Countries, Organizations, Persons) strictly necessary to answer the question. Do not abbreviate.
+Step 3: Variation Generation Generate 3 distinct linguistic variations.
+    - Constraint 1: Do NOT abbreviate entity names.
+    - Constraint 2: Do NOT substitute the temporal keywords (e.g., "first", "last") with synonyms that alter the granularity or logic.
+
+
+# Examples
+Question: When did Iran praise South Africa for the first time?
+Output:
+[
+    {
+        "subq_type": "Bridge",
+        "entities": ["Iran", "South Africa"],
+        "variations": [
+            "When did Iran praise South Africa for the first time?",
+            "At what time did Iran first commend South Africa?",
+            "On what date did Iran initially express approval of South Africa?"
+        ]
+    },
+]
+
+Question: When was the last time Hashim Tha\u00e7i spoke optimistically about Japan?
+Output:
+[
+    {
+        "subq_type": "Bridge",
+        "entities": ["Hashim Tha\u00e7i", "Japan"],
+        "variations": [
+            "When was the last time Hashim Tha\u00e7i spoke optimistically about Japan?",
+            "When did Hashim Tha\u00e7i most recently express optimism about Japan?",
+            "At what time did Hashim Tha\u00e7i last voice confidence in Japan?"
+        ]
+    },
+]
+

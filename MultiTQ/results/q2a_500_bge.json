@@ -1,0 +1,1503 @@
+[
+  {
+    "question": "After the peasant from Taiwan, with which country did China first want to establish diplomatic cooperation?",
+    "prediction": [
+      "Japan 2005-05-03"
+    ],
+    "gold_answer": [
+      "South Korea"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Before Ainars Slesers, who was the last to visit China?",
+    "prediction": [
+      "Olu\u1e63\u1eb9gun \u1eccbasanj\u1ecd 2005-04-14",
+      "Japan 2005-04-14"
+    ],
+    "gold_answer": [
+      "Wolfgang Sch\u00fcssel"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After China, who did the Cabinet Council of Ministers Advisors of United States decline first?",
+    "prediction": [
+      "Benjamin Netanyahu 2013-07-20"
+    ],
+    "gold_answer": [
+      "Iran"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who did Iraq last negotiate with?",
+    "prediction": [
+      "France 2015-10-29"
+    ],
+    "gold_answer": [
+      "Foreign Affairs (France)"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Can you tell me the exact month in which South Sudan last negotiated with Ethiopia?",
+    "prediction": [
+      "2015-04"
+    ],
+    "gold_answer": [
+      "2012-07"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "month"
+  },
+  {
+    "question": "Which country received the visit from China on the same month of Shura Council?",
+    "prediction": [
+      "Shura Council 2011-09-15"
+    ],
+    "gold_answer": [
+      "Kazakhstan"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "After Burundi, who was the first to speak negatively about Ethiopia?",
+    "prediction": [
+      "Hawiye (ethnic) 2009-01-07"
+    ],
+    "gold_answer": [
+      "African Union"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "In which month did China last want to participate in diplomatic cooperation with the Assemblies of Cambodia?",
+    "prediction": [],
+    "gold_answer": [
+      "2013-09"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "month"
+  },
+  {
+    "question": "After 9 July 2008, which country did Iraq make optimistic remarks about?",
+    "prediction": [],
+    "gold_answer": [
+      "Barack Obama",
+      "Nonaligned Movement",
+      "Foreign Affairs (France)",
+      "Head of Government (Turkmenistan)"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who visited China in the same month of the Nigerian communication satellite?",
+    "prediction": [
+      "Nigerian Communication Satellite 2010-12-31"
+    ],
+    "gold_answer": [
+      "Special Rapporteurs of the United Nations",
+      "Military (Philippines)",
+      "Lawmaker (Japan)",
+      "Vietnam",
+      "Xi Jinping",
+      "Julia Gillard",
+      "Bill Richardson",
+      "Okada Katsuya",
+      "Cabinet / Council of Ministers / Advisors (United States)",
+      "Hui Liangyu",
+      "Japan",
+      "Barack Obama"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "Who negotiated with Mwai Kibaki before Malaysia?",
+    "prediction": [
+      "Olu\u1e63\u1eb9gun \u1eccbasanj\u1ecd 2008-11-18",
+      "Kamalesh Sharma 2009-02-17",
+      "Wen Jiabao 2005-08-23",
+      "William J. Fallon 2007-07-19",
+      "Don McKinnon 2007-01-25",
+      "Don McKinnon 2007-01-24",
+      "Isaias Afewerki 2006-11-16"
+    ],
+    "gold_answer": [
+      "Ethiopia",
+      "Don McKinnon",
+      "Wen Jiabao",
+      "Isaias Afewerki"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who would want to negotiate with Pervez Musharraf before Malaysia?",
+    "prediction": [
+      "Presidential Family (United States) 2007-01-14",
+      "Stephen Hadley 2006-03-02"
+    ],
+    "gold_answer": [
+      "Shaukat Aziz",
+      "Head of Government (Pakistan)",
+      "Jack Straw"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Before Malaysia, which country last received the visit from South Korea?",
+    "prediction": [
+      "Iran 2014-04-25"
+    ],
+    "gold_answer": [
+      "Japan"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Before the party member from Taiwan, who was the last to reject China?",
+    "prediction": [
+      "Mainland Affairs Council 2007-09-17"
+    ],
+    "gold_answer": [
+      "Angela Merkel"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "When did China negotiate with Indonesia for the first time?",
+    "prediction": [],
+    "gold_answer": [
+      "2015-09-30"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "day"
+  },
+  {
+    "question": "Who was the last country to meet with the citizens of Australia, before Thailand?",
+    "prediction": [
+      "Japan 2005-02-10"
+    ],
+    "gold_answer": [
+      "Member of Parliament (Australia)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After July 2015, which country was rejected by Malaysia?",
+    "prediction": [],
+    "gold_answer": [
+      "Police (Malaysia)",
+      "Lawyer/Attorney (Malaysia)"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "After 4 March 2011, who wanted to establish diplomatic cooperation with Kuwait?",
+    "prediction": [
+      "Foreign Affairs (Kosovo) 2011-10-10",
+      "Oman 2011-05-10",
+      "Ali al-Dabbagh 2011-08-07",
+      "Carlos Ra\u00fal Morales 2014-11-06",
+      "Aladdin Boroujerdi 2011-08-08"
+    ],
+    "gold_answer": [
+      "Iran",
+      "China",
+      "Carlos Ra\u00fal Morales",
+      "Iraq",
+      "Legislature (Iraq)",
+      "Mexico"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who announced their intention to establish diplomatic cooperation with Thailand in January 2009?",
+    "prediction": [
+      "Cambodia 2009-01-26",
+      "Cambodia 2009-01-27",
+      "Cambodia 2009-01-28",
+      "Laos 2009-01-22"
+    ],
+    "gold_answer": [
+      "Citizen (Thailand)"
+    ],
+    "qlabel": "Single",
+    "qtype": "equal",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "With which country did Cambodia negotiate before 2008?",
+    "prediction": [],
+    "gold_answer": [
+      "Thailand",
+      "Laos",
+      "Wen Jiabao",
+      "Roh Moo Hyun",
+      "Vietnam"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "After Cambodia, which country praised Wen Jiabao?",
+    "prediction": [
+      "China 2012-03-27",
+      "China 2012-03-28"
+    ],
+    "gold_answer": [
+      "Angela Merkel",
+      "Malaysia",
+      "Dmitry Anatolyevich Medvedev",
+      "Julia Gillard",
+      "South Korea",
+      "Head of Government (Lesotho)",
+      "Helmut Schmidt",
+      "Mario Monti",
+      "Gerhard Schr\u00f6der",
+      "Yoshihiko Noda",
+      "Japan",
+      "Barack Obama"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "In what year did the Ministry of Foreign Affairs of South Korea first express its intention to meet with China?",
+    "prediction": [
+      "2005"
+    ],
+    "gold_answer": [
+      "2010"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "year"
+  },
+  {
+    "question": "Which country did China formally sign an agreement with first after the Government of South Africa?",
+    "prediction": [
+      "South Africa 2014-12-05"
+    ],
+    "gold_answer": [
+      "Iran"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After Patrick Buchanan, who was the first to criticise Iraq?",
+    "prediction": [
+      "Party Member (Iraq) 2005-02-03"
+    ],
+    "gold_answer": [
+      "Abdullah G\u00fcl"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who last would wish to visit Thailand?",
+    "prediction": [
+      "Barack Obama 2012-11-11"
+    ],
+    "gold_answer": [
+      "Sheikh Hamad bin Khalifa al-Thani"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who first receive the visit from the Foreign Affairs of Israel after Ethiopia did?",
+    "prediction": [
+      "Algirdas Butkevi\u010dius 2015-02-17"
+    ],
+    "gold_answer": [
+      "Foreign Affairs (France)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "In which month did China visit Wen Jiabao for the first time?",
+    "prediction": [],
+    "gold_answer": [
+      "2005-12"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "month"
+  },
+  {
+    "question": "Which country did Cambodia negotiate with before July 2008?",
+    "prediction": [],
+    "gold_answer": [
+      "Thailand",
+      "Laos",
+      "Wen Jiabao",
+      "Japan",
+      "Malaysia",
+      "Roh Moo Hyun",
+      "Vietnam"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "Which country did China release persons to last before the Dissident of Mongolia?",
+    "prediction": [
+      "Vietnam 2010-10-12"
+    ],
+    "gold_answer": [
+      "Fishermen (Vietnam)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After China, who was the first person Thongsing Thammavong wanted to meet?",
+    "prediction": [
+      "Kim Hwang Sik 2012-07-03"
+    ],
+    "gold_answer": [
+      "Vietnam"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who hosted the last visit of the Justice and Development Party before China?",
+    "prediction": [
+      "Armenia 2005-06-13"
+    ],
+    "gold_answer": [
+      "Education (Armenia)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "To whom did Malaysia first make optimistic comments in 2009?",
+    "prediction": [
+      "Tony Blair 2007-07-02"
+    ],
+    "gold_answer": [
+      "Barack Obama"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "After Angela Merkel, which country was the first to received the visit from China?",
+    "prediction": [
+      "Japan 2007-09-28"
+    ],
+    "gold_answer": [
+      "Kazakhstan"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Before the Undersecretary of the United States, with which country did China last express an interest in cooperation?",
+    "prediction": [
+      "France 2006-07-27"
+    ],
+    "gold_answer": [
+      "South Korea"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Before Kuwait, with which country did Cambodia last express its intention to engage in diplomatic cooperation?",
+    "prediction": [
+      "Thailand 2009-01-06"
+    ],
+    "gold_answer": [
+      "Malaysia"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After China, who did Ma Ying Jeou blame?",
+    "prediction": [
+      "China 2007-06-07",
+      "Kuomintang 2008-01-21",
+      "Japan 2014-01-15"
+    ],
+    "gold_answer": [
+      "Tsai Ing-wen",
+      "Head of Government (Taiwan)",
+      "Kuomintang",
+      "Japan"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Against whom did Thailand first use conventional military force?",
+    "prediction": [
+      "Insurgent (Thailand) 2008-02-17"
+    ],
+    "gold_answer": [
+      "Military (Cambodia)"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who made the first visit to Kuwait after the UAE forces?",
+    "prediction": [
+      "Mahmoud Abbas 2006-02-06"
+    ],
+    "gold_answer": [
+      "Royal Administration (Saudi Arabia)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who negotiated with Roh Moo Hyun in the same month of Cambodia?",
+    "prediction": [
+      "Cambodia 2006-11-22",
+      "Olu\u1e63\u1eb9gun \u1eccbasanj\u1ecd 2006-11-06"
+    ],
+    "gold_answer": [
+      "Olu\u1e63\u1eb9gun \u1eccbasanj\u1ecd"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "Who gave humanitarian aid to China first, after the Cambodian police?",
+    "prediction": [
+      "Japan 2006-05-16"
+    ],
+    "gold_answer": [
+      "Media Personnel (Pakistan)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "With whom did Canada sign formal agreements before Iraq?",
+    "prediction": [],
+    "gold_answer": [
+      "AvtoVAZ"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "When did Thailand last support Abhisit Vejjajiva?",
+    "prediction": [
+      "2011-05-31"
+    ],
+    "gold_answer": [
+      "2009-01-21"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "day"
+  },
+  {
+    "question": "What country did Malaysia make optimistic remarks about after 20 May 2015?",
+    "prediction": [],
+    "gold_answer": [
+      "Indigenous People (Malaysia)"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who would want to negotiate with Thailand on the same day as Yu Zhengsheng?",
+    "prediction": [
+      "Yu Zhengsheng 2015-07-16"
+    ],
+    "gold_answer": [
+      "Citizen (Thailand)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who was the last country denounced by the citizens of Nigeria before China?",
+    "prediction": [],
+    "gold_answer": [
+      "Government (Nigeria)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Before Barack Obama, with which country did Iraq last speak by telephone?",
+    "prediction": [],
+    "gold_answer": [
+      "Mahmoud Ahmadinejad"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Which country was the first to formally sign an agreement with China?",
+    "prediction": [
+      "Japan 2005-03-02"
+    ],
+    "gold_answer": [
+      "Vietnam"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who would wish to visit Iraq on the same month of the Joint Chiefs of Staff of South Korea?",
+    "prediction": [],
+    "gold_answer": [
+      "Tim Pawlenty",
+      "Intelligence Officer (Germany)",
+      "Russ Feingold"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "Before China, who did Julia Gillard make negative comments about?",
+    "prediction": [
+      "People Associated with the Opposition (Australia) 2011-03-03",
+      "People Associated with the Opposition (Australia) 2010-08-01",
+      "People Associated with the Opposition (Australia) 2008-12-04",
+      "People Associated with the Opposition (Australia) 2010-08-02",
+      "Citizen (Australia) 2011-03-17",
+      "Australia Greens 2011-03-22",
+      "People Associated with the Opposition (Australia) 2010-07-21",
+      "Australia Greens 2011-02-27",
+      "People Associated with the Opposition (Australia) 2010-09-17",
+      "Australia Greens 2011-04-02"
+    ],
+    "gold_answer": [
+      "Citizen (Australia)",
+      "Women (Australia)"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After Sheikh Ahmed Abdullah, who was the first to express an intention to negotiate with Malaysia?",
+    "prediction": [
+      "Julia Gillard 2010-10-22"
+    ],
+    "gold_answer": [
+      "Cabinet / Council of Ministers / Advisors (United States)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After September 2005, to which country did Iraq repatriate people?",
+    "prediction": [
+      "India 2014-07-05",
+      "India 2014-07-04"
+    ],
+    "gold_answer": [
+      "Men (United Kingdom)",
+      "Citizen (United Kingdom)",
+      "Detainee (United States)",
+      "Employee (Iraq)",
+      "Nurse (India)"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "In what year did the Association of Southeast Asian Nations first ask Thailand?",
+    "prediction": [
+      "2006"
+    ],
+    "gold_answer": [
+      "2008"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "year"
+  },
+  {
+    "question": "After the Defense Security Ministry of Spain, who would wish to visit China first?",
+    "prediction": [
+      "France 2006-10-28"
+    ],
+    "gold_answer": [
+      "Raphael Tuju"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Which country was the first to sign an agreement with Malaysia in 2008?",
+    "prediction": [
+      "Laos 2008-02-21"
+    ],
+    "gold_answer": [
+      "Iran"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "To which country did Malaysia return people after 13 May 2008?",
+    "prediction": [],
+    "gold_answer": [
+      "Employee (Thailand)",
+      "Businessperson (Malaysia)",
+      "Women (Uganda)",
+      "Women (Malaysia)"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who first did the head of government of Ethiopia request for after Kuwait?",
+    "prediction": [
+      "Head of Government (Ethiopia) 2015-03-24"
+    ],
+    "gold_answer": [
+      "African Union"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Which country offered cooperation to China in the same month as Yoshihiko Noda?",
+    "prediction": [],
+    "gold_answer": [
+      "Vietnam",
+      "South Korea"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "Who visited Iraq in the same month as Wesley K. Clark?",
+    "prediction": [
+      "Wesley K. Clark 2008-08-14"
+    ],
+    "gold_answer": [
+      "Military (El Salvador)",
+      "Royal Administration (Jordan)",
+      "Healthcare Facility (Kuwait)",
+      "Barack Obama"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "With which country before the Non-Aligned Movement did China last express its intention to engage in diplomatic cooperation?",
+    "prediction": [
+      "Japan 2009-07-13"
+    ],
+    "gold_answer": [
+      "Sudan"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "At what time did the Iranian Ministry of Foreign Affairs last negotiate with Oman?",
+    "prediction": [
+      "2015-01-05"
+    ],
+    "gold_answer": [
+      "2008-09-24"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "day"
+  },
+  {
+    "question": "In Jul 15th, 2005, who would wish to visit China?",
+    "prediction": [],
+    "gold_answer": [
+      "Farm Worker (Taiwan)",
+      "Lien Chan"
+    ],
+    "qlabel": "Single",
+    "qtype": "equal",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After the Foreign Minister of South Africa, who was the first to visit China?",
+    "prediction": [
+      "People First Party Korea 2005-04-28"
+    ],
+    "gold_answer": [
+      "Envoy (France)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "With which country did China last wish to meet before Ryutaro Hashimoto?",
+    "prediction": [
+      "France 2006-03-30",
+      "Japan 2006-03-30"
+    ],
+    "gold_answer": [
+      "South Korea"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After the citizens of Montenegro, who was the first to praise China?",
+    "prediction": [
+      "Bilawal Bhutto Zardari 2014-08-27"
+    ],
+    "gold_answer": [
+      "Islam Karimov"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who gave a visit to Burundi after 2012?",
+    "prediction": [
+      "Mahamat Saleh Annadif 2013-02-12",
+      "Uhuru Muigai Kenyatta 2013-07-01",
+      "International Federation of Red Cross and Red Crescent Societies 2013-01-29",
+      "Christine Lagarde 2015-01-28",
+      "Iran 2015-02-01",
+      "UN Security Council 2015-03-11"
+    ],
+    "gold_answer": [
+      "Iran",
+      "Bernard Makuza",
+      "Christine Lagarde",
+      "International Federation of Red Cross and Red Crescent Societies",
+      "Uhuru Muigai Kenyatta",
+      "UN Security Council"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "Who would want to negotiate with Cambodia in the same year as A.K. Antony?",
+    "prediction": [
+      "A.K. Antony 2007-05-06"
+    ],
+    "gold_answer": [
+      "Naval (United States)",
+      "Malaysia",
+      "Vietnam",
+      "Laos",
+      "Representatives (Cambodia)",
+      "China"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "Who was the last person to visit China before Nigeria's communications satellite?",
+    "prediction": [
+      "Elizabeth II 2014-06-17"
+    ],
+    "gold_answer": [
+      "Julia Gillard"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who would like to negotiate with Kuwait last?",
+    "prediction": [
+      "Mexico 2015-08-13"
+    ],
+    "gold_answer": [
+      "Foreign Affairs (South Korea)"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Which country wanted to cooperate with Thailand in the same month as Wen Jiabao?",
+    "prediction": [],
+    "gold_answer": [
+      "Malaysia"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "Which country was the last to sign formal agreements with Malaysia before the armed rebels of Ukraine did so?",
+    "prediction": [
+      "Yemen 2014-02-04"
+    ],
+    "gold_answer": [
+      "China"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who was the first country to host a visit from South Africa, after Swaziland?",
+    "prediction": [
+      "China 2010-08-27"
+    ],
+    "gold_answer": [
+      "Charles Rabemananjara"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who wanted to negotiate with China first, after the Hong Kong police?",
+    "prediction": [
+      "France 2008-04-13"
+    ],
+    "gold_answer": [
+      "Pervez Musharraf"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "In which year did the Prime Minister of Pakistan praise China for the first time?",
+    "prediction": [
+      "2007"
+    ],
+    "gold_answer": [
+      "2009"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "year"
+  },
+  {
+    "question": "Which country signed an agreement with Iraq in the same month as South Africa?",
+    "prediction": [
+      "South Africa 2012-11-17"
+    ],
+    "gold_answer": [
+      "Iran",
+      "Yemen"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "After Tharit Pengdit, who made the first appeal to Thailand?",
+    "prediction": [
+      "Envoy (United States) 2010-07-20"
+    ],
+    "gold_answer": [
+      "Cabinet / Council of Ministers / Advisors (United States)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who was the first to praise Tsakhiagiyn Elbegdorj after China?",
+    "prediction": [
+      "Democratic Party 2013-05-07"
+    ],
+    "gold_answer": [
+      "Citizen (Mongolia)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "After 21 September 2006, who started negotiations with Malaysia?",
+    "prediction": [
+      "Thai Airways 2006-10-19",
+      "Government Religious (Malaysia) 2006-11-27",
+      "Sondhi Limthongkul 2006-11-27",
+      "Iran 2006-11-20",
+      "Laos 2006-12-01",
+      "Representatives (Malaysia) 2013-04-06"
+    ],
+    "gold_answer": [
+      "Representatives (Malaysia)",
+      "Yemen",
+      "Julia Gillard",
+      "Mwai Kibaki",
+      "South Korea",
+      "Pervez Musharraf",
+      "Xi Jinping",
+      "Thailand",
+      "Cambodia",
+      "China",
+      "Governor (Malaysia)",
+      "Japan"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who last wanted to meet with Iraq before the Prime Minister of Portugal?",
+    "prediction": [
+      "Military of Hungary 2005-02-18",
+      "Senate Armed Services Committee 2005-02-18"
+    ],
+    "gold_answer": [
+      "Citizen (Australia)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "In which year did Abhisit Vejjajiva last negotiate with Thailand?",
+    "prediction": [
+      "2011"
+    ],
+    "gold_answer": [
+      "2010"
+    ],
+    "qlabel": "Single",
+    "qtype": "first_last",
+    "answer_type": "time",
+    "time_level": "year"
+  },
+  {
+    "question": "After Japan's Ministry of Finance, Economy, Trade and Industry, with which country did China first express its intention to establish diplomatic cooperation?",
+    "prediction": [],
+    "gold_answer": [
+      "Iran"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Which country was the first to sign an agreement with China after the government of South Africa?",
+    "prediction": [
+      "France 2014-01-26"
+    ],
+    "gold_answer": [
+      "Iran"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who last investigated China before Japanese lawmakers did?",
+    "prediction": [
+      "Military (Taiwan) 2005-03-13"
+    ],
+    "gold_answer": [
+      "Police (Australia)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Before Ethiopia, with which country did Kuwait last seek diplomatic cooperation?",
+    "prediction": [
+      "Iran 2014-09-22"
+    ],
+    "gold_answer": [
+      "Head of Government (Egypt)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who investigated China on the same year of Seagate Technology?",
+    "prediction": [
+      "Seagate Technology 2007-11-12",
+      "Mainland Affairs Council 2007-11-09",
+      "Mainland Affairs Council 2007-11-08",
+      "Wen Jiabao 2007-02-06",
+      "Segolene Royal 2007-01-08"
+    ],
+    "gold_answer": [
+      "Iran",
+      "Hui Liangyu",
+      "Segolene Royal",
+      "Wen Jiabao",
+      "Yasuo Fukuda",
+      "Criminal (China)",
+      "Henry M. Paulson",
+      "Mainland Affairs Council"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "After Iraq, with whom did the German business community announce its intention to meet?",
+    "prediction": [],
+    "gold_answer": [
+      "Angela Merkel"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who would wish to visit Iraq in May, 2013?",
+    "prediction": [
+      "Qatar 2013-05-19",
+      "Oman 2013-05-19"
+    ],
+    "gold_answer": [
+      "Justice and Development Party",
+      "Foreign Affairs (Syria)",
+      "Foreign Affairs (France)"
+    ],
+    "qlabel": "Single",
+    "qtype": "equal",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "Before Northern Ireland, with which country did China last wish to establish diplomatic cooperation?",
+    "prediction": [
+      "Kazakhstan 2015-05-07"
+    ],
+    "gold_answer": [
+      "Tanzania"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Which country hosted China's visit first after Abdullah G\u00fcl?",
+    "prediction": [
+      "Japan 2009-07-08"
+    ],
+    "gold_answer": [
+      "Kazakhstan"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who rejected Iraq in the same year of the envoy of the United States?",
+    "prediction": [
+      "Envoy (United States) 2007-09-09",
+      "Congress (United States) 2007-11-07",
+      "John Paul II 2007-02-28",
+      "Citizen (Australia) 2007-10-04",
+      "Malaysia 2007-02-15",
+      "Jawad al-Bulani 2007-12-26"
+    ],
+    "gold_answer": [
+      "Citizen (Australia)",
+      "Barack Obama",
+      "John Paul II",
+      "Legislature (Turkey)",
+      "Jawad al-Bulani",
+      "Iraqi National List",
+      "Legislature (Iraq)",
+      "Malaysia",
+      "Congress (United States)",
+      "Benedict XVI",
+      "Guerrilla (Kurdistan Workers' Party)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "Who was investigated by the Royal Thai Police before China?",
+    "prediction": [
+      "China 2010-02-16",
+      "Thailand 2007-01-29"
+    ],
+    "gold_answer": [
+      "Thailand",
+      "Abhisit Vejjajiva"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who rejected Iraq in the same month as Mitch McConnell?",
+    "prediction": [
+      "Mitch McConnell 2005-01-13",
+      "Citizen (Brazil) 2005-01-27"
+    ],
+    "gold_answer": [
+      "Citizen (Brazil)"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  },
+  {
+    "question": "Before Djibouti, who did Lee Myung Bak praise?",
+    "prediction": [
+      "South Korea 2008-04-18",
+      "Japan 2008-02-24",
+      "Japan 2008-02-16",
+      "South Korea 2007-05-02",
+      "South Korea 2008-01-14",
+      "Congress (United States) 2008-04-17",
+      "Grand National Party 2008-01-30",
+      "China 2007-12-20",
+      "Grand National Party 2008-04-11",
+      "Grand National Party 2007-08-28",
+      "Grand National Party 2007-05-02",
+      "Business (South Korea) 2007-10-24",
+      "South Korea 2007-12-20",
+      "South Korea 2007-12-19"
+    ],
+    "gold_answer": [
+      "Dmitry Anatolyevich Medvedev",
+      "Vietnam",
+      "Yasuo Fukuda",
+      "Grand National Party",
+      "China",
+      "Supreme Council (South Korea)",
+      "Roh Moo Hyun"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "In which country did Cambodia release people after the year 2010?",
+    "prediction": [
+      "Thailand 2011-01-18",
+      "Thailand 2011-01-21",
+      "Thailand 2011-01-22",
+      "Thailand 2011-01-24",
+      "Thailand 2011-01-26",
+      "Thailand 2011-02-04",
+      "Thailand 2011-06-14",
+      "Thailand 2013-02-01",
+      "Thailand 2014-07-01",
+      "Thailand 2014-07-01"
+    ],
+    "gold_answer": [
+      "Ieng Thirith",
+      "Citizen (Thailand)",
+      "Activist (Cambodia)",
+      "Men (Cambodia)",
+      "Villager (Thailand)",
+      "Activist (Thailand)"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "Who asked for Thailand first, after Xi Jinping?",
+    "prediction": [
+      "Cambodia 2012-02-23"
+    ],
+    "gold_answer": [
+      "Maldives"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Which country was investigated by Malaysia after 2009?",
+    "prediction": [],
+    "gold_answer": [
+      "Japan",
+      "China",
+      "Police (Malaysia)"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "In 2013, with which country did China first express interest in cooperation?",
+    "prediction": [
+      "Association of Southeast Asian Nations 2013-04-03"
+    ],
+    "gold_answer": [
+      "South Korea"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "After Thailand, which country was the first to make negative comments about Cambodia?",
+    "prediction": [
+      "Thailand 2011-02-09"
+    ],
+    "gold_answer": [
+      "Laos"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Before Tan Sri Muhyiddin Yassin, which country last would wish to visit Malaysia?",
+    "prediction": [
+      "China 2009-09-10"
+    ],
+    "gold_answer": [
+      "Thailand"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "before_last",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Before the indigenous people of the United States, who negotiated with Ethiopia?",
+    "prediction": [
+      "International Government Organizations 2006-02-03",
+      "Eritrea 2005-06-29",
+      "African Union 2006-03-09",
+      "China 2006-04-24",
+      "Indigenous People (Ethiopia) 2006-08-26",
+      "Japan 2006-03-29",
+      "High Commission for Refugees 2005-06-23",
+      "Patrick Manning 2006-07-15",
+      "Police (Belgium) 2006-08-16"
+    ],
+    "gold_answer": [
+      "Sudan",
+      "Indigenous People (Ethiopia)",
+      "UN Security Council",
+      "Eritrea"
+    ],
+    "qlabel": "Single",
+    "qtype": "before_after",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "Who made an appeal to the citizens of Sudan in the same year as China?",
+    "prediction": [
+      "China 2007-10-16"
+    ],
+    "gold_answer": [
+      "Government (Sudan)",
+      "Qutbi Al-Mahdi",
+      "Anthony Lino Makana",
+      "Badr al-Din Mahmoud",
+      "Envoy (Sudan)",
+      "African Union",
+      "Transitional Darfur Regional Authority",
+      "Isaias Afewerki",
+      "Daniel Arap Moi"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "year"
+  },
+  {
+    "question": "After Heinz Fischer, who would wish to visit Ethiopia first?",
+    "prediction": [
+      "Heinz Fischer 2008-02-21"
+    ],
+    "gold_answer": [
+      "African Union"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "after_first",
+    "answer_type": "entity",
+    "time_level": "day"
+  },
+  {
+    "question": "To whom did Wen Jiabao offer cooperation in the same month as Thailand?",
+    "prediction": [
+      "Thailand 2007-01-14"
+    ],
+    "gold_answer": [
+      "Roh Moo Hyun"
+    ],
+    "qlabel": "Multiple",
+    "qtype": "equal_multi",
+    "answer_type": "entity",
+    "time_level": "month"
+  }
+]
