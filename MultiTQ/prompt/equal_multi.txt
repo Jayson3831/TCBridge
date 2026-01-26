@@ -7,13 +7,13 @@ You will be provided with complex questions of the "equal_multi" type. These que
     2. Implicit Time / Shared Event: (e.g., "Who did Y in the same month as X?")
 
 # Step-by-Step Instructions
-Step 1: Decomposition Strategy Identify the question type and apply the corresponding logic to break it into exactly 2 logical sub-questions using the Anchor-Bridge framework.
+Step 1: Decomposition Strategy Identify the question type and apply the corresponding logic to break it into exactly 2 logical sub-questions using the Anchor-Target framework.
     - Type A: Explicit Time + Ranking (First/Last)
         - Logic: You must first retrieve the candidate pool before applying the ranking.
         - Subq 1 (Anchor - Candidate Retrieval):
             - Goal: Generate a query to retrieve all relevant events/entities within the explicit time constraint (ignoring the "first/last" keyword).
             - Query Intent: "Who/Which countries did Y in [Explicit Time]?"
-        - Subq 2 (Bridge - Ranking Logic):
+        - Subq 2 (Target - Ranking Logic):
             - Goal: Generate a natural language follow-up question that applies the ranking logic to the retrieved context.
             - Query Intent: "Who was the first/last to [Action] among the candidates?"
     - Type B: Implicit Time / Shared Event (Same as...)
@@ -21,7 +21,7 @@ Step 1: Decomposition Strategy Identify the question type and apply the correspo
         - Subq 1 (Anchor - Time Retrieval):
             - Goal: Generate a query to find the timestamp of the reference event.
             - Query Intent: "When did Event X happen?"
-        - Subq 2 (Bridge - Equivalence):
+        - Subq 2 (Target - Equivalence):
             - Goal: Generate a query that uses the retrieved time to find the target. You MUST use the symbol #t as a placeholder for the answer to Subq 1.
             - Query Intent: "Who did Y in/on #t?"
 Step 2: Entity Extraction For EACH generated sub-question, extract a list of specific Named Entities strictly necessary for that step.
@@ -45,7 +45,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": [],
         "variations": [
             "Who was the first to request a meeting with Togo among the candidates?",
@@ -68,7 +68,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "Which country was the last to praise Iran among the candidates?",
@@ -91,7 +91,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Abdelkader Messahel", "Mauritania"],
         "variations": [
             "Who hosted the visit of Abdelkader Messahel to Mauritania in #t?",
@@ -114,7 +114,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": [],
         "variations": [
             "Who was the first country to sign formal agreements with Iran among the candidates?",
@@ -137,7 +137,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "Who praised Iran in the same month as #t?",
@@ -160,7 +160,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "Who did Iran give the criticism of in the same month as #t?",
@@ -183,7 +183,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["envoy of Sudan"],
         "variations": [
             "Which country did the envoy of Sudan want to meet on #t?",
@@ -206,7 +206,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Colombia"],
         "variations": [
             "Which country did Colombia negotiate with in the same year as #t?",
@@ -229,7 +229,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "Who made an appeal to Iran on the same day as #t?",
@@ -252,7 +252,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": [],
         "variations": [
             "With which country did Guatemala last express its willingness to negotiate among the candidates?",
@@ -275,7 +275,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": [],
         "variations": [
             "Which country was the last to sign formal agreements with Mauritania among the candidates?",

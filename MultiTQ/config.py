@@ -1,9 +1,13 @@
 import os
+import datetime
+
+# 时间戳后缀
+time_suffix = datetime.datetime.now().strftime("%m%d%H")
 
 class Config:
     """模型配置类"""
     # 需要调节的参数
-    SAMPLE_NUM = 500
+    SAMPLE_NUM = 5
     RETRIEVER = "bge"
     REBUILD_NEO4J = False
     FACTS_NUM = 100
@@ -19,9 +23,9 @@ class Config:
     PREDICTIONS_FILE = f"predictions_{SAMPLE_NUM}.json"
     BEST_SUBQ_FILE = f"temp/best_subquestions_{SAMPLE_NUM}.json"
     SUBQ_FORMATTED_FILE = f"temp/subq_{SAMPLE_NUM}_formatted.json"
-    RESULT_FILE = f"results/test_{SAMPLE_NUM}_results_{RETRIEVER}.json"
-    Q2A_FILE = f"results/q2a_{SAMPLE_NUM}_{RETRIEVER}.json"
-    Q2A_FULL_FILE = f"results/q2a_full_tree_{SAMPLE_NUM}_{RETRIEVER}.json"
+    RESULT_FILE = f"results/test_{SAMPLE_NUM}_results_{RETRIEVER}_{time_suffix}.json"
+    Q2A_FILE = f"results/q2a_{SAMPLE_NUM}_{RETRIEVER}_{time_suffix}.json"
+    Q2A_FULL_FILE = f"results/q2a_full_tree_{SAMPLE_NUM}_{RETRIEVER}_{time_suffix}.json"
     PROMPT_PATHS = {
         "reason": "prompt/reason.txt",
         "ir": "prompt/IR_answer.txt",

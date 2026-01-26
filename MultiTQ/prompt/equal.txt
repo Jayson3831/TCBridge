@@ -16,8 +16,8 @@ Step 1: Decomposition & Normalization Since these are simple questions, they do 
             - Months → YYYY-MM
             - Years → YYYY
         - Note: If the question asks "When...", no normalization is needed for the question word itself.
-    - Bridge Identification:
-        - Set subq_type to "Bridge".
+    - Target Identification:
+        - Set subq_type to "Target".
         - Reasoning: This is a direct query connecting entities to a time or an entity to an answer given a time.
 Step 2: Entity Extraction Extract a list of specific Named Entities (Countries, Organizations, Persons) strictly necessary to answer the question.
 Step 3: Variation Generation Generate 3 distinct linguistic variations.
@@ -30,7 +30,7 @@ Question: Who visited France in 2009-05?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["France"],
         "variations": [
             "Who visited France in 2009-05?",
@@ -44,7 +44,7 @@ Question: When did Qatar pay a visit to Barack Obama?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Qatar", "Barack Obama"],
         "variations": [
             "When did Qatar pay a visit to Barack Obama?",
@@ -58,7 +58,7 @@ Question: Who applied for Iran in January 2010?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "Who applied for Iran in 2010-01?",
@@ -72,7 +72,7 @@ Question: Which country negotiated with Japan on 19 April 2005?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Japan"],
         "variations": [
             "Which country negotiated with Japan on 2005-04-19?",
@@ -86,7 +86,7 @@ Question: Who visited Japan in April 2012?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Japan"],
         "variations": [
             "Who visited Japan in 2012-04?",
@@ -100,7 +100,7 @@ Question: In May 2009, who signed an agreement with Iran?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "In 2009-05, who signed an agreement with Iran?",
@@ -114,7 +114,7 @@ Question: Who accused Iran in 2015?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "Who accused Iran in 2015?",
@@ -128,7 +128,7 @@ Question: On 19 March 2006, who threatened Iran?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "On 2006-03-19, who threatened Iran?",
@@ -142,7 +142,7 @@ Question: Who visited Guatemala on 7 July 2007?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Guatemala"],
         "variations": [
             "Who visited Guatemala on 2007-07-07?",

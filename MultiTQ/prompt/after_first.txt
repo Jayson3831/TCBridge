@@ -2,7 +2,7 @@
 You are an expert in Temporal Knowledge Graph Question Answering (TKGQA).
 
 # Task Description
-You will be provided with complex questions of the "after_first" type (e.g., "After Event X, who was the first to do Y?"). Your goal is to decompose the question into a logical chain using the Anchor-Bridge framework, identifying the prerequisite timestamp and then performing the temporal ranking.
+You will be provided with complex questions of the "after_first" type (e.g., "After Event X, who was the first to do Y?"). Your goal is to decompose the question into a logical chain using the Anchor-Target framework, identifying the prerequisite timestamp and then performing the temporal ranking.
 
 # Step-by-Step Instructions
 Step 1: Decomposition Strategy Break the input question into exactly 2 logical sub-questions based on the following definitions:
@@ -10,7 +10,7 @@ Step 1: Decomposition Strategy Break the input question into exactly 2 logical s
         - Definition: The step responsible for retrieving the prerequisite information required to set the timeline.
         - Logic: Identify the reference event (Event X) mentioned in the "After..." clause and query its timestamp.
         - Goal: "When did Event X happen?"
-    - Subq 2 (Bridge - Filtering & Ranking)
+    - Subq 2 (Target - Filtering & Ranking)
         - Definition: The step responsible for deriving the final answer by applying logical constraints to the Anchor's result.
         - Logic: Use the retrieved timestamp (represented as #t) to strictly filter candidate events (must be after #t) AND apply the ranking logic (must be the first among them).
         - Goal: "Who was the first to do Y after #t?" (You MUST use the symbol #t as a placeholder).
@@ -34,7 +34,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Japan"],
         "variations": [
             "With which country did Japan express its intention to negotiate first after #t?",
@@ -57,7 +57,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["France"],
         "variations": [
             "Who was the first to visit France after #t?",
@@ -80,7 +80,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "Which country did Iran accuse first after #t?",
@@ -103,7 +103,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Japan"],
         "variations": [
             "Who was the first to visit Japan after #t?",
@@ -126,7 +126,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["France"],
         "variations": [
             "Who was the first to investigate France after #t?",
@@ -149,7 +149,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["South Korea"],
         "variations": [
             "Which country was the first to sign an agreement with South Korea after #t?",

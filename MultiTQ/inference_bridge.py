@@ -134,7 +134,7 @@ async def solve_single_tree(tree, idx, retriever, semaphore, sys_mes, reranker_l
                     node["most_relevant_date"], node["earliest_date"], node["latest_date"] = \
                         await extract_and_compare_dates(fact_result)
                         
-                elif type_ == "Bridge":
+                elif type_ == "Target":
                     anchor_node = None
                     for i in range(idx - 1, -1, -1):
                         if tree[i].get("type") == "Anchor":

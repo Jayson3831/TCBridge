@@ -130,7 +130,7 @@ async def solve_single_tree(tree, idx, retriever, semaphore, sys_mes, reranker_l
                 type = node.get("type", "")
                 idx = node["idx"]
 
-                # 处理 anchor 和 bridge 子问题
+                # 处理 anchor 和 Target 子问题
                 if type == "Anchor":
                     # Anchor 子问题的处理逻辑
                     async with reranker_lock:
@@ -139,8 +139,8 @@ async def solve_single_tree(tree, idx, retriever, semaphore, sys_mes, reranker_l
                     node["facts"] = fact_result
                     most_relevant_date, earliest_date, latest_date = await extract_and_compare_dates(fact_result)
                     node["most_relevant_date"], node["earliest_date"], node["latest_date"] = most_relevant_date, earliest_date, latest_date
-                elif type == "Bridge":
-                    # Bridge 子问题的处理逻辑
+                elif type == "Target":
+                    # Target 子问题的处理逻辑
                     # 查 Anchor 子问题
                     anchor_node = None
                     for i in range(idx - 1, -1, -1):
@@ -152,8 +152,8 @@ async def solve_single_tree(tree, idx, retriever, semaphore, sys_mes, reranker_l
                     ref_tokens = re.findall(r"#t\b", question)
                     facts = [] # 初始化 facts
                     if ref_tokens and anchor_node:
-                        # 假设 bridge 依赖于前一个 anchor 子问题
-                        # 在当前的 tree 结构中，通常 anchor 是 bridge 的前置节点
+                        # 假设 Target 依赖于前一个 anchor 子问题
+                        # 在当前的 tree 结构中，通常 anchor 是 Target 的前置节点
                         replacement_date = anchor_node.get("most_relevant_date")
 
                         # 替换所有 #t

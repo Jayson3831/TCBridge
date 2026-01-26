@@ -7,12 +7,12 @@ You will be provided with complex questions of the "before_after" type. These qu
     2. Implicit Time / Shared Event: (e.g., "Who did Y before/after Event X?")
 
 # Step-by-Step Instructions
-Step 1: Decomposition Strategy Identify the question type and apply the corresponding logic to determine the logical steps using the Anchor-Bridge framework.
+Step 1: Decomposition Strategy Identify the question type and apply the corresponding logic to determine the logical steps using the Anchor-Target framework.
     - Type A: Explicit Time + Precedence (Single Step)
         - Criteria: The question contains a specific date or time expression (e.g., "before 2010", "after May 5th").
         - Logic: No external reference look-up is needed. The explicit date serves as the direct constraint.
         - Action: Generate exactly 1 sub-question.
-            - Subq 1 (Bridge): Rewrite the original question with the normalized time. Set subq_type to "Bridge".
+            - Subq 1 (Target): Rewrite the original question with the normalized time. Set subq_type to "Target".
             - Goal: "Who did Y before/after [Normalized Date]?"
     - Type B: Implicit Time / Shared Event (Two Steps)
         - Criteria: The time is defined by another event or entity's action (e.g., "before Japan did", "after the election").
@@ -21,7 +21,7 @@ Step 1: Decomposition Strategy Identify the question type and apply the correspo
             - Subq 1 (Anchor): Generate a query to find the timestamp of the reference event. Set subq_type to "Anchor".
                 - Definition: The step responsible for retrieving the prerequisite information required to set the timeline.
                 - Goal: "When did Event X happen?"
-            - Subq 2 (Bridge): Generate a query that uses the retrieved time to find the target. You MUST use the symbol #t as a placeholder for the answer to Subq 1. Set subq_type to "Bridge".
+            - Subq 2 (Target): Generate a query that uses the retrieved time to find the target. You MUST use the symbol #t as a placeholder for the answer to Subq 1. Set subq_type to "Target".
                 - Definition: The step responsible for deriving the final answer by applying logical constraints to the Anchor's result.
                 - Goal: "Who did Y before/after #t?"
 Step 2: Entity Extraction For EACH generated sub-question, extract a list of specific Named Entities strictly necessary for that step.
@@ -45,7 +45,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Iran"],
         "variations": [
             "Who rejected Iran before #t?",
@@ -68,7 +68,7 @@ Output:
         ]
     },
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["South Korea"],
         "variations": [
             "Who made South Korea suffer from conventional military forces after #t?",
@@ -82,7 +82,7 @@ Question: Which country did Qatar appeal to after April 2011?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Qatar"],
         "variations": [
             "Which country did Qatar appeal to after 2011-04?",
@@ -96,7 +96,7 @@ Question: Before 14 October 2015, who made Burundi suffer from conventional mili
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Burundi"],
         "variations": [
             "Who made Burundi suffer from conventional military forces before 2015-10-14?",
@@ -110,7 +110,7 @@ Question: Who had a telephone conversation with Japan after November 2005?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Japan"],
         "variations": [
             "Who had a telephone conversation with Japan after 2005-11?",
@@ -124,7 +124,7 @@ Question: Who negotiated with Colombia before 22 December 2010?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Colombia"],
         "variations": [
             "Who negotiated with Colombia before 2010-12-22?",
@@ -138,7 +138,7 @@ Question: With which country did Qatar sign formal agreements before 15 January 
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Qatar"],
         "variations": [
             "With which country did Qatar sign formal agreements before 2008-01-15?",
@@ -152,7 +152,7 @@ Question: After November 2007, who wanted to engage in diplomatic cooperation wi
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Timor-Leste"],
         "variations": [
             "Who wanted to engage in diplomatic cooperation with Timor-Leste after 2007-11?",
@@ -166,7 +166,7 @@ Question: Before 24 January 2005, who wanted to establish diplomatic cooperation
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Kuomintang"],
         "variations": [
             "Who wanted to establish diplomatic cooperation with the Kuomintang before 2005-01-24?",
@@ -180,7 +180,7 @@ Question: Who negotiated with Bolivia after June 2007?
 Output:
 [
     {
-        "subq_type": "Bridge",
+        "subq_type": "Target",
         "entities": ["Bolivia"],
         "variations": [
             "Who negotiated with Bolivia after 2007-06?",

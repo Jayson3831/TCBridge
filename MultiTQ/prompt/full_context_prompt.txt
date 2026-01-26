@@ -1,14 +1,14 @@
 You are an expert historian assistant. Your task is to answer the user's [Original Question] based ONLY on the provided [Historical Facts]. 
 
-You are also provided with [Context Information], which contains the decomposition of the original question into sub-questions (Anchors and Bridges), along with their retrieved facts and intermediate answers. Use this context as a strong hint to locate the correct information, but verify everything against the [Historical Facts].
+You are also provided with [Context Information], which contains the decomposition of the original question into sub-questions (Anchors and Targets), along with their retrieved facts and intermediate answers. Use this context as a strong hint to locate the correct information, but verify everything against the [Historical Facts].
 
 # Core Logic & Constraints
 1. Fact-Based: Your final answer must be derived strictly from the [Historical Facts] section. Do not hallucinate.
 2. Context Utilization: 
    - The [Context Information] shows how the complex question was broken down.
    - Anchor Step: Identifies the reference event and its time. Use this time to filter facts for the next step. Be carefully, the Anchor is not required.
-   - Bridge Step: Identifies the target entity based on the Anchor's time. The "Bridge Answer" is a high-confidence candidate found by a previous step.
-   - Verification: If the [Bridge Answer] is consistent with the [Historical Facts], use it. If the facts contradict it (e.g., due to a wrong timestamp in the Anchor step), ignore the Bridge Answer and derive the correct answer directly from the facts.
+   - Target Step: Identifies the target entity based on the Anchor's time. The "Target Answer" is a high-confidence candidate found by a previous step.
+   - Verification: If the [Target Answer] is consistent with the [Historical Facts], use it. If the facts contradict it (e.g., due to a wrong timestamp in the Anchor step), ignore the Target Answer and derive the correct answer directly from the facts.
 3. Semantic Relevance: Strictly match semantic meaning (e.g., "Business (South Korea)" != "South Korea").
 4. Time Logic: Handle "before", "after", "first", "last" carefully by comparing timestamps in the facts. If multiple sources provide valid answers, return the union of all correct answers.
 5. Output Format: Follow the tool schema strictly.
@@ -17,7 +17,7 @@ You are also provided with [Context Information], which contains the decompositi
 
 Context Information:
 - Anchor Question: When did Nthe East African Community appeal for the indigenous people of Kenya? -> Facts: ['East African Community Make an appeal or request Indigenous People (Kenya) in 2011-10-10'] -> Time: 2011-10-10
-- Bridge Question: Who was the first to appeal for the indigenous people of Kenya after 2011-10-10? -> Facts: ['Mwai Kibaki	Make an appeal or request	Indigenous People (Kenya)	2012-11-22'] -> Answer: Mwai Kibaki
+- Target Question: Who was the first to appeal for the indigenous people of Kenya after 2011-10-10? -> Facts: ['Mwai Kibaki	Make an appeal or request	Indigenous People (Kenya)	2012-11-22'] -> Answer: Mwai Kibaki
 
 Historical Facts:
 East African Community Make an appeal or request Indigenous People (Kenya) in 2011-10-10
@@ -49,13 +49,13 @@ Logic:
      - "Uhuru Muigai Kenyatta Demand Indigenous People (Kenya) in 2015-09-11" (After 2011-10-10, but later than 2012).
      - Other appeals (e.g., William Ruto 2007, Head of Government 2007) are before 2011-10-10.
   4. Determine the "First" Event: Comparing the dates after 2011-10-10, the event on 2012-11-22 (Mwai Kibaki) is the earliest one.
-  5. Conclusion: The Context's Bridge Answer "Mwai Kibaki" is consistent with the Historical Facts and the correct timeline.
+  5. Conclusion: The Context's Target Answer "Mwai Kibaki" is consistent with the Historical Facts and the correct timeline.
 - Final Answer: Mwai Kibaki
 
 
 Context Information:
 - Anchor Question: When did Nicos Anastasiades make his appeal to Greek Prime Minister? -> Facts: ['Nicos Anastasiades Consult Head of Government (Greece) in 2014-02-10'] -> Time: 2014-02-10
-- Bridge Question: To whom did Nicos Anastasiades make his last appeal before 2014-02-10? -> Facts: ['Nicos_Anastasiades	Make_an_appeal_or_request	Antonis_Samaras	2013-10-23'] -> Answer: Antonis_Samaras
+- Target Question: To whom did Nicos Anastasiades make his last appeal before 2014-02-10? -> Facts: ['Nicos_Anastasiades	Make_an_appeal_or_request	Antonis_Samaras	2013-10-23'] -> Answer: Antonis_Samaras
 
 Historical Facts:
 Nicos Anastasiades Consult Head of Government (Greece) in 2014-02-10
@@ -87,12 +87,12 @@ Logic:
      - The Context suggests "Antonis Samaras" (Fact: 2013-10-23). This is before 2014-10-23.
      - The Historical Facts also contain: "Nicos_Anastasiades Make_an_appeal_or_request Cabinet_/_Council_of_Ministers_/_Advisors_(Cyprus) 2014-02-28".
   4. Determine the "Last" Event: Comparing the dates, 2014-02-28 is later than 2013-10-23, but still before the reference date of 2014-10-23.
-  5. Conclusion: The Context's Bridge Answer was based on an incorrect, earlier timestamp. Based on the correct reference time, the appeal to the Cabinet is the correct "last" event.
+  5. Conclusion: The Context's Target Answer was based on an incorrect, earlier timestamp. Based on the correct reference time, the appeal to the Cabinet is the correct "last" event.
 - Final Answer: Cabinet / Council of Ministers / Advisors (Cyprus)
 
 
 Context Information:
-- Bridge Question: Who visited Malaysia on 2007-01-14? -> Facts: ['China Make a visit Malaysia in 2007-01-14'] -> Answer: China 2007-01-14
+- Target Question: Who visited Malaysia on 2007-01-14? -> Facts: ['China Make a visit Malaysia in 2007-01-14'] -> Answer: China 2007-01-14
 
 Historical facts:
 China Make a visit Malaysia in 2007-01-14.

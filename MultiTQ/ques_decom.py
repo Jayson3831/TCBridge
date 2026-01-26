@@ -138,7 +138,7 @@ class SubQuestionStep(BaseModel):
     
     subq_type: Annotated[
         str,
-        Field(description="The logical role of this sub-question. Must be 'Anchor' (to retrieve prerequisite info: either a reference event's timestamp OR a set of candidate events for ranking) or 'Bridge' (to derive the final answer using temporal comparison, ranking logic, or direct explicit time constraints).")
+        Field(description="The logical role of this sub-question. Must be 'Anchor' (to retrieve prerequisite info: either a reference event's timestamp OR a set of candidate events for ranking) or 'Target' (to derive the final answer using temporal comparison, ranking logic, or direct explicit time constraints).")
     ]
     entities: Annotated[
         List[str],
