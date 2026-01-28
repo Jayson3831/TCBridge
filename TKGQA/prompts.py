@@ -93,6 +93,72 @@ Output:
     }}
 ]
 
+**Example 4:**
+Input: Who was the first to visit Japan after the Russian Union of Industrialists and Entrepreneurs?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did the Russian Union of Industrialists and Entrepreneurs visit Japan?",
+            "At what time did the Russian Union of Industrialists and Entrepreneurs visit Japan?",
+            "What is the date when the Russian Union of Industrialists and Entrepreneurs visited Japan?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Who was the first to visit Japan after #1?",
+            "After #1, who was the first to visit Japan?",
+            "Who visited Japan first after #1?"
+        ]
+    }},
+]
+
+**Example 5:**
+Input: Who was the first to investigate France after Sean R. Parnell?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did Sean R. Parnell investigate France?",
+            "At what time did Sean R. Parnell investigate France?",
+            "What is the date when Sean R. Parnell investigated France?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Who was the first to investigate France after #1?",
+            "After #1, who was the first to investigate France?",
+            "Who investigated France first after #1?"
+        ]
+    }},
+]
+
+**Example 6:**
+Input: Which country was the first to sign an agreement with South Korea after Eletrobras?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did Eletrobras sign an agreement with South Korea?",
+            "At what time did Eletrobras sign an agreement with South Korea?",
+            "What is the date when Eletrobras signed an agreement with South Korea?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Which country was the first to sign an agreement with South Korea after #1?",
+            "After #1, which country was the first to sign an agreement with South Korea?",
+            "Which country signed an agreement with South Korea first after #1?"
+        ]
+    }},
+]
+
 # Input Data
 Please process the following new questions strictly adhering to the format above:
 
@@ -191,6 +257,72 @@ Output:
             "Which nation was attacked with small arms and light weapons by the Brazilian military last before #1?"
         ]
     }}
+]
+
+**Example 4:**
+Input: Before Tony Blair, which country last did France decline?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did France decline Tony Blair?",
+            "At what time did France decline Tony Blair?",
+            "What is the date when France declined Tony Blair?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Which country did France decline last before #1?",
+            "Before #1, which country did France decline last?",
+            "Which country was the last that France declined before #1?"
+        ]
+    }},
+]
+
+**Example 5:**
+Input: Who was the last person Winston Peters wanted to meet before Timor-Leste?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variations": [
+            "When did Winston Peters want to meet Timor-Leste?",
+            "At what time did Winston Peters want to meet Timor-Leste?",
+            "What is the date when Winston Peters wanted to meet Timor-Leste?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Who was the last person Winston Peters wanted to meet before #1?",
+            "Before #1, who was the last person Winston Peters wanted to meet?",
+            "Who did Winston Peters want to meet last before #1?"
+        ]
+    }},
+]
+
+**Example 6:**
+Input: Before Ali Muhammad Mujawar, which country last recommended Japan?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did Ali Muhammad Mujawar recommend Japan?",
+            "At what time did Ali Muhammad Mujawar recommend Japan?",
+            "What is the date when Ali Muhammad Mujawar recommended Japan?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Which country last recommended Japan before #1?",
+            "Before #1, which country last recommended Japan?",
+            "Which country was the last to recommend Japan before #1?"
+        ]
+    }},
 ]
 
 # Input Data
@@ -591,33 +723,19 @@ Please process the following new questions strictly adhering to the logic above:
 """
 
 inference = """# Role
-You are an expert Fact-Based Reasoning Engine. Your task is to answer a specific question based **only** on the provided list of "Historical facts".
+You are an expert historian assistant. Your task is to answer the user's question based ONLY on the provided [Relevant facts].
 
-# Input Format
-You will receive:
-1.  **Historical facts**: A list of retrieved event strings (Subject - Relation - Object - Timestamp).
-2.  **Question**: A natural language query.
-
-# Reasoning Guidelines
-1.  **Fact Filtering**: Identify the Subject, Relation (Action), and Object in the question. Filter the "Historical facts" to find matching events.
-2.  **Entity Type Validation (CRITICAL)**:
-    * Analyze the question to determine the **expected entity type** of the answer.
-    * **Person vs. Country**:
-        * If the question asks **"Which country"** or **"Which nation"**, you must ONLY output answers that are countries. **Discard** answers that are persons, organizations, or other entities.
-        * If the question asks for a person (e.g., **"Which person"**, **"Which leader"**, or **"Who"** in a context implying an individual), you must ONLY output answers that are people. **Discard** answers that are countries or organizations.
-    * **Consistency**: Ensure the answer's entity type strictly matches the question's interrogative constraint.
-3.  **Temporal Logic**:
-    * If the question implies **"first"**, find the earliest date among the matching facts.
-    * If the question implies **"last"**, find the latest date among the matching facts.
-    * If the question specifies a date (e.g., "on 14 January 2007"), filter for facts happening exactly on that date.
-4.  **Answer Extraction**:
-    * **Time Answers**: If the question asks "When", "Which year", or "Which month", extract the timestamp.
-    * **Entity Answers**: Extract the entity name exactly as it appears in the filtered facts.
+# Core Logic & Constraints
+1. Semantic Relevance: Strictly match semantic meaning. For example, "Business (South Korea)" CANNOT be equated with "South Korea", and "appeal or request" CANNOT be equated with "consult".
+2. Full Names: Always retrieve the full, explicit name of entities. Do not use partial names or abbreviations inside parentheses.
+3. Time Logic: 
+   - Handle conditions like "before", "after", "first", or "last" carefully by comparing timestamps.
+   - If multiple sources provide valid answers, return the union of all correct answers.
 
 # Output Format Rules
 You must strictly output a valid JSON object with two keys: `reason` and `answers`.
 
-1.  **"reason"**: A brief explanation of how you derived the answer from the facts, specifically mentioning how you matched the entity type (e.g., "Filtered out 'John Doe' because the question asked for a country...").
+1.  **"reason"**: A brief explanation of how you derived the answer from the facts.
 2.  **"answers"**: A list of strings.
     * **Date Formatting**:
         * If the question asks for a specific **year**, output format: `"YYYY"`.
@@ -638,7 +756,7 @@ Zawahiri Reject Barack Obama 2009-08-04.
 Question: In which year did barack obama reject the party member of united kingdom?
 Output:
 {
-    "reason": "The facts show 'Barack Obama Reject Party Member (United Kingdom)' occurred on 2008-09-23. The question asks for the year.",
+    "reason": "The rejection event occurred on 2008-09-23, so the year is 2008.",
     "answers": ["2008"]
 }
 
@@ -653,7 +771,7 @@ Vietnam Engage in diplomatic cooperation South Africa 2005-09-02.
 Question: When did the citizens of africa express their intention to establish diplomatic cooperation with vietnam?
 Output:
 {
-    "reason": "Found a direct match: 'Citizen (Africa) Express intent to engage in diplomatic cooperation... Vietnam' on 2012-09-04.",
+    "reason": "From the historical facts: Citizen (Africa) Express intent to engage in diplomatic cooperation (such as policy support) Vietnam 2012-09-04. This matches exactly what the question asks: citizens of Africa expressing intent toward diplomatic cooperation with Vietnam. So the date is 2012-09-04.",
     "answers": ["2012-09-04"]
 }
 
@@ -669,7 +787,7 @@ Media Personnel (Somalia) Make statement African Union 2007-06-15.
 Question: When did somalia's media personnel first commend somalia's council of ministers?
 Output:
 {
-    "reason": "There are two facts where Media Personnel (Somalia) praised Cabinet (Somalia): 2012-11-27 and 2015-01-12. The question asks for the 'first' time, which is the earlier date.",
+    "reason": "We are asked to find the first time Somalia's media personnel commended (i.e., praised or endorsed) Somalia's Cabinet / Council of Ministers / Advisors. From the historical facts: Media Personnel (Somalia) Praise or endorse Cabinet / Council of Ministers / Advisors (Somalia) on: 2012-11-27 and 2015-01-12. Among these, the earliest instance is 2012-11-27.",
     "answers": ["2012-11-27"]
 }
 
@@ -683,7 +801,7 @@ France Demand China in 2008-06-11.
 Question: Could you tell me the exact month when Agence France-Presse appealed to China?
 Output:
 {
-    "reason": "Found fact 'Agence France-Presse Make an appeal or request China' on 2007-01-08. The question asks for the exact month.",
+    "reason": "The user asks for the month Agence France-Presse appealed to China. I filtered out facts where the subject was 'France' or 'China'. The specific fact 'Agence France-Presse Make an appeal or request China in 2007-01-08' is the correct match. So the answer is: 2007-01.",
     "answers": ["2007-01"]
 }
 
@@ -704,7 +822,7 @@ Malaysia Host a visit Association of Southeast Asian Nations in 2007-01-14.
 Question: Who visited Malaysia on 14 January 2007?
 Output:
 {
-    "reason": "Identified facts where entities visited Malaysia on 2007-01-14. Matching records found for 'China' and 'Association of Southeast Asian Nations'.",
+    "reason": "Both China and Association of Southeast Asian Nations visited on that exact date. So the answer is: "China", "Association of Southeast Asian Nations",
     "answers": ["China", "Association of Southeast Asian Nations"]
 }
 
