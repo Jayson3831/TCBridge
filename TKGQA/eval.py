@@ -161,7 +161,8 @@ if __name__ == "__main__":
     output_path, error_path, eval_log = get_result_paths(
         args.dataset,
         args.sample,
+        args.suffix,
         top_k=args.top_k,
-        rerank_top_k=args.rerank_top_k
+        rerank_top_k=args.rerank_top_k,
     )
     evaluate(output_path, error_path, eval_log)

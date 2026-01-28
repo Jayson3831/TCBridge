@@ -280,8 +280,9 @@ async def main():
     output_path, error_path, result_path = get_result_paths(
         args.dataset,
         args.sample,
+        args.suffix,
         top_k=args.top_k,
-        rerank_top_k=args.rerank_top_k
+        rerank_top_k=args.rerank_top_k,
     )
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     os.makedirs(os.path.dirname(error_path), exist_ok=True)

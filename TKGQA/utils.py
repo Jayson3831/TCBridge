@@ -85,7 +85,7 @@ def parse_date_string(date_str: str) -> Optional[str]:
     except (ValueError, TypeError):
         return None
 
-def get_result_paths(dataset, sample, **kwargs):
+def get_result_paths(dataset, sample, suffix, **kwargs):
     """生成结果文件路径"""
     param_parts = []
     for key, value in kwargs.items():
@@ -95,6 +95,9 @@ def get_result_paths(dataset, sample, **kwargs):
     param_suffix = "_".join(param_parts)
     if param_suffix:
         param_suffix = "_" + param_suffix
+
+    if suffix:
+        param_suffix += "_" + suffix
 
     output_path = f"outputs/{dataset}_test_{sample}{param_suffix}.json"
     error_path = f"errors/{dataset}_test_{sample}{param_suffix}.json"

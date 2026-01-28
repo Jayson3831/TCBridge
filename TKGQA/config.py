@@ -25,6 +25,8 @@ def parse_args():
                         help='Path to knowledge graph data')
     parser.add_argument('--index_path', type=str, default='index/full_faiss.bin',
                         help='Path to FAISS index file')
+    parser.add_argument('--suffix', type=str, default='',
+                        help='Suffix for output files')
     parser.add_argument('--dataset', type=str, default='multitq',
                         help='Path to question file')
 
