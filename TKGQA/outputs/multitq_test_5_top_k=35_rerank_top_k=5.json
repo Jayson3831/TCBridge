@@ -1,0 +1,420 @@
+[
+    {
+        "question": "Who visited China on 8 May 2013?",
+        "gold_answers": [
+            "Benjamin Netanyahu",
+            "Antonis Samaras",
+            "Mahmoud Abbas",
+            "Barack Obama"
+        ],
+        "qtype": "equal",
+        "answer_type": "entity",
+        "time_level": "day",
+        "qlabel": "Single",
+        "decomposition": [
+            {
+                "subq_idx": 1,
+                "variants": [
+                    "Who visited China on 2013-05-08?",
+                    "Who made a visit to China on 2013-05-08?",
+                    "China host a visit to whom on 2013-05-08?"
+                ],
+                "best_subq": "China host a visit to whom on 2013-05-08?",
+                "facts": [
+                    "Middle East Host a visit China in 2013-05-08.",
+                    "China Host a visit Barack Obama in 2013-05-08.",
+                    "China Host a visit South Korea in 2013-05-12.",
+                    "China Host a visit Japan in 2013-08-05.",
+                    "China Host a visit Xi Jinping in 2013-05-15.",
+                    "China Host a visit Mahmoud Abbas in 2013-05-08.",
+                    "China Make a visit Middle East in 2013-05-08.",
+                    "China Host a visit Medical Personnel (Taiwan) in 2013-08-05.",
+                    "Thailand Host a visit China in 2013-11-05.",
+                    "China Host a visit Kuomintang in 2013-08-12.",
+                    "China Host a visit Antonis Samaras in 2013-05-08.",
+                    "China Host a visit Foreign Affairs (India) in 2013-05-13.",
+                    "China Host a visit Barack Obama in 2013-05-22.",
+                    "China Host a visit Mahmoud Abbas in 2013-05-05.",
+                    "China Host a visit Iran in 2013-10-13.",
+                    "China Host a visit Foreign Affairs (India) in 2013-05-15.",
+                    "China Host a visit Catherine Ashton in 2013-05-01.",
+                    "China Host a visit High Ranking Military Personnel (Taiwan) in 2013-05-10.",
+                    "China Host a visit Mahmoud Abbas in 2013-05-10.",
+                    "Japan Make a visit China in 2013-08-05.",
+                    "China Host a visit Xi Jinping in 2014-05-08.",
+                    "China Host a visit South Korea in 2008-05-13.",
+                    "China Host a visit Head of Government (Pakistan) in 2013-07-08.",
+                    "China Host a visit Mahmoud Abbas in 2013-05-15.",
+                    "China Host a visit South Korea in 2013-11-13.",
+                    "China Host a visit Kuomintang in 2013-06-09.",
+                    "China Host a visit Benjamin Netanyahu in 2013-05-08.",
+                    "Vietnam Host a visit China in 2013-10-09.",
+                    "China Host a visit Mahmoud Abbas in 2013-05-07.",
+                    "China Host a visit Kuomintang in 2013-06-12.",
+                    "China Host a visit Government Official (Russia) in 2013-12-05.",
+                    "China Host a visit Foreign Affairs (India) in 2013-05-03.",
+                    "China Host a visit France in 2013-04-25.",
+                    "China Host a visit Oluṣẹgun Ọbasanjọ in 2005-04-13.",
+                    "China Host a visit Antonis Samaras in 2013-05-12."
+                ]
+            }
+        ],
+        "inference": {
+            "reason": "Filtered facts where China Host a visit occurred on 2013-05-08. Matching entities found: Barack Obama, Mahmoud Abbas, Antonis Samaras, and Benjamin Netanyahu. The question asks 'to whom', implying a person or entity, and all matches are valid as they are entities hosted by China.",
+            "answers": [
+                "Barack Obama",
+                "Mahmoud Abbas",
+                "Antonis Samaras",
+                "Benjamin Netanyahu"
+            ]
+        }
+    },
+    {
+        "question": "Before Xi Jinping, who was the last country to make optimistic remarks about Malaysia?",
+        "gold_answers": [
+            "China"
+        ],
+        "qtype": "before_last",
+        "answer_type": "entity",
+        "time_level": "day",
+        "qlabel": "Multiple",
+        "decomposition": [
+            {
+                "subq_idx": 1,
+                "variants": [
+                    "When did Xi Jinping make optimistic remarks about Malaysia?",
+                    "At what time did Xi Jinping make optimistic remarks about Malaysia?",
+                    "What is the date when Xi Jinping made optimistic remarks about Malaysia?"
+                ],
+                "best_subq": "What is the date when Xi Jinping made optimistic remarks about Malaysia?",
+                "facts": [
+                    "Xi Jinping Make optimistic comment Malaysia in 2014-11-10.",
+                    "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-10-01.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-31.",
+                    "Xi Jinping Make a visit Malaysia in 2013-09-30.",
+                    "Xi Jinping Make a visit Malaysia in 2013-11-25.",
+                    "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-09-26.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-05.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-10.",
+                    "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-09-30.",
+                    "Xi Jinping Make a visit Malaysia in 2014-03-26.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-11.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-21.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-12.",
+                    "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-10-04.",
+                    "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-10-03.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-03.",
+                    "Xi Jinping Express intent to meet or negotiate Malaysia in 2013-10-02.",
+                    "Xi Jinping Engage in negotiation Malaysia in 2013-10-05.",
+                    "Malaysia Engage in negotiation Xi Jinping in 2013-10-05.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-02.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-04.",
+                    "Xi Jinping Make a visit Malaysia in 2013-10-09.",
+                    "China Make optimistic comment Malaysia in 2009-11-12.",
+                    "China Make optimistic comment Malaysia in 2014-05-27.",
+                    "China Make optimistic comment Malaysia in 2014-05-28.",
+                    "Malaysia Make optimistic comment China in 2009-11-11.",
+                    "Xi Jinping Make statement Malaysia in 2014-06-25.",
+                    "Malaysia Make optimistic comment China in 2009-11-12.",
+                    "Malaysia Make optimistic comment China in 2015-04-23.",
+                    "China Make optimistic comment Malaysia in 2014-03-26.",
+                    "Malaysia Make optimistic comment China in 2009-11-10.",
+                    "China Make optimistic comment Malaysia in 2014-03-31.",
+                    "China Make optimistic comment Malaysia in 2014-05-29.",
+                    "China Make optimistic comment Malaysia in 2014-04-01.",
+                    "China Make optimistic comment Malaysia in 2005-12-05."
+                ]
+            },
+            {
+                "subq_idx": 2,
+                "variants": [
+                    "Which country was the last to make optimistic remarks about Malaysia before #1?",
+                    "Before #1, which country was the last to make optimistic remarks about Malaysia?",
+                    "Which nation made optimistic remarks about Malaysia last before #1?"
+                ],
+                "best_subq": "Which country was the last to make optimistic remarks about Malaysia before 2014-11-10?",
+                "facts": [
+                    "Xi Jinping Make optimistic comment Malaysia in 2014-11-10.",
+                    "China Make optimistic comment Malaysia in 2014-03-31.",
+                    "China Make optimistic comment Malaysia in 2014-04-01.",
+                    "China Make optimistic comment Malaysia in 2014-05-27.",
+                    "China Make optimistic comment Malaysia in 2014-05-28.",
+                    "China Make optimistic comment Malaysia in 2014-05-29.",
+                    "China Make optimistic comment Malaysia in 2014-03-26.",
+                    "Thailand Make optimistic comment Malaysia in 2013-11-20.",
+                    "China Make optimistic comment Malaysia in 2009-11-12.",
+                    "China Make optimistic comment Malaysia in 2014-06-24.",
+                    "Thailand Make optimistic comment Malaysia in 2014-06-21.",
+                    "Malaysia Make optimistic comment Thailand in 2006-10-14.",
+                    "Thailand Make optimistic comment Malaysia in 2014-06-20.",
+                    "Malaysia Make optimistic comment China in 2009-11-10.",
+                    "Malaysia Make optimistic comment China in 2009-11-11.",
+                    "China Make optimistic comment Malaysia in 2014-09-06.",
+                    "Malaysia Make optimistic comment Thailand in 2008-10-22.",
+                    "Al Jazeera Make pessimistic comment Malaysia in 2014-12-11.",
+                    "Malaysia Make optimistic comment China in 2009-11-12.",
+                    "Malaysia Make optimistic comment Thailand in 2015-05-20.",
+                    "Malaysia Make optimistic comment China in 2015-04-23.",
+                    "Zhang Dejiang Make optimistic comment Malaysia in 2014-05-30.",
+                    "Malaysia Make optimistic comment Vietnam in 2014-03-17.",
+                    "Malaysia Make optimistic comment China in 2011-04-30.",
+                    "Malaysia Make optimistic comment Thailand in 2007-02-13.",
+                    "Thailand Make optimistic comment Malaysia in 2008-04-21.",
+                    "Thailand Make optimistic comment Malaysia in 2015-05-20.",
+                    "Malaysia Make optimistic comment Barack Obama in 2008-11-10.",
+                    "Malaysia Make optimistic comment Thailand in 2005-10-17.",
+                    "Iran Make optimistic comment Malaysia in 2012-11-22.",
+                    "Malaysia Make optimistic comment Cambodia in 2008-10-22.",
+                    "Thailand Make optimistic comment Malaysia in 2007-02-13.",
+                    "Malaysia Make optimistic comment Thailand in 2006-03-31.",
+                    "Malaysia Make optimistic comment United Arab Emirates in 2010-05-04.",
+                    "Malaysia Make optimistic comment Iran in 2012-11-22."
+                ]
+            }
+        ],
+        "inference": {
+            "reason": "The question asks 'Which country was the last to make optimistic remarks about Malaysia before 2014-11-10?', which specifies the expected entity type as a country. Filtered facts where the Subject is a country (e.g., China, Thailand, Iran) and the Relation is 'Make optimistic comment' with Object 'Malaysia', and the Timestamp is before 2014-11-10. Matching facts include: China (multiple dates up to 2014-09-06), Thailand (up to 2014-06-21), and Iran (2012-11-22). The latest date among these is 2014-09-06 for China, so China is the answer. Discarded facts with persons (e.g., Xi Jinping, Zhang Dejiang) or organizations (e.g., Al Jazeera) as they are not countries.",
+            "answers": [
+                "China"
+            ]
+        }
+    },
+    {
+        "question": "On 10 Nov 2009, which country paid a visit to Cambodia?",
+        "gold_answers": [
+            "Thailand"
+        ],
+        "qtype": "equal",
+        "answer_type": "entity",
+        "time_level": "day",
+        "qlabel": "Single",
+        "decomposition": [
+            {
+                "subq_idx": 1,
+                "variants": [
+                    "Which country paid a visit to Cambodia on 2009-11-10?",
+                    "On 2009-11-10, which nation visited Cambodia?",
+                    "What country made a visit to Cambodia on the date 2009-11-10?"
+                ],
+                "best_subq": "On 2009-11-10, which nation visited Cambodia?",
+                "facts": [
+                    "Thailand Make a visit Cambodia in 2009-11-10.",
+                    "China Host a visit Cambodia in 2009-10-20.",
+                    "Cambodia Host a visit Thailand in 2009-11-10.",
+                    "Thailand Host a visit Cambodia in 2009-11-30.",
+                    "Thailand Make a visit Cambodia in 2009-11-11.",
+                    "Cambodia Host a visit Thailand in 2009-11-11.",
+                    "Thailand Host a visit Cambodia in 2009-10-25.",
+                    "China Host a visit Cambodia in 2009-12-20.",
+                    "Thailand Make a visit Cambodia in 2009-11-14.",
+                    "Thailand Host a visit Cambodia in 2009-03-11.",
+                    "Thailand Make a visit Cambodia in 2009-12-09.",
+                    "Cambodia Make a visit Thailand in 2009-11-30.",
+                    "Thailand Make a visit Cambodia in 2009-11-16.",
+                    "Cambodia Host a visit Thailand in 2009-11-14.",
+                    "Thailand Make a visit Cambodia in 2009-12-08.",
+                    "China Host a visit Cambodia in 2009-07-09.",
+                    "Abhisit Vejjajiva Make a visit Cambodia in 2009-11-09.",
+                    "Cambodia Host a visit Thailand in 2009-12-09.",
+                    "Cambodia Host a visit Thailand in 2009-11-16.",
+                    "Thailand Make a visit Cambodia in 2009-10-21.",
+                    "Vietnam Make a visit Cambodia in 2009-08-11.",
+                    "Thailand Make a visit Cambodia in 2009-12-02.",
+                    "Cambodia Host a visit Vietnam in 2009-08-11.",
+                    "Cambodia Make a visit Thailand in 2009-03-11.",
+                    "Cambodia Host a visit Thailand in 2009-12-08.",
+                    "Cambodia Host a visit Thailand in 2009-10-21.",
+                    "Cambodia Make a visit Thailand in 2009-10-25.",
+                    "Abhisit Vejjajiva Make a visit Cambodia in 2009-06-11.",
+                    "Thailand Consult Cambodia in 2009-04-10.",
+                    "Abhisit Vejjajiva Make a visit Cambodia in 2009-11-04.",
+                    "Thailand Make a visit Cambodia in 2009-02-20.",
+                    "Thailand Consult Cambodia in 2009-11-30.",
+                    "China Make a visit Cambodia in 2009-12-21.",
+                    "Cambodia Host a visit Thailand in 2009-12-02.",
+                    "Cambodia Host a visit Vietnam in 2009-09-25."
+                ]
+            }
+        ],
+        "inference": {
+            "reason": "Identified facts where entities visited Cambodia on 2009-11-10. The question asks 'which nation', so only countries are considered. Matching records found for 'Thailand' as a nation visiting Cambodia on that date. 'Abhisit Vejjajiva' is a person, not a nation, and thus filtered out.",
+            "answers": [
+                "Thailand"
+            ]
+        }
+    },
+    {
+        "question": "After Yoshihiko Noda, which country was the first to be praised by China?",
+        "gold_answers": [
+            "France"
+        ],
+        "qtype": "after_first",
+        "answer_type": "entity",
+        "time_level": "day",
+        "qlabel": "Multiple",
+        "decomposition": [
+            {
+                "subq_idx": 1,
+                "variants": [
+                    "When did China praise Yoshihiko Noda?",
+                    "At what time did China praise Yoshihiko Noda?",
+                    "What is the date when China praised Yoshihiko Noda?"
+                ],
+                "best_subq": "What is the date when China praised Yoshihiko Noda?",
+                "facts": [
+                    "China Praise or endorse Yoshihiko Noda in 2011-08-29.",
+                    "Yoshihiko Noda Consult China in 2011-12-26.",
+                    "China Criticize or denounce Yoshihiko Noda in 2012-09-27.",
+                    "Yoshihiko Noda Consult China in 2011-12-25.",
+                    "China Criticize or denounce Yoshihiko Noda in 2012-09-28.",
+                    "China Criticize or denounce Yoshihiko Noda in 2012-07-28.",
+                    "Yoshihiko Noda Praise or endorse China in 2011-11-03.",
+                    "China Demand Yoshihiko Noda in 2011-08-29.",
+                    "Yoshihiko Noda Praise or endorse China in 2011-11-04.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-16.",
+                    "China Demand Yoshihiko Noda in 2011-08-30.",
+                    "China Consult Yoshihiko Noda in 2011-12-25.",
+                    "China Consult Yoshihiko Noda in 2011-12-26.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-14.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-29.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-24.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-20.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-27.",
+                    "China Host a visit Yoshihiko Noda in 2012-05-12.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-28.",
+                    "Yoshihiko Noda Make statement China in 2011-12-26.",
+                    "China Host a visit Yoshihiko Noda in 2012-02-11.",
+                    "China Host a visit Yoshihiko Noda in 2012-05-13.",
+                    "China Host a visit Yoshihiko Noda in 2012-05-14.",
+                    "China Host a visit Yoshihiko Noda in 2012-04-26.",
+                    "Yoshihiko Noda Make statement China in 2012-05-13.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-21.",
+                    "Yoshihiko Noda Make a visit China in 2011-12-27.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-22.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-26.",
+                    "China Host a visit Yoshihiko Noda in 2011-10-12.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-25.",
+                    "Yoshihiko Noda Make a visit China in 2011-12-29.",
+                    "China Host a visit Yoshihiko Noda in 2011-12-23.",
+                    "China Host a visit Yoshihiko Noda in 2011-11-16."
+                ]
+            },
+            {
+                "subq_idx": 2,
+                "variants": [
+                    "Which country was the first to be praised by China after #1?",
+                    "After #1, which country was the first to be praised by China?",
+                    "Which country did China praise first after #1?"
+                ],
+                "best_subq": "After 2011-08-29, which country was the first to be praised by China?",
+                "facts": [
+                    "China Praise or endorse France in 2011-06-29.",
+                    "China Praise or endorse Thailand in 2011-04-29.",
+                    "China Praise or endorse Japan in 2011-12-29.",
+                    "China Praise or endorse France in 2011-08-31.",
+                    "China Praise or endorse France in 2011-09-01.",
+                    "China Praise or endorse Sudan in 2011-06-29.",
+                    "China Praise or endorse Japan in 2011-10-28.",
+                    "China Praise or endorse South Africa in 2011-09-30.",
+                    "China Praise or endorse Iran in 2011-09-15.",
+                    "China Praise or endorse Iran in 2011-06-25.",
+                    "China Praise or endorse France in 2011-03-31.",
+                    "China Praise or endorse Kazakhstan in 2011-12-20.",
+                    "China Praise or endorse African Union in 2011-09-25.",
+                    "China Praise or endorse Government (Pakistan) in 2011-05-23.",
+                    "China Praise or endorse South Korea in 2011-07-21.",
+                    "China Praise or endorse Ethiopia in 2011-08-16.",
+                    "International Government Organizations Praise or endorse China in 2008-09-26.",
+                    "China Praise or endorse South Korea in 2011-05-31.",
+                    "China Praise or endorse Eritrea in 2011-09-21.",
+                    "China Praise or endorse Iran in 2011-04-19.",
+                    "Sudan Praise or endorse China in 2011-11-29.",
+                    "Japan Praise or endorse China in 2011-05-27.",
+                    "China Praise or endorse Sudan in 2011-06-30.",
+                    "China Praise or endorse Thailand in 2010-11-29.",
+                    "China Praise or endorse Japan in 2011-12-26.",
+                    "China Praise or endorse Iran in 2011-04-20.",
+                    "China Praise or endorse Iran in 2010-09-29.",
+                    "China Praise or endorse Tanzania in 2011-06-21.",
+                    "China Praise or endorse Iran in 2011-03-23.",
+                    "China Praise or endorse South Korea in 2011-02-11.",
+                    "China Praise or endorse Thailand in 2011-07-05.",
+                    "China Praise or endorse Tanzania in 2011-06-22.",
+                    "China Praise or endorse United Arab Emirates in 2011-02-11.",
+                    "China Praise or endorse Iran in 2011-01-19.",
+                    "China Praise or endorse Iran in 2011-04-15."
+                ]
+            }
+        ],
+        "inference": {
+            "reason": "The question asks for a country praised by China after 2011-08-29, with 'first' implying the earliest date. Filtered facts show China praised entities after that date: South Africa on 2011-09-30, Iran on 2011-09-15, African Union on 2011-09-25, Eritrea on 2011-09-21, France on 2011-09-01, and Japan on 2011-12-29 and 2011-12-26. The earliest date is 2011-09-01 (France), but France is a country. Other early dates include Iran on 2011-09-15, but Iran is also a country. The earliest date for a country is France on 2011-09-01, as it matches the entity type 'country' as per the question's constraint.",
+            "answers": [
+                "France"
+            ]
+        }
+    },
+    {
+        "question": "Which country made Iraq suffer from conventional military forces on 13 June 2010?",
+        "gold_answers": [
+            "Iran"
+        ],
+        "qtype": "equal",
+        "answer_type": "entity",
+        "time_level": "day",
+        "qlabel": "Single",
+        "decomposition": [
+            {
+                "subq_idx": 1,
+                "variants": [
+                    "Which country made Iraq suffer from conventional military forces on 2010-06-13?",
+                    "On 2010-06-13, which nation caused Iraq to suffer from conventional military forces?",
+                    "What country inflicted suffering from conventional military forces on Iraq on the date 2010-06-13?"
+                ],
+                "best_subq": "What country inflicted suffering from conventional military forces on Iraq on the date 2010-06-13?",
+                "facts": [
+                    "Iran Use conventional military force Iraq in 2010-06-13.",
+                    "Iraq Use conventional military force Iran in 2010-03-05.",
+                    "France Use conventional military force Iraq in 2014-08-10.",
+                    "Iraq Use conventional military force France in 2011-05-10.",
+                    "Naval (United States) Use conventional military force Iraq in 2010-11-13.",
+                    "France Use conventional military force Iraq in 2015-04-10.",
+                    "France Use conventional military force Iraq in 2014-10-05.",
+                    "Iraq Use conventional military force Iran in 2007-10-12.",
+                    "France Use conventional military force Iraq in 2014-10-01.",
+                    "France Use conventional military force Iraq in 2014-10-08.",
+                    "Sudan Use conventional military force Iraq in 2012-11-10.",
+                    "Iraq Accuse Iran in 2010-10-17.",
+                    "France Use conventional military force Iraq in 2007-03-03.",
+                    "France Use conventional military force Iraq in 2014-09-20.",
+                    "France Use conventional military force Iraq in 2014-09-26.",
+                    "France Use conventional military force Iraq in 2015-09-16.",
+                    "France Use conventional military force Iraq in 2007-05-09.",
+                    "Iran Use conventional military force Iraq in 2011-10-01.",
+                    "France Use conventional military force Iraq in 2014-09-23.",
+                    "France Use conventional military force Iraq in 2015-11-16.",
+                    "Iraq Use conventional military force Iran in 2009-05-16.",
+                    "France Use conventional military force Iraq in 2014-09-25.",
+                    "France Use conventional military force Iraq in 2015-09-29.",
+                    "Bolivia Use conventional military force Iraq in 2014-08-13.",
+                    "France Use conventional military force Iraq in 2015-09-27.",
+                    "Iraq Use conventional military force Iran in 2011-10-17.",
+                    "France Use conventional military force Iran in 2010-06-16.",
+                    "Iraq Use conventional military force Insurgent (Islamic State of Iraq and the Levant) in 2014-06-20.",
+                    "France Use conventional military force Iraq in 2014-09-22.",
+                    "Iraq Use conventional military force Iran in 2011-04-08.",
+                    "France Use conventional military force Iraq in 2015-11-14.",
+                    "Iraq Use conventional military force Iran in 2011-11-12.",
+                    "Iran fight with artillery and tanks Iraq in 2010-06-10.",
+                    "Human Rights Watch Investigate Iraq in 2010-04-30.",
+                    "Iraq Use conventional military force Iran in 2008-04-15."
+                ]
+            }
+        ],
+        "inference": {
+            "reason": "Filtered facts for events where a subject used conventional military force on Iraq on 2010-06-13. Found 'Iran Use conventional military force Iraq in 2010-06-13'. The question asks for a country, and Iran is a country, so it matches the entity type constraint.",
+            "answers": [
+                "Iran"
+            ]
+        }
+    }
+]

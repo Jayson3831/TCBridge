@@ -1,0 +1,393 @@
+[
+    {
+        "timestamp": "2026-01-28 17:15:37",
+        "overall_hit": "69.40%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 219,
+                "total": 341
+            },
+            "time": {
+                "hit": 128,
+                "total": 159
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 297,
+                "total": 372
+            },
+            "Multiple": {
+                "hit": 50,
+                "total": 128
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 85,
+                "total": 91
+            },
+            "month": {
+                "hit": 35,
+                "total": 44
+            },
+            "year": {
+                "hit": 21,
+                "total": 23
+            }
+        },
+        "hit_by_before_after": {
+            "day": {
+                "hit": 62,
+                "total": 78
+            },
+            "month": {
+                "hit": 10,
+                "total": 15
+            },
+            "year": {
+                "hit": 7,
+                "total": 12
+            }
+        },
+        "hit_by_equal_multi": {
+            "month": {
+                "hit": 5,
+                "total": 12
+            },
+            "year": {
+                "hit": 3,
+                "total": 10
+            },
+            "day": {
+                "hit": 0,
+                "total": 1
+            }
+        },
+        "total_tokens": {
+            "completion": 143077,
+            "prompt": 1800861,
+            "total": 1943938
+        }
+    },
+    {
+        "timestamp": "2026-01-28 17:30:58",
+        "overall_hit": "69.40%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 219,
+                "total": 341,
+                "acc": "64.22%"
+            },
+            "time": {
+                "hit": 128,
+                "total": 159,
+                "acc": "80.50%"
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 297,
+                "total": 372,
+                "acc": "79.84%"
+            },
+            "Multiple": {
+                "hit": 50,
+                "total": 128,
+                "acc": "39.06%"
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 85,
+                "total": 91,
+                "acc": "93.41%"
+            },
+            "month": {
+                "hit": 35,
+                "total": 44,
+                "acc": "79.55%"
+            },
+            "year": {
+                "hit": 21,
+                "total": 23,
+                "acc": "91.30%"
+            }
+        },
+        "hit_by_before_after": {
+            "day": {
+                "hit": 62,
+                "total": 78,
+                "acc": "79.49%"
+            },
+            "month": {
+                "hit": 10,
+                "total": 15,
+                "acc": "66.67%"
+            },
+            "year": {
+                "hit": 7,
+                "total": 12,
+                "acc": "58.33%"
+            }
+        },
+        "hit_by_equal_multi": {
+            "month": {
+                "hit": 5,
+                "total": 12,
+                "acc": "41.67%"
+            },
+            "year": {
+                "hit": 3,
+                "total": 10,
+                "acc": "30.00%"
+            },
+            "day": {
+                "hit": 0,
+                "total": 1,
+                "acc": "0.00%"
+            }
+        },
+        "total_tokens": null
+    },
+    {
+        "timestamp": "2026-01-28 17:32:30",
+        "overall_hit": "69.40%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 219,
+                "total": 341,
+                "acc": "64.22%"
+            },
+            "time": {
+                "hit": 128,
+                "total": 159,
+                "acc": "80.50%"
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 297,
+                "total": 372,
+                "acc": "79.84%"
+            },
+            "Multiple": {
+                "hit": 50,
+                "total": 128,
+                "acc": "39.06%"
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 85,
+                "total": 91,
+                "acc": "93.41%"
+            },
+            "month": {
+                "hit": 35,
+                "total": 44,
+                "acc": "79.55%"
+            },
+            "year": {
+                "hit": 21,
+                "total": 23,
+                "acc": "91.30%"
+            }
+        },
+        "hit_by_before_after": {
+            "day": {
+                "hit": 62,
+                "total": 78,
+                "acc": "79.49%"
+            },
+            "month": {
+                "hit": 10,
+                "total": 15,
+                "acc": "66.67%"
+            },
+            "year": {
+                "hit": 7,
+                "total": 12,
+                "acc": "58.33%"
+            }
+        },
+        "hit_by_equal_multi": {
+            "month": {
+                "hit": 5,
+                "total": 12,
+                "acc": "41.67%"
+            },
+            "year": {
+                "hit": 3,
+                "total": 10,
+                "acc": "30.00%"
+            },
+            "day": {
+                "hit": 0,
+                "total": 1,
+                "acc": "0.00%"
+            }
+        },
+        "total_tokens": null
+    },
+    {
+        "timestamp": "2026-01-28 17:32:46",
+        "overall_hit": "73.20%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 238,
+                "total": 341,
+                "acc": "69.79%"
+            },
+            "time": {
+                "hit": 128,
+                "total": 159,
+                "acc": "80.50%"
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 305,
+                "total": 372,
+                "acc": "81.99%"
+            },
+            "Multiple": {
+                "hit": 61,
+                "total": 128,
+                "acc": "47.66%"
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 85,
+                "total": 91,
+                "acc": "93.41%"
+            },
+            "month": {
+                "hit": 37,
+                "total": 44,
+                "acc": "84.09%"
+            },
+            "year": {
+                "hit": 21,
+                "total": 23,
+                "acc": "91.30%"
+            }
+        },
+        "hit_by_before_after": {
+            "day": {
+                "hit": 65,
+                "total": 78,
+                "acc": "83.33%"
+            },
+            "month": {
+                "hit": 12,
+                "total": 15,
+                "acc": "80.00%"
+            },
+            "year": {
+                "hit": 8,
+                "total": 12,
+                "acc": "66.67%"
+            }
+        },
+        "hit_by_equal_multi": {
+            "month": {
+                "hit": 9,
+                "total": 12,
+                "acc": "75.00%"
+            },
+            "year": {
+                "hit": 6,
+                "total": 10,
+                "acc": "60.00%"
+            },
+            "day": {
+                "hit": 1,
+                "total": 1,
+                "acc": "100.00%"
+            }
+        },
+        "total_tokens": null
+    },
+    {
+        "timestamp": "2026-01-28 17:34:27",
+        "overall_hit": "73.00%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 219,
+                "total": 341,
+                "acc": "64.22%"
+            },
+            "time": {
+                "hit": 146,
+                "total": 159,
+                "acc": "91.82%"
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 315,
+                "total": 372,
+                "acc": "84.68%"
+            },
+            "Multiple": {
+                "hit": 50,
+                "total": 128,
+                "acc": "39.06%"
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 85,
+                "total": 91,
+                "acc": "93.41%"
+            },
+            "month": {
+                "hit": 37,
+                "total": 44,
+                "acc": "84.09%"
+            },
+            "year": {
+                "hit": 23,
+                "total": 23,
+                "acc": "100.00%"
+            }
+        },
+        "hit_by_before_after": {
+            "day": {
+                "hit": 62,
+                "total": 78,
+                "acc": "79.49%"
+            },
+            "month": {
+                "hit": 10,
+                "total": 15,
+                "acc": "66.67%"
+            },
+            "year": {
+                "hit": 7,
+                "total": 12,
+                "acc": "58.33%"
+            }
+        },
+        "hit_by_equal_multi": {
+            "month": {
+                "hit": 5,
+                "total": 12,
+                "acc": "41.67%"
+            },
+            "year": {
+                "hit": 3,
+                "total": 10,
+                "acc": "30.00%"
+            },
+            "day": {
+                "hit": 0,
+                "total": 1,
+                "acc": "0.00%"
+            }
+        },
+        "total_tokens": null
+    }
+]

@@ -129,6 +129,92 @@ class BestSubquestionSelector:
         return best_subqs[0], best_idxs[0].item()
 
 
+async def process_single_question(data, selector, retriever, total_tokens, reranker_lock):
+    """处理单个问题的完整流程"""
+    question = data['question']
+    qtype = data['qtype']
+    answer_type = data['answer_type']
+    time_level = data['time_level']
+    qlabel = data['qlabel']
+
+    # 问题类型标记
+    time_constraint = "before" if "before" in qtype else "after" if "after" in qtype else None
+
+    # 问题分解
+    dec_prompt = getattr(prompts, qtype)
+    dec_messages = [{"role": "system", "content": dec_prompt},
+                    {"role": "user", "content": question}]
+    dec_response = await llm_invoke(dec_messages, total_tokens)
+
+    if not dec_response:
+        print(colored(f"Decomposition failed for question: {question}", "red"))
+        return None
+
+    # 选择最佳子问题变体
+    dec_questions = deepcopy(dec_response)
+    for sub_decq in dec_questions:
+        variants = sub_decq.get('variants', [])
+        if len(variants) != 3:
+            print(colored(f"Expected 3 variants for subquestion: {sub_decq.get('subq_idx')}", "red"))
+            continue
+
+        best_subq, _ = selector.select_single(question, variants)
+        sub_decq['best_subq'] = best_subq
+
+    # 相关事件检索
+    for decq in dec_questions:
+        # 找占位符
+        idx = decq.get('subq_idx')
+        cur_question = decq['best_subq']
+        ref_tokens = re.findall(r"#\d+", cur_question)
+        if ref_tokens:
+            cur_question = await tcbridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock)
+            decq['best_subq'] = cur_question
+
+        # 子问题事件检索
+        facts = await retriever.get_faiss_facts(cur_question, args.top_k)
+        decq['facts'] = facts
+
+    # 根据子问题相关事件进行推理
+    last_subq = dec_questions[-1]
+    last_facts = last_subq['facts']
+    facts_text = '\n'.join(last_facts)
+    human_message = f"Relevant facts:\n{facts_text}\nQuestion: {last_subq['best_subq']}"
+    inf_messages = [{"role": "system", "content": prompts.inference},
+                    {"role": "user", "content": human_message}]
+    inf_response = await llm_invoke(inf_messages, total_tokens)
+
+    reason = inf_response.get('reason', 'No reason generated.')
+    answers = inf_response.get('answers', [])
+
+    # fallback
+    if not answers:
+        fallback_facts = await retriever.get_faiss_facts(question, args.top_k)
+        if fallback_facts:
+            facts_text = '\n'.join(fallback_facts)
+            human_message = f"Relevant facts (fallback):\n{facts_text}\nQuestion: {last_subq['best_subq']}"
+            inf_messages = [{"role": "system", "content": prompts.inference},
+                            {"role": "user", "content": human_message}]
+            inf_response = await llm_invoke(inf_messages, total_tokens)
+
+            reason = inf_response.get('reason', 'No reason generated.')
+            answers = inf_response.get('answers', [])
+
+    return {
+        "question": question,
+        "gold_answers": data['answers'],
+        "qtype": qtype,
+        "answer_type": answer_type,
+        "time_level": time_level,
+        "qlabel": qlabel,
+        "decomposition": dec_questions,
+        "inference": {
+            "reason": reason,
+            "answers": answers
+        }
+    }
+
+
 async def main():
     reranker_lock = asyncio.Lock()
 
@@ -162,114 +248,49 @@ async def main():
         with open(sample_path, 'w') as file:
             json.dump(datas, file, indent=4)
 
-    # 统计tokens用量
+    # 统计 tokens 用量（使用可变对象在协程间共享）
     total_tokens = {
         "completion": 0,
         "prompt": 0,
         "total": 0
     }
 
-    # 推理过程
-    results = []
-    for data in tqdm(datas, desc="Processing question and events for inference."):
-        question = data['question']
-        qtype = data['qtype']
+    # 并发限制
+    concurrent_limit = getattr(args, 'concurrent_limit', 8)
+    semaphore = asyncio.Semaphore(concurrent_limit)
 
-        # 问题类型标记
-        time_constraint = "before" if "before" in qtype else "after" if "after" in qtype else None
+    async def process_with_limit(data):
+        async with semaphore:
+            return await process_single_question(data, selector, retriever, total_tokens, reranker_lock)
 
-        # 问题分解
-        failed_dec = 0
-        dec_prompt = getattr(prompts, qtype)
-        dec_messages = [{"role": "system", "content": dec_prompt},
-                        {"role": "user", "content": question}]
-        dec_response = await llm_invoke(dec_messages, total_tokens)
+    # 并行处理所有问题
+    tasks = [process_with_limit(data) for data in datas]
+    results_raw = await tqdm_asyncio.gather(*tasks, desc="Processing questions concurrently")
 
-        if not dec_response:
-            print(colored(f"Decomposition failed for question: {question}", "red"))
-            failed_dec += 1
-            continue
-
-        # 选择最佳子问题变体
-        dec_questions = deepcopy(dec_response)
-        for sub_decq in dec_questions:
-            variants = sub_decq['variants']
-            if len(variants) != 3:
-                print(colored(f"Expected 3 variants for subquestion: {sub_decq['subq_idx']}", "red"))
-                failed_dec += 1
-                continue
-
-            best_subq, _ = selector.select_single(question, variants)
-            sub_decq['best_subq'] = best_subq
-
-        # 相关事件检索
-        for decq in dec_questions:
-            # 找占位符
-            subq_idx = decq['subq_idx']
-            cur_question = decq['best_subq']
-            ref_tokens = re.findall(r"#\d+", cur_question)
-            if ref_tokens:
-                cur_question = await tcbridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock)
-                decq['best_subq'] = cur_question
-
-            # 子问题事件检索
-            facts = await retriever.get_faiss_facts(cur_question, args.top_k)
-            decq['facts'] = facts
-
-        # 根据子问题相关事件进行推理
-        last_subq = dec_questions[-1]
-        last_facts = last_subq['facts']
-        facts_text = '\n'.join(last_facts)
-        human_message = f"Relevant facts:\n{facts_text}\nQuestion: {last_subq['best_subq']}"
-        inf_messages = [{"role": "system", "content": prompts.inference},
-                        {"role": "user", "content": human_message}]
-        inf_response = await llm_invoke(inf_messages, total_tokens)
-
-        reason = inf_response.get('reason', 'No reason generated.')
-        answers = inf_response.get('answers', [])
-
-        # fallback
-        if not answers:
-            fallback_facts = await retriever.get_faiss_facts(question, args.top_k)
-            if fallback_facts:
-                facts_text = '\n'.join(fallback_facts)
-                human_message = f"Relevant facts (fallback):\n{facts_text}\nQuestion: {last_subq['best_subq']}"
-                inf_messages = [{"role": "system", "content": prompts.inference},
-                                {"role": "user", "content": human_message}]
-                inf_response = await llm_invoke(inf_messages, total_tokens)
-
-                reason = inf_response.get('reason', 'No reason generated.')
-                answers = inf_response.get('answers', [])
-
-        # 保存结果文件
-        result = {
-            "question": question,
-            "gold_answers": data['answers'],
-            "qtype": qtype,
-            "answer_type": data['answer_type'],
-            "time_level": data['time_level'],
-            "qlabel": data['qlabel'],
-            "decomposition": dec_questions,
-            "inference": {
-                "reason": reason,
-                "answers": answers
-            }
-        }
-        results.append(result)
+    # 过滤掉失败的结果（None）
+    results = [r for r in results_raw if r is not None]
+    failed_dec = len(datas) - len(results)
 
     # 保存所有结果
     print(f"\n{failed_dec} questions failed during decomposition.")
     print("\n===============================================\n")
     print(f"Total tokens used: {total_tokens}")
     print("\n===============================================\n")
-    result_path = f"results/{args.dataset}_test_{args.sample}_results.json"
-    error_file = f"results/{args.dataset}_test_{args.sample}_errors.json"
+
+    output_path, error_path, result_path = get_result_paths(
+        args.dataset,
+        args.sample,
+        top_k=args.top_k,
+        rerank_top_k=args.rerank_top_k
+    )
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    os.makedirs(os.path.dirname(error_path), exist_ok=True)
     os.makedirs(os.path.dirname(result_path), exist_ok=True)
-    with open(result_path, 'w') as f:
+    with open(output_path, 'w') as f:
         json.dump(results, f, ensure_ascii=False, indent=4)
 
     # 评估准确率
-    evaluate(result_path, error_file, total_tokens)
+    evaluate(output_path, error_path, result_path, total_tokens)
 
 if __name__ == "__main__":
     asyncio.run(main())

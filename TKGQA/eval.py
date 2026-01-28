@@ -4,6 +4,7 @@ import json
 import re
 import string
 from config import args
+from utils import *
 from collections import defaultdict
 from termcolor import colored
 
@@ -45,7 +46,7 @@ def eval_hit(prediction, answers):
             return 1
     return 0
 
-def evaluate(result_file, error_file, total_tokens=None):
+def evaluate(result_file, error_file, eval_log_path, total_tokens=None):
     print(colored("Evaluating Results...", "green"))
     
     with open(result_file, 'r') as f:
@@ -131,6 +132,9 @@ def evaluate(result_file, error_file, total_tokens=None):
     # 构建结果字典
     eval_result = {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "config": {k: getattr(args, k) for k in [
+            "top_k", "rerank_top_k", "hit_k", "llm", "dataset", "sample"
+        ]},
         "overall_hit": f"{sum(hit_list) * 100 / len(hit_list):.2f}%",
         "hit_by_answer_type": dict(hit_by_answer_type),
         "hit_by_qlabel": dict(hit_by_qlabel),
@@ -139,9 +143,6 @@ def evaluate(result_file, error_file, total_tokens=None):
         "hit_by_equal_multi": dict(hit_by_equal_multi),
         "total_tokens": dict(total_tokens) if total_tokens else None
     }
-
-    # 追加到评估日志文件
-    eval_log_path = f"results/{args.dataset}_test_{args.sample}_eval_log.json"
 
     # 读取已有日志
     if os.path.exists(eval_log_path):
@@ -157,6 +158,10 @@ def evaluate(result_file, error_file, total_tokens=None):
 
 
 if __name__ == "__main__":
-    result_path = f"results/{args.dataset}_test_{args.sample}_results.json"
-    error_file = f"results/{args.dataset}_test_{args.sample}_errors.json"
-    evaluate(result_path, error_file)
+    output_path, error_path, eval_log = get_result_paths(
+        args.dataset,
+        args.sample,
+        top_k=args.top_k,
+        rerank_top_k=args.rerank_top_k
+    )
+    evaluate(output_path, error_path, eval_log)

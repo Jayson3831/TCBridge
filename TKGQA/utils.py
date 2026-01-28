@@ -1,15 +1,15 @@
 import os
 import json
-from openai import OpenAI
+from openai import AsyncOpenAI
 from dateutil import parser
 from datetime import datetime
 from config import args
 from typing import Optional, List, Dict
 
-client = OpenAI(api_key=args.api_key, base_url=args.base_url, max_retries=2)
+client = AsyncOpenAI(api_key=args.api_key, base_url=args.base_url, max_retries=2, timeout=120.0)
 
 async def llm_invoke(messages: List[Dict], total_tokens: Dict[str, int]):
-    response = client.chat.completions.create(
+    response = await client.chat.completions.create(
         model=args.llm,
         messages=messages,
         temperature=args.temperature,
@@ -85,3 +85,19 @@ def parse_date_string(date_str: str) -> Optional[str]:
     except (ValueError, TypeError):
         return None
 
+def get_result_paths(dataset, sample, **kwargs):
+    """生成结果文件路径"""
+    param_parts = []
+    for key, value in kwargs.items():
+        if value is not None and value != getattr(args, '_default_' + key, None):
+            param_parts.append(f"{key}={value}")
+
+    param_suffix = "_".join(param_parts)
+    if param_suffix:
+        param_suffix = "_" + param_suffix
+
+    output_path = f"outputs/{dataset}_test_{sample}{param_suffix}.json"
+    error_path = f"errors/{dataset}_test_{sample}{param_suffix}.json"
+    result_path = f"results/{dataset}_test_{sample}{param_suffix}.json"
+
+    return output_path, error_path, result_path

@@ -1,0 +1,146 @@
+[
+    {
+        "timestamp": "2026-01-28 15:18:34",
+        "overall_hit": "100.00%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 5,
+                "total": 5
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 3,
+                "total": 3
+            },
+            "Multiple": {
+                "hit": 2,
+                "total": 2
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 3,
+                "total": 3
+            }
+        },
+        "hit_by_before_after": {},
+        "hit_by_equal_multi": {},
+        "total_tokens": {
+            "completion": 1150,
+            "prompt": 15503,
+            "total": 16653
+        }
+    },
+    {
+        "timestamp": "2026-01-28 15:24:33",
+        "overall_hit": "100.00%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 5,
+                "total": 5
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 3,
+                "total": 3
+            },
+            "Multiple": {
+                "hit": 2,
+                "total": 2
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 3,
+                "total": 3
+            }
+        },
+        "hit_by_before_after": {},
+        "hit_by_equal_multi": {},
+        "total_tokens": {
+            "completion": 1434,
+            "prompt": 16374,
+            "total": 17808
+        }
+    },
+    {
+        "timestamp": "2026-01-28 15:27:49",
+        "overall_hit": "100.00%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 5,
+                "total": 5
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 3,
+                "total": 3
+            },
+            "Multiple": {
+                "hit": 2,
+                "total": 2
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 3,
+                "total": 3
+            }
+        },
+        "hit_by_before_after": {},
+        "hit_by_equal_multi": {},
+        "total_tokens": {
+            "completion": 1297,
+            "prompt": 16374,
+            "total": 17671
+        }
+    },
+    {
+        "timestamp": "2026-01-28 18:31:03",
+        "config": {
+            "top_k": 35,
+            "rerank_top_k": 5,
+            "hit_k": 1,
+            "llm": "deepseek-chat",
+            "dataset": "multitq",
+            "sample": 5
+        },
+        "overall_hit": "80.00%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 4,
+                "total": 5,
+                "acc": "80.00%"
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 3,
+                "total": 3,
+                "acc": "100.00%"
+            },
+            "Multiple": {
+                "hit": 1,
+                "total": 2,
+                "acc": "50.00%"
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 3,
+                "total": 3,
+                "acc": "100.00%"
+            }
+        },
+        "hit_by_before_after": {},
+        "hit_by_equal_multi": {},
+        "total_tokens": {
+            "completion": 1259,
+            "prompt": 16374,
+            "total": 17633
+        }
+    }
+]
