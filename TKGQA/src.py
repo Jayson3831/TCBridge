@@ -262,13 +262,14 @@ async def main():
     print("\n===============================================\n")
     print(f"Total tokens used: {total_tokens}")
     print("\n===============================================\n")
-    result_path = args.result_path
+    result_path = f"results/{args.dataset}_test_{args.sample}_results.json"
+    error_file = f"results/{args.dataset}_test_{args.sample}_errors.json"
     os.makedirs(os.path.dirname(result_path), exist_ok=True)
     with open(result_path, 'w') as f:
         json.dump(results, f, ensure_ascii=False, indent=4)
 
     # 评估准确率
-    evaluate(result_path, args.error_file, total_tokens)
+    evaluate(result_path, error_file, total_tokens)
 
 if __name__ == "__main__":
     asyncio.run(main())

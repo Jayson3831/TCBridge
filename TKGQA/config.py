@@ -20,19 +20,13 @@ def parse_args():
     parser.add_argument('--base_url', type=str, default='https://api.deepseek.com',
                         help='Base URL for llm API')
 
-    # Data paths
+    # Data settings
     parser.add_argument('--kg_path', type=str, default='../Datasets/multitq/kg/full.txt',
                         help='Path to knowledge graph data')
     parser.add_argument('--index_path', type=str, default='index/full_faiss.bin',
                         help='Path to FAISS index file')
     parser.add_argument('--dataset', type=str, default='multitq',
                         help='Path to question file')
-
-    # Output paths
-    parser.add_argument('--result_path', type=str, default='results/multitq_test.json',
-                        help='Path to output results')
-    parser.add_argument('--error_file', type=str, default='results/multitq_errors.json',
-                        help='File path to output error samples.')
 
     # Model parameters
     parser.add_argument('--embedding_size', type=int, default=1024,

@@ -14,7 +14,14 @@ For each question, you must generate a JSON object containing the decomposition.
 3.  **Variant Generation**:
     * For each sub-question, provide exactly **3 distinct variants**.
     * The variants must use different phrasing or sentence structures but **must strictly preserve the original semantic meaning**.
-4.  **Output Format**:
+4.  **Entity Type Consistency (CRITICAL)**:
+    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
+    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
+    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
+    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
+    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
+    * **NEVER use vague terms like "which entity" or "which party".**
+5.  **Output Format**:
     * Output strictly valid JSON.
     * Do not include markdown code blocks (```json) or introductory text. Just the raw JSON data.
 
@@ -39,7 +46,7 @@ Output:
             "After #1, with which country did Japan first express its intention to negotiate?",
             "Which country was the first that Japan expressed its intention to negotiate with after #1?"
         ]
-    }},
+    }}
 ]
 
 **Example 2:**
@@ -61,7 +68,7 @@ Output:
             "After #1, who was the first to visit France?",
             "Who visited France first after #1?"
         ]
-    }},
+    }}
 ]
 
 **Example 3:**
@@ -77,13 +84,13 @@ Output:
         ]
     }},
     {{
-        "subq_idx": "Target",
+        "subq_idx": 2,
         "variants": [
             "Which country did Iran accuse first after #1?",
             "After #1, which country did Iran accuse first?",
             "Which country was the first accused by Iran after #1?"
         ]
-    }},
+    }}
 ]
 
 # Input Data
@@ -107,7 +114,14 @@ For each input question, you must generate a JSON object following these specifi
 3.  **Variant Generation**:
     * For each sub-question, provide exactly **3 distinct variants**.
     * Variants must have different sentence structures or phrasings but must preserve the **exact same semantic meaning**.
-4.  **Output Format**:
+4.  **Entity Type Consistency (CRITICAL)**:
+    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
+    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
+    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
+    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
+    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
+    * **NEVER use vague terms like "which entity" or "which party".**
+5.  **Output Format**:
     * Output strictly valid JSON.
     * Do not include markdown code blocks (```json) or introductory text. Just the raw JSON data.
 
@@ -130,9 +144,9 @@ Output:
         "variants": [
             "Which country was the last to express optimism about the leader of Ukraine before #1?",
             "Before #1, which country was the last to express optimism about the leader of Ukraine?",
-            "Who expressed optimism about the leader of Ukraine last before #1?"
+            "Which nation expressed optimism about the leader of Ukraine last before #1?"
         ]
-    }},
+    }}
 ]
 
 **Example 2:**
@@ -154,7 +168,7 @@ Output:
             "Before #1, who last wished to meet with Nuri al-Maliki?",
             "Who was the last to wish to meet with Nuri al-Maliki before #1?"
         ]
-    }},
+    }}
 ]
 
 **Example 3:**
@@ -172,11 +186,11 @@ Output:
     {{
         "subq_idx": 2,
         "variants": [
-            "Who was the last country to be attacked with small arms and light weapons by the Brazilian military before #1?",
-            "Before #1, who was the last country to be attacked with small arms and light weapons by the Brazilian military?",
-            "Which country was attacked with small arms and light weapons by the Brazilian military last before #1?"
+            "Which country was the last to be attacked with small arms and light weapons by the Brazilian military before #1?",
+            "Before #1, which country was the last to be attacked with small arms and light weapons by the Brazilian military?",
+            "Which nation was attacked with small arms and light weapons by the Brazilian military last before #1?"
         ]
-    }},
+    }}
 ]
 
 # Input Data
@@ -208,8 +222,15 @@ You will receive questions that fall into two distinct subtypes. You must identi
 
 # General Rules
 1.  **Variants**: For every sub-question, provide exactly **3 distinct variants** with the same semantic meaning.
-2. **Time Normalization**: Normalize them to the international standard ISO 8601 format: YYYY-MM-DD for specific dates, YYYY-MM for year-month precision, and YYYY for year-only precision.
-3.  **Output Format**: Output strict JSON only. No markdown formatting or extra text.
+2.  **Time Normalization**: Normalize them to the international standard ISO 8601 format: YYYY-MM-DD for specific dates, YYYY-MM for year-month precision, and YYYY for year-only precision.
+3.  **Entity Type Consistency (CRITICAL)**:
+    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
+    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
+    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
+    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
+    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
+    * **NEVER use vague terms like "which entity" or "which party".**
+4.  **Output Format**: Output strict JSON only. No markdown formatting or extra text.
 
 # Examples
 
@@ -221,10 +242,10 @@ Output:
         "subq_idx": 1,
         "variants": [
             "Who was the first to request a meeting with Togo in 2005?",
-            "In 2005, which entity was the first to ask for a meeting with Togo?",
+            "In 2005, who was the first to ask for a meeting with Togo?",
             "Who submitted the first request to meet with Togo during the year 2005?"
         ]
-    }},
+    }}
 ]
 
 **Example 2 (Subtype A - Explicit Time / Last):**
@@ -236,9 +257,9 @@ Output:
         "variants": [
             "Which country last praised Iran in 2009?",
             "In 2009, which country was the last to praise Iran?",
-            "Who was the last country to praise Iran in the year 2009?"
+            "Which nation was the last to praise Iran in the year 2009?"
         ]
-    }},
+    }}
 ]
 
 **Example 3 (Subtype B - Relative Time / Same Year):**
@@ -260,7 +281,7 @@ Output:
             "In the year #1, who hosted the visit of Abdelkader Messahel to Mauritania?",
             "Who was the host for Abdelkader Messahel's visit to Mauritania in #1?"
         ]
-    }},
+    }}
 ]
 
 **Example 4 (Subtype B - Relative Time / Same Month):**
@@ -282,7 +303,7 @@ Output:
             "In the month of #1, who praised Iran?",
             "Who offered praise to Iran in #1?"
         ]
-    }},
+    }}
 ]
     
 **Example 5 (Subtype B - Relative Time / Same Day):**
@@ -302,9 +323,9 @@ Output:
         "variants": [
             "Which country did the envoy of Sudan want to meet on #1?",
             "On the day #1, which country did the envoy of Sudan want to meet?",
-            "Who did the envoy of Sudan want to meet on #1?"
+            "Which nation did the envoy of Sudan want to meet on #1?"
         ]
-    }},
+    }}
 ]
 
 # Input Data
@@ -335,8 +356,15 @@ You will receive questions that fall into two distinct subtypes based on the nat
 
 # General Rules
 1.  **Variants**: For every sub-question, provide exactly **3 distinct variants** with the same semantic meaning.
-2. **Time Normalization**: Normalize them to the international standard ISO 8601 format: YYYY-MM-DD for specific dates, YYYY-MM for year-month precision, and YYYY for year-only precision.
-3.  **Output Format**: Output strict JSON only. No markdown formatting or extra text.
+2.  **Time Normalization**: Normalize them to the international standard ISO 8601 format: YYYY-MM-DD for specific dates, YYYY-MM for year-month precision, and YYYY for year-only precision.
+3.  **Entity Type Consistency (CRITICAL)**:
+    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
+    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
+    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
+    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
+    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
+    * **NEVER use vague terms like "which entity" or "which party".**
+4.  **Output Format**: Output strict JSON only. No markdown formatting or extra text.
 
 # Examples
 
@@ -357,7 +385,7 @@ Output:
         "variants": [
             "Before #1, who rejected Iran?",
             "Who rejected Iran prior to #1?",
-            "Which entity rejected Iran earlier than #1?"
+            "Who rejected Iran earlier than #1?"
         ]
     }},
 ]
@@ -378,8 +406,8 @@ Output:
         "subq_idx": 2,
         "variants": [
             "Who made South Korea suffer from conventional military forces after #1?",
-            "Which country made South Korea suffer from conventional military forces after #1?",
-            "After #1, who made South Korea suffer from conventional military forces?"
+            "After #1, who made South Korea suffer from conventional military forces?",
+            "Who attacked South Korea with conventional forces subsequent to #1?"
         ]
     }},
 ]
@@ -406,10 +434,10 @@ Output:
         "subq_idx": 1,
         "variants": [
             "Who made Burundi suffer from conventional military forces before 2015-10-14?",
-            "Which entities made Burundi suffer from conventional military forces before 2015-10-14?",
+            "Who subjected Burundi to conventional military forces before 2015-10-14?",
             "Who used conventional military forces against Burundi before 2015-10-14?"
         ]
-    }},
+    }}
 ]
 
 **Example 5 (Subtype B - Explicit Time / Before):**
@@ -421,9 +449,9 @@ Output:
         "variants": [
             "With which country did Qatar sign formal agreements before 2008-01-15?",
             "Which countries signed formal agreements with Qatar before 2008-01-15?",
-            "Who signed formal agreements with Qatar before 2008-01-15?"
+            "Prior to 2008-01-15, with which nation did Qatar sign formal agreements?"
         ]
-    }},
+    }}
 ]
 
 # Input Data
@@ -443,10 +471,13 @@ Since these questions refer to a single event without external dependencies, **n
 2.  **Variant Generation**: Provide exactly **3 distinct variants** of the original question.
 3.  **Semantic Preservation**: Ensure the variants strictly preserve the temporal modifier ("first time", "last time", "initially", "most recently").
 
-# Output Format
-* Output strictly valid JSON.
-* Do not include markdown code blocks (```json) or introductory text.
-
+# General Rules
+1.  **Variants**: For the single sub-question, provide exactly **3 distinct variants** with the same semantic meaning.
+2.  **Entity Type Consistency (CRITICAL)**:
+    * **NEVER use vague terms like "the entity", "the party", or "the group".**
+    * Strictly preserve the specific names of entities mentioned (e.g., if the input is "Iran", do not change it to "the country" or "the nation" unless absolutely necessary for flow, and NEVER genericize it to "the entity").
+    * Preserve the specific action verbs or their precise synonyms (e.g., "praise" -> "commend", "express approval", but NOT vague terms like "interact with").
+3.  **Output Format**: Output strict JSON only. No markdown formatting or extra text.
 
 # Examples
 
@@ -458,24 +489,24 @@ Output:
         "subq_idx": 1,
         "variants": [
             "When did Iran praise South Africa for the first time?",
-            "At what time did Iran first commend South Africa?",
-            "On what date did Iran initially express approval of South Africa?"
+            "At what time did Iran first praise South Africa?",
+            "On what date did Iran initially praise South Africa?"
         ]
-    }},
+    }}
 ]
 
 **Example 2:**
-Input: When was the last time Hashim Tha\u00e7i spoke optimistically about Japan?
+Input: When was the last time Hashim Thaçi spoke optimistically about Japan?
 Output:
 [
     {{
         "subq_idx": 1,
         "variants": [
-            "When was the last time Hashim Tha\u00e7i spoke optimistically about Japan?",
-            "When did Hashim Tha\u00e7i most recently express optimism about Japan?",
-            "At what time did Hashim Tha\u00e7i last voice confidence in Japan?"
+            "When was the last time Hashim Thaçi spoke optimistically about Japan?",
+            "When did Hashim Thaçi most recently express optimism about Japan?",
+            "At what time did Hashim Thaçi last voice confidence in Japan?"
         ]
-    }},
+    }}
 ]
 
 # Input Data
@@ -500,8 +531,14 @@ You will receive questions that fall into two simple categories. Since these are
 # General Rules
 1.  **Single Step Processing**: Always output a decomposition list containing only one item (`idx: 1`).
 2.  **Variant Generation**: Provide exactly **3 distinct variants** of the question.
-3.  **Semantic Preservation**: Ensure strict adherence to the original meaning (e.g., if the date is "19 April 2005", do not change it to just "2005").
-4. **Time Normalization**: Normalize them to the international standard ISO 8601 format: YYYY-MM-DD for specific dates, YYYY-MM for year-month precision, and YYYY for year-only precision.
+3.  **Time Normalization**: Normalize them to the international standard ISO 8601 format: YYYY-MM-DD for specific dates, YYYY-MM for year-month precision, and YYYY for year-only precision.
+4.  **Entity Type Consistency (CRITICAL)**:
+    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
+    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
+    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
+    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
+    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
+    * **NEVER use vague terms like "which entity" or "which party".**
 5.  **Output Format**: Output strict JSON only. No markdown formatting or extra text.
 
 # Examples
@@ -531,7 +568,21 @@ Output:
             "On 2005-04-19, which nation held negotiations with Japan?",
             "What country engaged in negotiations with Japan on the date 2005-04-19?"
         ]
-    }},
+    }}
+]
+
+**Example 3 (Subtype A - Time known, find Entity):**
+Input: Who visited France in 2009-05?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "Who visited France in 2009-05?",
+            "Who made a visit to France in 2009-05?",
+            "France host a visit to whom in 2009-05?"
+        ]
+    }}
 ]
 
 # Input Data
@@ -549,18 +600,24 @@ You will receive:
 
 # Reasoning Guidelines
 1.  **Fact Filtering**: Identify the Subject, Relation (Action), and Object in the question. Filter the "Historical facts" to find matching events.
-2.  **Temporal Logic**:
+2.  **Entity Type Validation (CRITICAL)**:
+    * Analyze the question to determine the **expected entity type** of the answer.
+    * **Person vs. Country**:
+        * If the question asks **"Which country"** or **"Which nation"**, you must ONLY output answers that are countries. **Discard** answers that are persons, organizations, or other entities.
+        * If the question asks for a person (e.g., **"Which person"**, **"Which leader"**, or **"Who"** in a context implying an individual), you must ONLY output answers that are people. **Discard** answers that are countries or organizations.
+    * **Consistency**: Ensure the answer's entity type strictly matches the question's interrogative constraint.
+3.  **Temporal Logic**:
     * If the question implies **"first"**, find the earliest date among the matching facts.
     * If the question implies **"last"**, find the latest date among the matching facts.
     * If the question specifies a date (e.g., "on 14 January 2007"), filter for facts happening exactly on that date.
-3.  **Answer Extraction**:
+4.  **Answer Extraction**:
     * **Time Answers**: If the question asks "When", "Which year", or "Which month", extract the timestamp.
-    * **Entity Answers**: If the question asks "Who", "Which country", extract the entity name.
+    * **Entity Answers**: Extract the entity name exactly as it appears in the filtered facts.
 
 # Output Format Rules
 You must strictly output a valid JSON object with two keys: `reason` and `answers`.
 
-1.  **"reason"**: A brief explanation of how you derived the answer from the facts (e.g., "Found matching event X on date Y...").
+1.  **"reason"**: A brief explanation of how you derived the answer from the facts, specifically mentioning how you matched the entity type (e.g., "Filtered out 'John Doe' because the question asked for a country...").
 2.  **"answers"**: A list of strings.
     * **Date Formatting**:
         * If the question asks for a specific **year**, output format: `"YYYY"`.

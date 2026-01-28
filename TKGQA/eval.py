@@ -38,20 +38,10 @@ def topk(prediction, k=-1):
         raise ValueError(f"Unsupported prediction type: {type(prediction)}")
 
 def eval_hit(prediction, answers):
-    # 确保 answers 是列表
-    if not isinstance(answers, list): 
-        answers = [answers]
-
-    # 确保 prediction 是列表
-    if not isinstance(prediction, list):
-        prediction = [prediction]
-
-    # 归一化答案
-    answers_norm = [normalize_text(ans) for ans in answers]
-
-    # 检查预测中是否有任何一个在答案中
-    for pred in prediction:
-        if normalize_text(pred) in answers_norm:
+    if not isinstance(answers, list): answers = [answers]
+    pred_norm = normalize_text(prediction)
+    for ans in answers:
+        if normalize_text(ans) in pred_norm:
             return 1
     return 0
 
@@ -71,16 +61,15 @@ def evaluate(result_file, error_file, total_tokens=None):
     print(len(results))
 
     for result in results:
-        prediction = result["inference"]["answers"]
-        normalized_pred = normalize_prediction(prediction)
-        topk_pred = topk(normalized_pred, args.hit_k)
+        predictions = result["inference"]["answers"]
+        topk_preds = predictions[:args.hit_k]
 
         gold = result["gold_answers"]
         qlabel = result["qlabel"]
         qtype = result["qtype"]
         answer_type = result["answer_type"]
         time_level = result["time_level"]
-        hit = eval_hit(topk_pred, gold)
+        hit = eval_hit(topk_preds, gold)
 
         if hit == 0:
             error_results.append(result)
@@ -104,6 +93,7 @@ def evaluate(result_file, error_file, total_tokens=None):
     for atype, stats in hit_by_answer_type.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {atype}: {acc:.2f}% ({hit}/{total})")
 
     # 输出按 qlabel 分类的命中率
@@ -111,24 +101,28 @@ def evaluate(result_file, error_file, total_tokens=None):
     for qlabel, stats in hit_by_qlabel.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
 
     print("Hit by Equal:")
     for qlabel, stats in hit_by_equal.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
 
     print("Hit by Before_after:")
     for qlabel, stats in hit_by_before_after.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
 
     print("Hit by Equal_Multi:")
     for qlabel, stats in hit_by_equal_multi.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
 
     with open(error_file, 'w') as ef:
@@ -138,7 +132,6 @@ def evaluate(result_file, error_file, total_tokens=None):
     eval_result = {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "overall_hit": f"{sum(hit_list) * 100 / len(hit_list):.2f}%",
-        "hit_list": hit_list,
         "hit_by_answer_type": dict(hit_by_answer_type),
         "hit_by_qlabel": dict(hit_by_qlabel),
         "hit_by_equal": dict(hit_by_equal),
@@ -148,7 +141,7 @@ def evaluate(result_file, error_file, total_tokens=None):
     }
 
     # 追加到评估日志文件
-    eval_log_path = args.result_path.replace('.json', '_eval_log.json')
+    eval_log_path = f"results/{args.dataset}_test_{args.sample}_eval_log.json"
 
     # 读取已有日志
     if os.path.exists(eval_log_path):
@@ -164,4 +157,6 @@ def evaluate(result_file, error_file, total_tokens=None):
 
 
 if __name__ == "__main__":
-    evaluate(args.result_path, args.error_file)
+    result_path = f"results/{args.dataset}_test_{args.sample}_results.json"
+    error_file = f"results/{args.dataset}_test_{args.sample}_errors.json"
+    evaluate(result_path, error_file)
