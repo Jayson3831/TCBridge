@@ -29,6 +29,8 @@ def parse_args():
                         help='Suffix for output files')
     parser.add_argument('--dataset', type=str, default='multitq',
                         help='Path to question file')
+    parser.add_argument('--dataset_type', type=str, default='test',
+                        help='Type of dataset (train/val/test)')
 
     # Model parameters
     parser.add_argument('--embedding_size', type=int, default=1024,

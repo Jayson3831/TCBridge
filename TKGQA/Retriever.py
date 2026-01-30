@@ -114,7 +114,10 @@ class Retrieval_BGE:
         ranked_indices = np.argsort(-np.array(scores))[:rerank_top_k]
         ranked_facts = [facts[i] for i in ranked_indices]
         ranked_scores = [scores[i] for i in ranked_indices]
-        return ranked_facts
+        return {
+            'facts': ranked_facts,
+            'scores': ranked_scores
+        }
 
 
 async def main():

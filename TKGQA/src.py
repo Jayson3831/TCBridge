@@ -164,7 +164,6 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
     # 相关事件检索
     for decq in dec_questions:
         # 找占位符
-        idx = decq.get('subq_idx')
         cur_question = decq['best_subq']
         ref_tokens = re.findall(r"#\d+", cur_question)
         if ref_tokens:
@@ -175,13 +174,16 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
         facts = await retriever.get_faiss_facts(cur_question, args.top_k)
         decq['facts'] = facts
 
-    # 根据子问题相关事件进行推理
-    last_subq = dec_questions[-1]
-    last_facts = last_subq['facts']
-    facts_text = '\n'.join(last_facts)
-    human_message = f"Relevant facts:\n{facts_text}\nQuestion: {last_subq['best_subq']}"
+    # 构造上下文
+    context = f"Raw question: {question}\n"
+    for decq in dec_questions:
+        idx = decq.get('subq_idx')
+        cur_question = decq['best_subq']
+        facts_text = '\n'.join(decq['top1_fact'] if decq.get('top1_fact') else decq['facts'])
+        context += f"Subquestion {idx}: {cur_question}\nRelevant facts {idx}:\n{facts_text}\n"
+
     inf_messages = [{"role": "system", "content": prompts.inference},
-                    {"role": "user", "content": human_message}]
+                    {"role": "user", "content": context}]
     inf_response = await llm_invoke(inf_messages, total_tokens)
 
     reason = inf_response.get('reason', 'No reason generated.')
@@ -192,8 +194,8 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
         fallback_facts = await retriever.get_faiss_facts(question, args.top_k)
         if fallback_facts:
             facts_text = '\n'.join(fallback_facts)
-            human_message = f"Relevant facts (fallback):\n{facts_text}\nQuestion: {last_subq['best_subq']}"
-            inf_messages = [{"role": "system", "content": prompts.inference},
+            human_message = f"Relevant facts (fallback):\n{facts_text}\nQuestion: {question}"
+            inf_messages = [{"role": "system", "content": prompts.fallback},
                             {"role": "user", "content": human_message}]
             inf_response = await llm_invoke(inf_messages, total_tokens)
 
@@ -236,15 +238,15 @@ async def main():
     await retriever.load()
 
     # 加载测试数据
-    sample_path = f'../Datasets/{args.dataset}/questions/test_{args.sample}.json'
+    sample_path = f'../Datasets/{args.dataset}/questions/{args.dataset_type}_{args.sample}.json'
     if os.path.exists(sample_path):
         with open(sample_path, 'r') as file:
             datas = json.load(file)
     else:
-        with open(f'../Datasets/{args.dataset}/questions/test.json', 'r') as file:
-            test_data = json.load(file)
+        with open(f'../Datasets/{args.dataset}/questions/{args.dataset_type}.json', 'r') as file:
+            load_data = json.load(file)
             random.seed(42)
-            datas = random.sample(test_data, args.sample)
+            datas = random.sample(load_data, args.sample)
         with open(sample_path, 'w') as file:
             json.dump(datas, file, indent=4)
 

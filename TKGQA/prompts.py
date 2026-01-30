@@ -15,12 +15,9 @@ For each question, you must generate a JSON object containing the decomposition.
     * For each sub-question, provide exactly **3 distinct variants**.
     * The variants must use different phrasing or sentence structures but **must strictly preserve the original semantic meaning**.
 4.  **Entity Type Consistency (CRITICAL)**:
-    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
-    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
-    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
-    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
-    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
-    * **NEVER use vague terms like "which entity" or "which party".**
+    * **NEVER use vague terms like "the entity", "the party", or "the group".**
+    * Strictly preserve the specific names of entities mentioned (e.g., if the input is "Iran", do not change it to "the country" or "the nation" unless absolutely necessary for flow, and NEVER genericize it to "the entity").
+    * Preserve the specific action verbs or their precise synonyms (e.g., "praise" -> "commend", "express approval", but NOT vague terms like "interact with").
 5.  **Output Format**:
     * Output strictly valid JSON.
     * Do not include markdown code blocks (```json) or introductory text. Just the raw JSON data.
@@ -181,12 +178,9 @@ For each input question, you must generate a JSON object following these specifi
     * For each sub-question, provide exactly **3 distinct variants**.
     * Variants must have different sentence structures or phrasings but must preserve the **exact same semantic meaning**.
 4.  **Entity Type Consistency (CRITICAL)**:
-    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
-    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
-    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
-    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
-    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
-    * **NEVER use vague terms like "which entity" or "which party".**
+    * **NEVER use vague terms like "the entity", "the party", or "the group".**
+    * Strictly preserve the specific names of entities mentioned (e.g., if the input is "Iran", do not change it to "the country" or "the nation" unless absolutely necessary for flow, and NEVER genericize it to "the entity").
+    * Preserve the specific action verbs or their precise synonyms (e.g., "praise" -> "commend", "express approval", but NOT vague terms like "interact with").
 5.  **Output Format**:
     * Output strictly valid JSON.
     * Do not include markdown code blocks (```json) or introductory text. Just the raw JSON data.
@@ -356,12 +350,9 @@ You will receive questions that fall into two distinct subtypes. You must identi
 1.  **Variants**: For every sub-question, provide exactly **3 distinct variants** with the same semantic meaning.
 2.  **Time Normalization**: Normalize them to the international standard ISO 8601 format: YYYY-MM-DD for specific dates, YYYY-MM for year-month precision, and YYYY for year-only precision.
 3.  **Entity Type Consistency (CRITICAL)**:
-    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
-    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
-    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
-    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
-    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
-    * **NEVER use vague terms like "which entity" or "which party".**
+    * **NEVER use vague terms like "the entity", "the party", or "the group".**
+    * Strictly preserve the specific names of entities mentioned (e.g., if the input is "Iran", do not change it to "the country" or "the nation" unless absolutely necessary for flow, and NEVER genericize it to "the entity").
+    * Preserve the specific action verbs or their precise synonyms (e.g., "praise" -> "commend", "express approval", but NOT vague terms like "interact with").
 4.  **Output Format**: Output strict JSON only. No markdown formatting or extra text.
 
 # Examples
@@ -490,12 +481,9 @@ You will receive questions that fall into two distinct subtypes based on the nat
 1.  **Variants**: For every sub-question, provide exactly **3 distinct variants** with the same semantic meaning.
 2.  **Time Normalization**: Normalize them to the international standard ISO 8601 format: YYYY-MM-DD for specific dates, YYYY-MM for year-month precision, and YYYY for year-only precision.
 3.  **Entity Type Consistency (CRITICAL)**:
-    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
-    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
-    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
-    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
-    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
-    * **NEVER use vague terms like "which entity" or "which party".**
+    * **NEVER use vague terms like "the entity", "the party", or "the group".**
+    * Strictly preserve the specific names of entities mentioned (e.g., if the input is "Iran", do not change it to "the country" or "the nation" unless absolutely necessary for flow, and NEVER genericize it to "the entity").
+    * Preserve the specific action verbs or their precise synonyms (e.g., "praise" -> "commend", "express approval", but NOT vague terms like "interact with").
 4.  **Output Format**: Output strict JSON only. No markdown formatting or extra text.
 
 # Examples
@@ -665,12 +653,9 @@ You will receive questions that fall into two simple categories. Since these are
 2.  **Variant Generation**: Provide exactly **3 distinct variants** of the question.
 3.  **Time Normalization**: Normalize them to the international standard ISO 8601 format: YYYY-MM-DD for specific dates, YYYY-MM for year-month precision, and YYYY for year-only precision.
 4.  **Entity Type Consistency (CRITICAL)**:
-    * You must strictly preserve the interrogative pronoun based on the entity type requested in the original question.
-    * If the original question asks for a person, use **"Who"**, **"Whom"**, or **"Whose"**.
-    * If the original question asks for a country/nation, use **"Which country"** or **"Which nation"**. Do NOT use "Who" for countries.
-    * If the original question asks for an organization or object, use **"Which organization"**, **"Which company"**, or **"What"** appropriately.
-    * **Do not generalize specific entity types into generic pronouns (e.g., do not change "Which country" to "Who").**
-    * **NEVER use vague terms like "which entity" or "which party".**
+    * **NEVER use vague terms like "the entity", "the party", or "the group".**
+    * Strictly preserve the specific names of entities mentioned (e.g., if the input is "Iran", do not change it to "the country" or "the nation" unless absolutely necessary for flow, and NEVER genericize it to "the entity").
+    * Preserve the specific action verbs or their precise synonyms (e.g., "praise" -> "commend", "express approval", but NOT vague terms like "interact with").
 5.  **Output Format**: Output strict JSON only. No markdown formatting or extra text.
 
 # Examples
@@ -723,6 +708,193 @@ Please process the following new questions strictly adhering to the logic above:
 """
 
 inference = """# Role
+You are an expert Fact-Based Reasoning Engine. Your task is to answer the **Raw Question** based on the provided context.
+
+# Context Structure
+You will receive a context block containing:
+1.  **Raw Question**: The user's original complex query.
+2.  **Subquestions**: A logical decomposition of the original question. Use these to understand the steps required to solve the problem (e.g., finding a time anchor first).
+3.  **Relevant Facts**: A list of retrieved historical events (Subject - Relation - Object - Timestamp) associated with each subquestion.
+
+# Reasoning Guidelines
+1.  **Analyze the Logic**: Look at the `Subquestions` to determine the logical flow (e.g., "Find date of Event A" -> "Find Event B that happened after Event A").
+2.  **Filter Facts**: Strictly use the provided `Relevant Facts`. Do not hallucinate external knowledge.
+    * Pay close attention to **Subject** and **Object** directionality (e.g., "A accuse B" is different from "B accuse A").
+    * Pay close attention to **Action** types (e.g., "Praise" vs "Criticize").
+3.  **Temporal Reasoning**:
+    * **First/Last**: Compare timestamps to find the earliest or latest event matching the criteria.
+    * **Before/After**: Filter events based on the timestamp derived from the anchor event.
+    * **Same Time**: Match events occurring in the same specific year, month, or day.
+4.  **Formatting**:
+    * **Time**: If asking for a year/month/day, extract it from the ISO date (YYYY/YYYY-MM/YYYY-MM-DD).
+    * **Entities**: Output entity names exactly as they appear in the facts.
+5.  **Critical Constraint - Answer Presence**:
+    * **MUST** verify that the answer event exists in the provided `Relevant Facts`.
+    * If the `Relevant Facts` do NOT contain any event that answers the question (e.g., no matching entities, no matching time period, or no matching action), you MUST return an empty list for `"answers"`.
+    * **DO NOT** guess, hallucinate, or infer answers from external knowledge when the facts are insufficient.
+    * When returning an empty list, explain in `"reason"` that the relevant facts do not contain the answer.
+
+# Output Format
+Output a valid JSON object with two keys:
+* `"reason"`: A concise step-by-step explanation of how you derived the answer from the facts.
+* `"answers"`: A list of strings containing the final answers.
+
+# Examples
+
+**Example 1**
+**Raw question**: Could you tell me the exact month when the European Central Bank hosted the visit of Nicos Anastasiades?
+**Subquestion 1**: What is the month when the European Central Bank hosted Nicos Anastasiades's visit?
+**Relevant facts 1**: 
+European Central Bank Host a visit Nicos Anastasiades in 2013-07-03.
+Nicos Anastasiades Make a visit European Central Bank in 2013-07-03.
+China Host a visit Nicos Anastasiades in 2015-10-19.
+China Host a visit Nicos Anastasiades in 2015-10-18.
+Nicos Anastasiades Host a visit Angela Merkel in 2014-05-06.
+**Output**:
+{{
+	"reason": "The relevant fact shows 'European Central Bank Host a visit Nicos Anastasiades' occurred on 2013-07-03. The question asks for the exact month.",
+	"answers": ["2013-07"]
+}}
+
+**Example 2**
+**Raw question**: After the UN Security Council, to whom did Tony Blair first express optimism?
+**Subquestion 1**: What is the date when Tony Blair expressed optimism to the UN Security Council?
+**Relevant facts 1**:
+Tony Blair Make optimistic comment UN Security Council in 2005-09-13.
+**Subquestion 2**: Who was the first to receive optimism expressed by Tony Blair after 2005-09-13?
+**Relevant facts 2**:
+Tony Blair Express intent to meet or negotiate China in 2005-09-01.
+Tony Blair Make optimistic comment African Union in 2005-01-23.
+Citizen (United Kingdom) Make optimistic comment Tony Blair in 2006-09-09.
+Tony Blair Make optimistic comment Government (Germany) in 2005-10-11.
+Tony Blair Express intent to meet or negotiate Elizabeth II in 2005-04-05.
+Tony Blair Express intent to meet or negotiate Iran in 2005-11-23.
+**Output**:
+{{
+	"reason": "First, the anchor event (Blair optimism to UN Security Council) occurred on 2005-09-13. I need to find who Tony Blair made an optimistic comment to *after* this date. Comparing the facts: African Union (Jan 2005) is before. Optimism to Government (Germany) occurred on 2005-10-11. This is the first instance after Sep 13.",
+	"answers": ["Government (Germany)"]
+}}
+
+**Example 3**
+**Raw question**: In what year did the women of Australia first accuse the Lawyer/Attorney of Australia?
+**Subquestion 1**: When did the women of Australia initially make accusations against the Lawyer/Attorney of Australia?
+**Relevant facts 1**:
+Women (Australia) Accuse Lawyer/Attorney (Australia) in 2014-03-11.
+Lawyer/Attorney (Australia) Accuse Women (Australia) in 2007-03-28.
+Lawyer/Attorney (Australia) Accuse Women (Australia) in 2013-07-31.
+Lawyer/Attorney (Australia) Accuse Women (Australia) in 2013-03-26.
+Lawyer/Attorney (Australia) Accuse Women (Australia) in 2012-06-26.
+**Output**:
+{{
+    "reason": "The question asks when 'Women (Australia)' accused 'Lawyer/Attorney (Australia)'. Most facts show the Lawyer accusing the Women. There is only one fact where Women are the subject accusing the Lawyer: 'Women (Australia) Accuse Lawyer/Attorney (Australia) in 2014-03-11'. The year is 2014.",
+	"answers": ["2014"]
+}}
+
+**Example 4**
+**Raw question**: Who was the last person Roh Moo Hyun wanted to negotiate with before the head of government of Peru?
+**Subquestion 1**: What is the date when Roh Moo Hyun wanted to negotiate with the head of government of Peru?
+**Relevant facts 1**:
+Roh Moo Hyun Express intent to meet or negotiate Head of Government (Peru) in 2005-10-31.
+**Subquestion 2**: Who did Roh Moo Hyun want to negotiate with last before 2005-10-31?
+**Relevant facts 2**:
+Roh Moo Hyun Express intent to meet or negotiate Japan in 2005-11-21.
+Roh Moo Hyun Express intent to meet or negotiate Mexico in 2005-05-05.
+Roh Moo Hyun Express intent to meet or negotiate South Korea in 2005-05-25.
+Roh Moo Hyun Express intent to meet or negotiate South Korea in 2005-10-26.
+Roh Moo Hyun Express intent to meet or negotiate South Korea in 2005-11-05.
+Roh Moo Hyun Express intent to meet or negotiate South Korea in 2005-11-09.
+Roh Moo Hyun Express intent to meet or negotiate Japan in 2005-09-22.
+Roh Moo Hyun Express intent to meet or negotiate Mexico in 2005-08-22.
+Roh Moo Hyun Express intent to meet or negotiate Mexico in 2005-08-23.
+**Output**:
+{{
+	"reason": "The anchor event is Roh Moo Hyun negotiating with Head of Government (Peru) on 2005-10-31. I need the latest event *before* this date. Japan (Nov 21) and South Korea (Nov 05) are after. Among those before, South Korea on 2005-10-26 is closer to 10-31 than Japan (Sep 22) or other South Korea dates.",
+	"answers": ["South Korea"]
+}}
+
+**Example 5**
+**Raw question**: Who did the citizens of Norway want to negotiate with after 14 June 2006?
+**Subquestion 1**: After 2006-06-14, with whom did the citizens of Norway desire to negotiate?
+**Relevant facts 1**:
+Citizen (Norway) Express intent to meet or negotiate Education (Norway) in 2006-06-14.
+Citizen (Norway) Express intent to meet or negotiate Anders Breivik in 2012-06-18.
+Citizen (North Korea) Express intent to meet or negotiate South Korea in 2006-08-24.
+Citizen (Norway) Express intent to meet or negotiate South Korea in 2007-05-07.
+Citizen (Norway) Express intent to meet or negotiate Iraq in 2014-10-30.
+Citizen (North Korea) Express intent to meet or negotiate Japan in 2006-04-06.
+**Output**:
+{{
+	"reason": "The time constraint is strictly 'after 2006-06-14'. Checking Citizen (Norway) intentions: Education (Norway) is *on* the date (not after). Anders Breivik (2012), South Korea (2007), and Iraq (2014) are all after the date.",
+	"answers": ["Anders Breivik", "South Korea", "Iraq"]
+}}
+
+**Example 6**
+**Raw question**: Who gave a condemnation of Boko Haram in the same month as the Ministry of Iran?
+**Subquestion 1**: What is the date when the Ministry of Iran condemned Boko Haram?
+**Relevant facts 1**:
+Ministry (Iran) Criticize or denounce Boko Haram in 2014-05-21.
+**Subquestion 2**: Who gave a condemnation of Boko Haram in the same month as 2014-05-21?
+**Relevant facts 2**:
+UN Security Council Criticize or denounce Boko Haram in 2014-05-11.
+Barack Obama Criticize or denounce Boko Haram in 2014-05-12.
+Iran Criticize or denounce Boko Haram in 2014-05-21.
+UN Security Council Criticize or denounce Boko Haram in 2014-05-10.
+ANC Youth League Criticize or denounce Boko Haram in 2014-05-21.
+Al-Shabaab Praise or endorse Boko Haram in 2014-05-19.
+Media (Nigeria) Criticize or denounce Boko Haram in 2014-04-21.
+Education (Nigeria) Criticize or denounce Boko Haram in 2014-05-26.
+Citizen (Nigeria) Criticize or denounce Boko Haram in 2014-05-07.
+Citizen (Saudi Arabia) Criticize or denounce Boko Haram in 2014-05-10.
+African Union Criticize or denounce Boko Haram in 2015-01-13.
+Chris Olukolade Criticize or denounce Boko Haram in 2014-03-15.
+**Output**:
+{{
+	"reason": "The Ministry (Iran) condemned Boko Haram in 2014-05. I need to find other entities who 'Criticize or denounce' Boko Haram in May 2014. Matches: UN Security Council, Barack Obama, Iran, ANC Youth League, Citizen (Nigeria), Citizen (Saudi Arabia), Education (Nigeria). Excluded 'Al-Shabaab' (Praise) and 'Media (Nigeria)' (April).",
+	"answers": ["UN Security Council", "Barack Obama", "Iran", "ANC Youth League", "Citizen (Nigeria)", "Citizen (Saudi Arabia)", "Education (Nigeria)"]
+}}
+
+**Example 7**
+**Raw question**: With whom did Wen Jiabao first express interest in cooperation in 2006?
+**Subquestion 1**: In 2006, with whom did Wen Jiabao first express interest in cooperating?
+**Relevant facts 1**:
+Wen Jiabao Investigate China in 2006-10-11.
+Wen Jiabao Investigate China in 2006-07-16.
+Huang Ju Consult Wen Jiabao in 2006-07-13.
+Wen Jiabao Express intent to cooperate Angela Merkel in 2006-03-02.
+Jakaya Mrisho Kikwete Consult Wen Jiabao in 2006-11-04.
+China Consult Wen Jiabao in 2006-02-25.
+China Consult Wen Jiabao in 2006-03-10.
+Wen Jiabao Investigate China in 2006-07-23.
+**Output**:
+{{
+	"reason": "The question specifies the action 'express interest in cooperation' in 2006. While there are earlier events involving 'Consult' or 'Investigate', the only fact explicitly matching 'Express intent to cooperate' is with Angela Merkel on 2006-03-02.",
+	"answers": ["Angela Merkel"]
+}}
+
+**Example 8**
+**Raw question**: Who criticised the business of Argentina in the same year of the Senate of Argentina?
+**Subquestion 1**: In which year did the Senate of Argentina criticise the business of Argentina?
+**Relevant facts 1**:
+Senate (Argentina) Criticize or denounce Business (Argentina) in 2011-03-04.
+**Subquestion 1**: Who criticised the business of Argentina in the same year as 2011-03-04?
+**Relevant facts 1**:
+Cristina Fernández de Kirchner Criticize or denounce Business (Argentina) in 2011-04-19.
+Argentine Industrial Union Criticize or denounce China in 2015-02-03.
+Economist (Mexico) Criticize or denounce National Action Party in 2011-03-21.
+Cristina Fernández de Kirchner Criticize or denounce Business (Argentina) in 2012-01-25.
+Lawyer/Attorney (Argentina) Criticize or denounce Cristina Fernández de Kirchner in 2011-07-21.
+National Action Party Criticize or denounce Mexico in 2012-04-11.
+Lawmaker (Argentina) Criticize or denounce Daniel Scioli in 2011-04-14.
+**Output**:
+{{
+	"reason": "The Senate of Argentina criticized Business (Argentina) in 2011. I need to find others who criticized 'Business (Argentina)' in 2011. Cristina Fernández de Kirchner did so on 2011-04-19. Other facts involve different targets (China, National Action Party) or different years (2012, 2015).",
+	"answers": ["Cristina Fernández de Kirchner"]
+}}
+
+"""
+
+
+fallback = """# Role
 You are an expert historian assistant. Your task is to answer the user's question based ONLY on the provided [Relevant facts].
 
 # Core Logic & Constraints

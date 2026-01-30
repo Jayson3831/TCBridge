@@ -37,21 +37,23 @@ async def tcbridge_module(ref_tokens, curq, allq, retriever, reranker_lock):
     # 逐一处理所有占位符
     for ref_token in ref_tokens:
         ref_idx = int(ref_token[1:])
-        for subq in allq:
-            idx = subq['subq_idx']
-            if ref_idx == idx:
-                refq = subq['best_subq']
-                ref_facts = subq['facts']
-                break
-        if not refq:
-            refq = allq[ref_idx - 1]['best_subq']
-            ref_facts = allq[ref_idx - 1]['facts']
+        if ref_idx < 0 or ref_idx > len(allq):
+            continue
+
+        ref_subq = next((subq for subq in allq if subq['subq_idx'] == ref_idx), allq[ref_idx - 1])
+        refq = ref_subq['best_subq']
+        ref_facts = ref_subq['facts']
 
         # 找到替换占位符的最佳时间
         async with reranker_lock:
-            ref_facts = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
-        relevant_date = parse_date_string(ref_facts[0]) if ref_facts else None
+            result = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
+        reranked_facts = result['facts']
+        reranked_scores = result['scores']
+        ref_subq['top1_fact'] = [reranked_facts[0]]
+        ref_subq['top1_score'] = [reranked_scores[0]]
 
+        # 替换占位符
+        relevant_date = parse_date_string(ref_facts[0]) if ref_facts else None
         if relevant_date:
             curq = curq.replace(ref_token, relevant_date)
 
@@ -100,8 +102,8 @@ def get_result_paths(dataset, sample, suffix, **kwargs):
     if suffix:
         param_suffix += "_" + suffix
 
-    output_path = f"outputs/{dataset}_test_{sample}{param_suffix}.json"
-    error_path = f"errors/{dataset}_test_{sample}{param_suffix}.json"
-    result_path = f"results/{dataset}_test_{sample}{param_suffix}.json"
+    output_path = f"outputs/{dataset}_{args.dataset_type}_{sample}{param_suffix}.json"
+    error_path = f"errors/{dataset}_{args.dataset_type}_{sample}{param_suffix}.json"
+    result_path = f"results/{dataset}_{args.dataset_type}_{sample}{param_suffix}.json"
 
     return output_path, error_path, result_path
