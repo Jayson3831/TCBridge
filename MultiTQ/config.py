@@ -61,7 +61,7 @@ def parse_args():
                         help='Threshold of confidence.')
     parser.add_argument('--entropy_threshold', type=float, default=0.4,
                         help='Threshold of entropy.')
-    parser.add_argument('--temp', type=float, default=0.1,
+    parser.add_argument('--temp', type=float, default=1.0,
                         help='Temperature of faiss entropy.')
 
     # Other parameters
