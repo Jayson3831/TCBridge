@@ -1,5 +1,6 @@
 import os
 import json
+import numpy as np
 from openai import AsyncOpenAI
 from dateutil import parser
 from datetime import datetime
@@ -58,6 +59,54 @@ async def tcbridge_module(ref_tokens, curq, allq, retriever, reranker_lock):
             curq = curq.replace(ref_token, relevant_date)
 
     return curq
+
+async def bridge_module(ref_tokens, curq, allq, retriever, reranker_lock):
+    for ref_token in ref_tokens:
+        ref_idx = int(ref_token[1:])
+        if ref_idx < 0 or ref_idx > len(allq):
+            continue
+
+        ref_subq = next((subq for subq in allq if subq['subq_idx'] == ref_idx), allq[ref_idx - 1])
+        refq = ref_subq['best_subq']
+        ref_facts = ref_subq['facts']
+        ref_scores = ref_subq['similarities']
+
+        # 计算置信度和全局熵，决定是否采用精排。
+        if ref_scores and len(ref_scores) > 1:
+            f_conf, f_entropy = calculate_metrics(ref_scores, args.temp)
+
+            if f_conf > args.conf_threshold and f_entropy < args.entropy_threshold:
+                top_facts = ref_facts
+                top_scores = ref_scores
+            else:
+                async with reranker_lock:
+                    reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
+                top_facts = reranked['facts']
+                top_scores = reranked['scores']
+
+        # 语义重构（替换占位符）
+        relevant_date = parse_date_string(top_facts[0]) if ref_facts else None
+        if relevant_date:
+            curq = curq.replace(ref_token, relevant_date)
+
+    return curq
+
+def calculate_metrics(scores, temp=1.0):
+    if not scores or len(scores) < 2:
+        return 1.0, 0.0
+    
+    scores = np.array(scores)
+    # 1. Softmax & Entropy
+    exp_scores = np.exp((scores - np.max(scores)) / temp)
+    probs = exp_scores / np.sum(exp_scores)
+    entropy = -np.sum(probs * np.log(probs + 1e-9))
+    h_norm = entropy / np.log(len(scores))
+
+    # 2. Confidence
+    delta_s = scores[0] - scores[1]
+    conf = 1 / (1 + np.exp(-delta_s)) # Sigmoid
+
+    return conf, h_norm
 
 async def tc_rerank(question, events, time_constraint):
     """

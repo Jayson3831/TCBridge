@@ -52,11 +52,17 @@ def parse_args():
     parser.add_argument('--nprobe', type=int, default=10,
                         help='Number of clusters to probe during FAISS search')
 
-    # Retrieval parameters
-    parser.add_argument('--top_k', type=int, default=35,
+    # hyperparameters
+    parser.add_argument('--top_k', type=int, default=60,
                         help='Number of top results to retrieve')
     parser.add_argument('--rerank_top_k', type=int, default=5,
                         help='Number of top results to rerank')
+    parser.add_argument('--conf_threshold', type=float, default=0.6,
+                        help='Threshold of confidence.')
+    parser.add_argument('--entropy_threshold', type=float, default=0.4,
+                        help='Threshold of entropy.')
+    parser.add_argument('--temp', type=float, default=0.1,
+                        help='Temperature of faiss entropy.')
 
     # Other parameters
     parser.add_argument('--sample', type=int, default=500,

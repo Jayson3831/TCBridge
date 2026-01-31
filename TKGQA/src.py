@@ -8,7 +8,7 @@ from copy import deepcopy
 from sentence_transformers import SentenceTransformer
 from termcolor import colored
 from tqdm.asyncio import tqdm_asyncio
-from tqdm import tqdm
+import numpy as np
 from typing import List
 import torch
 import torch.nn.functional as F
@@ -167,12 +167,13 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
         cur_question = decq['best_subq']
         ref_tokens = re.findall(r"#\d+", cur_question)
         if ref_tokens:
-            cur_question = await tcbridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock)
+            cur_question = await bridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock)
             decq['best_subq'] = cur_question
 
         # 子问题事件检索
         facts = await retriever.get_faiss_facts(cur_question, args.top_k)
-        decq['facts'] = facts
+        decq['facts'] = facts['facts']
+        decq['similarities'] = facts['scores']
 
     # 构造上下文
     context = f"Raw question: {question}\n"
@@ -193,7 +194,7 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
     if not answers:
         fallback_facts = await retriever.get_faiss_facts(question, args.top_k)
         if fallback_facts:
-            facts_text = '\n'.join(fallback_facts)
+            facts_text = '\n'.join(fallback_facts['facts'])
             human_message = f"Relevant facts (fallback):\n{facts_text}\nQuestion: {question}"
             inf_messages = [{"role": "system", "content": prompts.fallback},
                             {"role": "user", "content": human_message}]

@@ -100,9 +100,12 @@ class Retrieval_BGE:
         hits = [{'corpus_id': id, 'score': score} for id, score in zip(corpus_ids[0], distances[0])]
         hits = sorted(hits, key=lambda x: x['score'], reverse=True)
 
-        scores = [str(hit['score']) for hit in hits]
+        scores = [float(hit['score']) for hit in hits]
         facts = [self.fact_list[hit['corpus_id']] for hit in hits]
-        return facts
+        return {
+            'facts': facts,
+            'scores': scores
+        }
 
     async def rerank_facts(self, question, facts, rerank_top_k=3):
         qf_pairs = [[question, fact] for fact in facts]
