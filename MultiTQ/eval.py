@@ -1,8 +1,10 @@
-import os, sys
+import os
+import time
 import json
 import re
 import string
-from config import Config
+from config import args
+from utils import *
 from collections import defaultdict
 from termcolor import colored
 
@@ -44,42 +46,36 @@ def eval_hit(prediction, answers):
             return 1
     return 0
 
-def evaluate(result_file):
-    print(colored("Step 3: Evaluating Results...", "green"))
+def evaluate(result_file, error_file, eval_log_path, total_tokens=None):
+    print(colored("Evaluating Results...", "green"))
     
     with open(result_file, 'r') as f:
-        trees = json.load(f)
+        results = json.load(f)
         
-    q2a = []
-    q2a_trees = []
+    error_results = []
     hit_list = []
     hit_by_answer_type = defaultdict(lambda: {"hit": 0, "total": 0})
     hit_by_qlabel = defaultdict(lambda: {"hit": 0, "total": 0})
     hit_by_equal = defaultdict(lambda: {"hit": 0, "total": 0})
     hit_by_before_after = defaultdict(lambda: {"hit": 0, "total": 0})
     hit_by_equal_multi = defaultdict(lambda: {"hit": 0, "total": 0})
-    print(len(trees))
-    
-    for i, tree in enumerate(trees):
-        # 根节点是最后一个
-        node = tree[-1]
-        
-        question, prediction = node["question"], node["answer"]
-        normalized_pred = normalize_prediction(prediction)
-        topk_pred = topk(normalized_pred, 10)
-        
-        gold = node["gold_answer"]
-        qlabel = node["qlabel"]
-        qtype = node["qtype"]
-        answer_type = node["answer_type"]
-        time_level = node["time_level"]
-        hit = eval_hit(topk_pred, gold)
+    print(len(results))
+
+    for result in results:
+        predictions = result["inference"]["answers"]
+        topk_preds = predictions[:args.hit_k]
+
+        gold = result["gold_answers"]
+        qlabel = result["qlabel"]
+        qtype = result["qtype"]
+        answer_type = result["answer_type"]
+        time_level = result["time_level"]
+        hit = eval_hit(topk_preds, gold)
+
+        if hit == 0:
+            error_results.append(result)
+
         hit_list.append(hit)
-        if(hit==0):
-            q2a_trees.append(
-                tree
-            )
-            q2a.append({"question": question, "prediction": prediction, "gold_answer": gold, "qlabel": qlabel, "qtype": qtype, "answer_type": answer_type, "time_level": time_level})
         hit_by_answer_type[answer_type]["hit"] += hit
         hit_by_answer_type[answer_type]["total"] += 1
         hit_by_qlabel[qlabel]["hit"] += hit
@@ -98,6 +94,7 @@ def evaluate(result_file):
     for atype, stats in hit_by_answer_type.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {atype}: {acc:.2f}% ({hit}/{total})")
 
     # 输出按 qlabel 分类的命中率
@@ -105,31 +102,67 @@ def evaluate(result_file):
     for qlabel, stats in hit_by_qlabel.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
 
     print("Hit by Equal:")
     for qlabel, stats in hit_by_equal.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
 
     print("Hit by Before_after:")
     for qlabel, stats in hit_by_before_after.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
 
     print("Hit by Equal_Multi:")
     for qlabel, stats in hit_by_equal_multi.items():
         hit, total = stats["hit"], stats["total"]
         acc = hit * 100 / total if total > 0 else 0.0
+        stats['acc'] = f"{acc:.2f}%"
         print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
 
-    json.dump(q2a, open(Config.Q2A_FILE, "w"), indent=2)
-    output_path = Config.Q2A_FULL_FILE
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(q2a_trees, f, indent=2, ensure_ascii=False)
+    with open(error_file, 'w') as ef:
+        json.dump(error_results, ef, ensure_ascii=False, indent=4)
+
+    # 构建结果字典
+    eval_result = {
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "config": {k: getattr(args, k) for k in [
+            "top_k", "rerank_top_k", "hit_k", "llm", "dataset", "sample"
+        ]},
+        "overall_hit": f"{sum(hit_list) * 100 / len(hit_list):.2f}%",
+        "hit_by_answer_type": dict(hit_by_answer_type),
+        "hit_by_qlabel": dict(hit_by_qlabel),
+        "hit_by_equal": dict(hit_by_equal),
+        "hit_by_before_after": dict(hit_by_before_after),
+        "hit_by_equal_multi": dict(hit_by_equal_multi),
+        "total_tokens": dict(total_tokens) if total_tokens else None
+    }
+
+    # 读取已有日志
+    if os.path.exists(eval_log_path):
+        with open(eval_log_path, 'r') as log_f:
+            eval_logs = json.load(log_f)
+    else:
+        eval_logs = []
+
+    eval_logs.append(eval_result)
+
+    with open(eval_log_path, 'w') as log_f:
+        json.dump(eval_logs, log_f, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":
-    evaluate(Config.RESULT_FILE)
+    output_path, error_path, eval_log = get_result_paths(
+        args.dataset,
+        args.sample,
+        args.suffix,
+        top_k=args.top_k,
+        rerank_top_k=args.rerank_top_k,
+    )
+    evaluate(output_path, error_path, eval_log)
