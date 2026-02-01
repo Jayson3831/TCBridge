@@ -137,6 +137,8 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
     question_type = data['question_type']
     answer_type = data['answer_type']
     gold_answer = data['answer']
+    dec_questions = []
+    events = []
 
     # 问题分解
     dec_prompt = getattr(prompts, f'{args.dataset}_{qlevel}')
@@ -144,62 +146,69 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
                     {"role": "user", "content": question}]
     dec_response = await llm_invoke(dec_messages, total_tokens)
 
-    if not dec_response:
+    fallback = False
+    if not dec_response or not isinstance(dec_response, list) or not all(isinstance(item, dict) for item in dec_response):
         print(colored(f"Decomposition failed for question: {question}", "red"))
-        return None
+        fallback = True
 
     # 选择最佳子问题变体
-    dec_questions = deepcopy(dec_response)
-    for sub_decq in dec_questions:
-        variants = sub_decq.get('variants', [])
-        if len(variants) != 3:
-            print(colored(f"Expected 3 variants for subquestion: {sub_decq.get('subq_idx')}", "red"))
-            continue
+    if not fallback:
+        dec_questions = deepcopy(dec_response)
+        for sub_decq in dec_questions:
+            variants = sub_decq.get('variants', [])
+            if len(variants) != 3:
+                print(colored(f"Expected 3 variants for subquestion: {sub_decq.get('subq_idx')}", "red"))
+                continue
 
-        best_subq, _ = selector.select_single(question, variants)
-        sub_decq['best_subq'] = best_subq
+            best_subq, _ = selector.select_single(question, variants)
+            sub_decq['best_subq'] = best_subq
 
-    # 相关事件检索
-    for decq in dec_questions:
-        # 找占位符
-        cur_question = decq['best_subq']
-        ref_tokens = re.findall(r"#\d+", cur_question)
-        if ref_tokens:
-            cur_question = await bridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock)
-            decq['best_subq'] = cur_question
+        # 相关事件检索
+        for decq in dec_questions:
+            # 找占位符
+            cur_question = decq.get('best_subq', [])
+            if not cur_question:
+                continue
+            ref_tokens = re.findall(r"#\d+", cur_question)
+            if ref_tokens:
+                cur_question = await bridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock)
+                decq['best_subq'] = cur_question
 
-        # 子问题事件检索
-        facts = await retriever.get_faiss_facts(cur_question, args.top_k)
-        decq['facts'] = facts['facts']
-        decq['similarities'] = facts['scores']
+            # 子问题事件检索
+            facts = await retriever.get_faiss_facts(cur_question, args.top_k)
+            decq['facts'] = facts['facts']
+            decq['similarities'] = facts['scores']
 
-    # 构造上下文
-    context = f"Raw question: {question}\n"
-    for decq in dec_questions:
-        idx = decq.get('subq_idx')
-        cur_question = decq['best_subq']
-        facts_text = '\n'.join(decq['top1_fact'] if decq.get('top1_fact') else decq['facts'])
-        context += f"Subquestion {idx}: {cur_question}\nRelevant facts {idx}:\n{facts_text}\n"
+        # 构造上下文
+        context = f"Raw question: {question}\n"
+        for decq in dec_questions:
+            idx = decq.get('subq_idx')
+            cur_question = decq['best_subq']
+            facts_text = '\n'.join(decq['top1_fact'] if decq.get('top1_fact') else decq['facts'])
+            context += f"Subquestion {idx}: {cur_question}\nRelevant facts {idx}:\n{facts_text}\n"
 
-    if args.dataset == 'cron':
-        infer_prompt = prompts.cron_infer
-        fb_prompt = prompts.cron_fallback
-    elif args.dataset =='icews_actor':
-        infer_prompt = prompts.ic_infer
-        fb_prompt = prompts.ic_fallback
+        if args.dataset == 'cron':
+            infer_prompt = prompts.cron_infer
+        elif args.dataset =='icews_actor':
+            infer_prompt = prompts.ic_infer
 
-    inf_messages = [{"role": "system", "content": infer_prompt},
-                    {"role": "user", "content": context}]
-    inf_response = await llm_invoke(inf_messages, total_tokens)
+        inf_messages = [{"role": "system", "content": infer_prompt},
+                        {"role": "user", "content": context}]
+        inf_response = await llm_invoke(inf_messages, total_tokens)
 
-    reason = inf_response.get('reason', 'No reason generated.')
-    events = inf_response.get('events', [])
-    answers = inf_response.get('answers', [])
+        reason = inf_response.get('reason', 'No reason generated.')
+        events = inf_response.get('events', [])
+        answers = inf_response.get('answers', [])
 
     # fallback
-    if not events:
+    if not events or fallback:
         fallback_facts = await retriever.get_faiss_facts(question, args.top_k)
         if fallback_facts:
+            if args.dataset == 'cron':
+                fb_prompt = prompts.cron_fallback
+            elif args.dataset =='icews_actor':
+                fb_prompt = prompts.ic_fallback
+
             facts_text = '\n'.join(fallback_facts['facts'])
             human_message = f"Relevant facts:\n{facts_text}\nQuestion: {question}"
             inf_messages = [{"role": "system", "content": fb_prompt},

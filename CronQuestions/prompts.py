@@ -818,6 +818,927 @@ John Steinbeck nominated for Nobel Prize in Literature from 1962-01-01 to 1962-0
 
 """
 
-ic_infer = """"""
+icews_actor_simple = """# Role
+You are a Precise Fact Retrieval Engine. Your goal is to structure straightforward questions into a standard single-step or simple two-step JSON format.
 
-ic_fallback = """"""
+# Task
+1.  **Analyze the Question**: These questions usually involve political affiliations, government positions, or entity relationships constrained by specific time points, periods, or durations.
+2.  **Output Structure**: Output a JSON list of objects, where each object contains:
+    * `idx`: The sequential index (starting from "1").
+    * `variants`: A list of **exactly 3 distinct**, grammatically correct ways to phrase this sub-question.
+3.  **Date Precision**: Respect the granularity of the input.
+    * Do not change the specific keywords "beginning of time" or "end of time".
+    * If the input mentions an explicit date, use the exact format provided (usually "YYYY-MM-DD").
+
+# Constraints
+* Output must be a strictly valid JSON list.
+* Do not answer the questions; only provide the decomposition plan.
+* **Natural Phrasing**: Do not include technical format strings like "(YYYY-MM-DD)" inside the `variants` text. Keep the questions conversational.
+* Ensure `variants` represent the exact same intent but with grammatically distinct phrasings.
+
+# Examples
+
+**Example 1:**
+Input: At what point did Max Bradford cease his affiliation with the major governing party in New Zealand?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did Max Bradford end his affiliation with the major governing party in New Zealand?",
+            "At what point in time did Max Bradford cease his affiliation with the major governing party in New Zealand?",
+            "What is the date when Max Bradford stopped being affiliated with the major governing party in New Zealand?"
+        ]
+    }}
+]
+
+**Example 2:**
+Input: How long did Jorge Heine Affiliation To Ministry of National Assets?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "How long was Jorge Heine affiliated to the Ministry of National Assets?",
+            "What was the duration of Jorge Heine's Affiliation To the Ministry of National Assets?",
+            "For what length of time did Jorge Heine maintain an Affiliation To the Ministry of National Assets?"
+        ]
+    }}
+]
+
+**Example 3:**
+Input: Who Affiliation To National Democratic Party from beginning of time to 2006-12-31?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "Who had an Affiliation To the National Democratic Party from beginning of time to 2006-12-31?",
+            "Which person was affiliated to the National Democratic Party in the period from beginning of time to 2006-12-31?",
+            "Who held an Affiliation To the National Democratic Party starting from beginning of time until 2006-12-31?"
+        ]
+    }}
+]
+
+**Example 4:**
+Input: Which organisation is Affiliation To by Khamliang Phonsena from beginning of time to end of time?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "Which organisation was Khamliang Phonsena affiliated to from beginning of time to end of time?",
+            "What organisation had an Affiliation To by Khamliang Phonsena for the period from beginning of time to end of time?",
+            "To which organisation did Khamliang Phonsena maintain an Affiliation To from beginning of time to end of time?"
+        ]
+    }}
+]
+
+**Example 5:**
+Input: Ministry of Agriculture is Affiliation To by who from 2005-01-01 to 2010-01-01?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "Who had an Affiliation To the Ministry of Agriculture from 2005-01-01 to 2010-01-01?",
+            "By whom was the Ministry of Agriculture Affiliation To during the period of 2005-01-01 to 2010-01-01?",
+            "Which person maintained an Affiliation To the Ministry of Agriculture between 2005-01-01 and 2010-01-01?"
+        ]
+    }}
+]
+
+# Input Data
+Please process the following new questions strictly adhering to the logic above:
+
+"""
+
+icews_actor_medium = """# Role
+You are an expert Question Decomposition Engine. Your goal is to break down complex, multi-hop, or comparative questions into a sequence of simple, atomic sub-questions that can be answered individually.
+
+# Task
+1.  **Analyze the Question**: Understand the logical flow, which usually involves:
+    * **Union/Intersection**: "From when to when... A or B", "At the same time...".
+    * **Duration Calculation**: "Total duration", "Average duration".
+    * **Comparison**: "Is the duration... shorter/longer...".
+    * **Dependency**: "During X, who...", "After X...".
+2.  **Decompose**: Break the question into sequential steps.
+3.  **Output Structure**: For each step, output a JSON object containing:
+    * `idx`: The sequential index (starting from "1").
+    * `variants`: A list of **exactly 3 distinct**, grammatically correct ways to phrase this sub-question.
+4.  **Dependency & Slot Filling**: When a sub-question requires information obtained from a previous step, use `#idx` (e.g., `#1`, `#2`) as a **placeholder**.
+    * **Example**: If Step 1 finds a time period, Step 2 should ask "Who was affiliated... during #1?".
+
+# Constraints
+* **Date Precision**:
+    * Do **not** change the specific keywords "beginning of time" or "end of time".
+    * If the input mentions an explicit date, use "YYYY-MM-DD".
+* **#idx Usage Rule**: `#idx` refers strictly to the **answer** of the sub-question with `idx` (e.g., a date, a duration, a person).
+* **Entity Precision**: Preserve specific entity names exactly as they appear (e.g., "Information / Communication / Transparency NGOs (United States)").
+* **Natural Phrasing**: Do not include technical format strings inside the `variants` text. Keep the questions conversational.
+
+# Examples
+
+**Example 1:**
+Input: From when to when, Hauser Center for Nonprofit Organizations Affiliation To Information / Communication / Transparency NGOs (United States) or Elaine Lan Chao Affiliation To U.S. Republican Party?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "From when to when was the Hauser Center for Nonprofit Organizations affiliated with Information / Communication / Transparency NGOs (United States)?",
+            "What is the time period of the Hauser Center for Nonprofit Organizations' affiliation to Information / Communication / Transparency NGOs (United States)?",
+            "When did the Hauser Center for Nonprofit Organizations maintain an affiliation to Information / Communication / Transparency NGOs (United States)?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "From when to when was Elaine Lan Chao affiliated with the U.S. Republican Party?",
+            "What is the time period of Elaine Lan Chao's affiliation to the U.S. Republican Party?",
+            "When did Elaine Lan Chao maintain an affiliation to the U.S. Republican Party?"
+        ]
+    }}
+]
+
+**Example 2:**
+Input: How long is the total duration of Atta Mohammed Nur Affiliation To Northern Alliance and Kennedy Sakeni Affiliation To Ministry of Home Affairs?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "How long was Atta Mohammed Nur affiliated with the Northern Alliance?",
+            "What was the duration of Atta Mohammed Nur's affiliation to the Northern Alliance?",
+            "Calculate the length of time Atta Mohammed Nur held an affiliation to the Northern Alliance."
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "How long was Kennedy Sakeni affiliated with the Ministry of Home Affairs?",
+            "What was the duration of Kennedy Sakeni's affiliation to the Ministry of Home Affairs?",
+            "Calculate the length of time Kennedy Sakeni held an affiliation to the Ministry of Home Affairs."
+        ]
+    }}
+]
+
+**Example 3:**
+Input: What is the average duration of Attorney General Ruddock Affiliation To Opposition Major Party (Out Of Government) (Australia) and Platinum Group Metals Ltd Affiliation To Heavy Industrial / Chemical Business (Multi-National Corporations)?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "What is the duration of Attorney General Ruddock's affiliation with the Opposition Major Party (Out Of Government) (Australia)?",
+            "For how long was Attorney General Ruddock affiliated to the Opposition Major Party (Out Of Government) (Australia)?",
+            "Calculate the time length of Attorney General Ruddock's affiliation to the Opposition Major Party (Australia)."
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "What is the duration of Platinum Group Metals Ltd's affiliation with Heavy Industrial / Chemical Business (Multi-National Corporations)?",
+            "For how long was Platinum Group Metals Ltd affiliated to Heavy Industrial / Chemical Business (Multi-National Corporations)?",
+            "Calculate the time length of Platinum Group Metals Ltd's affiliation to Heavy Industrial / Chemical Business."
+        ]
+    }}
+]
+
+**Example 4:**
+Input: At the same time André Kimbuta Affiliation To People's Party for Reconstruction and Democracy, in which organisation Manila Times Affiliation To?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When was André Kimbuta affiliated with the People's Party for Reconstruction and Democracy?",
+            "What is the time period of André Kimbuta's affiliation to the People's Party for Reconstruction and Democracy?",
+            "At what time did André Kimbuta hold an affiliation to the People's Party for Reconstruction and Democracy?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Which organisation was the Manila Times affiliated with during the time #1?",
+            "To which organisation did the Manila Times have an affiliation at the same time as #1?",
+            "Identify the organisation affiliated with the Manila Times during the period #1."
+        ]
+    }}
+]
+
+**Example 5:**
+Input: Who Affiliation To Medical / Health / Pharmeceutical Business (Multi-National Corporations) during Stefan Sofiyanski Affiliation To Sofia?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When was Stefan Sofiyanski affiliated with Sofia?",
+            "What is the time period of Stefan Sofiyanski's affiliation to Sofia?",
+            "At what time did Stefan Sofiyanski hold an affiliation to Sofia?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Who was affiliated with Medical / Health / Pharmeceutical Business (Multi-National Corporations) during #1?",
+            "Which entity held an affiliation to Medical / Health / Pharmeceutical Business (Multi-National Corporations) throughout the period #1?",
+            "Identify the person or entity affiliated to Medical / Health / Pharmeceutical Business (Multi-National Corporations) in the timeframe #1."
+        ]
+    }}
+]
+
+**Example 6:**
+Input: Is the duration of José de Gregorio Affiliation To Central Bank of Chile shorter the duration of Hightech Payment Systems Affiliation To Consulting / Financial Services Business (Morocco)?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "What is the duration of José de Gregorio's affiliation with the Central Bank of Chile?",
+            "For how long was José de Gregorio affiliated to the Central Bank of Chile?",
+            "Calculate the length of time José de Gregorio held an affiliation to the Central Bank of Chile."
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "What is the duration of Hightech Payment Systems' affiliation with Consulting / Financial Services Business (Morocco)?",
+            "For how long was Hightech Payment Systems affiliated to Consulting / Financial Services Business (Morocco)?",
+            "Calculate the length of time Hightech Payment Systems held an affiliation to Consulting / Financial Services Business (Morocco)."
+        ]
+    }}
+]
+
+**Example 7:**
+Input: Who Affiliation To Elite (Comoros) at the same start and end time Khalil Fleihan start and end Affiliation To Daily Star?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "What are the start and end dates of Khalil Fleihan's affiliation with the Daily Star?",
+            "From when to when was Khalil Fleihan affiliated to the Daily Star?",
+            "Identify the specific start and end times for Khalil Fleihan's affiliation to the Daily Star."
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Who was affiliated with Elite (Comoros) during the exact same start and end times as #1?",
+            "Which person held an affiliation to Elite (Comoros) starting and ending at the same dates as #1?",
+            "Who had the same affiliation period to Elite (Comoros) as the timeframe identified in #1?"
+        ]
+    }}
+]
+
+**Example 8:**
+Input: During Jüri Pihl Affiliation To Social Democratic Party, which organisation is Affiliation Toed by Sergion Sebastiani?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When was Jüri Pihl affiliated with the Social Democratic Party?",
+            "What is the time period of Jüri Pihl's affiliation to the Social Democratic Party?",
+            "At what time did Jüri Pihl hold an affiliation to the Social Democratic Party?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "Which organisation was Sergion Sebastiani affiliated with during #1?",
+            "To which organisation did Sergion Sebastiani hold an affiliation during the period #1?",
+            "What organisation had an affiliation by Sergion Sebastiani within the timeframe #1?"
+        ]
+    }}
+]
+
+# Input Data
+Please process the following new questions strictly adhering to the logic above:
+
+"""
+
+icews_actor_complex = """# Role
+You are an Advanced Logic Decomposition Engine. Your goal is to break down complex questions involving multiple entities (usually 3+), timeline intersections, rankings, or comparative durations into atomic sub-questions.
+
+# Task
+1.  **Analyze the Question**: Identify the entities and the specific temporal logic:
+    * **Intersection/Simultaneity**: "at the same time", "during... during...".
+    * **Allen Interval Logic**: "finishedby", "starts", "equal", "overlapped by".
+    * **Sequence**: "after... after...", "before... before...".
+    * **Ranking/Aggregation**: "ranking what based on start time", "total duration of A, B, and C".
+2.  **Decompose**: Break the question into sequential steps. Generate simple retrieval questions to get the start/end dates for **each** person/entity mentioned.
+3.  **Output Structure**: For each step, output a JSON object containing:
+    * `idx`: The sequential index (starting from "1").
+    * `variants`: A list of **exactly 3 distinct**, grammatically correct ways to phrase this sub-question.
+4.  **Dependency & Slot Filling**: Use `#idx` (e.g., `#1`, `#2`) to refer to the **answer/result** of a previous sub-question.
+
+# Constraints
+* **Date Precision**: Do not change "beginning of time" or "end of time". If an explicit date is present, use "YYYY-MM-DD".
+* **Entity Precision**: Preserve specific entity names exactly as they appear (e.g., "RLI Corporation").
+* **Natural Phrasing**: Do not include technical format strings inside the `variants` text. Keep the questions conversational.
+
+# Examples
+
+**Example 1:**
+Input: From when to when, Mariama Sarr-Ceesay Affiliation To Alliance for Patriotic Reorientation and Construction, at the same time, António Manuel Mascarenhas Gomes Monteiro Affiliation To Government (Portugal), at the same time, Ricardo Arias Calderon Affiliation To Christian Democratic Party?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "From when to when was Mariama Sarr-Ceesay affiliated with the Alliance for Patriotic Reorientation and Construction?",
+            "What is the time period of Mariama Sarr-Ceesay's affiliation to the Alliance for Patriotic Reorientation and Construction?",
+            "When did Mariama Sarr-Ceesay hold an affiliation to the Alliance for Patriotic Reorientation and Construction?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "From when to when was António Manuel Mascarenhas Gomes Monteiro affiliated with the Government (Portugal)?",
+            "What is the time period of António Manuel Mascarenhas Gomes Monteiro's affiliation to the Government (Portugal)?",
+            "When did António Manuel Mascarenhas Gomes Monteiro hold an affiliation to the Government (Portugal)?"
+        ]
+    }},
+    {{
+        "subq_idx": 3,
+        "variants": [
+            "From when to when was Ricardo Arias Calderon affiliated with the Christian Democratic Party?",
+            "What is the time period of Ricardo Arias Calderon's affiliation to the Christian Democratic Party?",
+            "When did Ricardo Arias Calderon hold an affiliation to the Christian Democratic Party?"
+        ]
+    }}
+]
+
+**Example 2:**
+Input: Ricardo Arias Calderon Affiliation To which organisation, finishedby Oswaldo Álvarez Paz Affiliation To Popular Alliance, finishedby Dave Heineman Affiliation To Nebraska?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did Oswaldo Álvarez Paz end his affiliation with the Popular Alliance?",
+            "What is the end date of Oswaldo Álvarez Paz's affiliation to the Popular Alliance?",
+            "At what time did Oswaldo Álvarez Paz cease being affiliated with the Popular Alliance?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "When did Dave Heineman end his affiliation with Nebraska?",
+            "What is the end date of Dave Heineman's affiliation to Nebraska?",
+            "At what time did Dave Heineman cease being affiliated with Nebraska?"
+        ]
+    }},
+    {{
+        "subq_idx": 3,
+        "variants": [
+            "Which organisation was Ricardo Arias Calderon affiliated with that finished at the same time as #1 and #2?",
+            "Identify the organisation whose affiliation with Ricardo Arias Calderon ended on the dates #1 and #2.",
+            "What affiliation of Ricardo Arias Calderon concluded simultaneously with #1 and #2?"
+        ]
+    }}
+]
+
+**Example 3:**
+Input: Who Raila Odinga National Development Party, starts RLI Corporation Affiliation To Consulting / Financial Services Business (Multi-National Corporations), before Artis Pabriks Affiliation To, Ministry of Defence?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did RLI Corporation start its affiliation with Consulting / Financial Services Business (Multi-National Corporations)?",
+            "What is the start date of RLI Corporation's affiliation to Consulting / Financial Services Business?",
+            "At what time did RLI Corporation begin being affiliated with Consulting / Financial Services Business?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "When did Artis Pabriks start his affiliation with the Ministry of Defence?",
+            "What is the start date of Artis Pabriks's affiliation to the Ministry of Defence?",
+            "At what time did Artis Pabriks join the Ministry of Defence?"
+        ]
+    }},
+    {{
+        "subq_idx": 3,
+        "variants": [
+            "Who was affiliated with the National Development Party starting at the same time as #1 and before #2?",
+            "Identify the person whose affiliation with the National Development Party began on date #1 and prior to date #2.",
+            "Which entity started their affiliation to the National Development Party simultaneously with #1 and before the event #2?"
+        ]
+    }}
+]
+
+**Example 4:**
+Input: Sicily Affiliation To which organisation, during Fernando Olivera Affiliation To Council of Ministers of Peru, during Wendell H. Ford Affiliation To United States Senate?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "What is the time period of Fernando Olivera's affiliation to the Council of Ministers of Peru?",
+            "From when to when was Fernando Olivera affiliated with the Council of Ministers of Peru?",
+            "When did Fernando Olivera hold an affiliation to the Council of Ministers of Peru?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "What is the time period of Wendell H. Ford's affiliation to the United States Senate?",
+            "From when to when was Wendell H. Ford affiliated with the United States Senate?",
+            "When did Wendell H. Ford hold an affiliation to the United States Senate?"
+        ]
+    }},
+    {{
+        "subq_idx": 3,
+        "variants": [
+            "Which organisation was Sicily affiliated with during both #1 and #2?",
+            "To which organisation did Sicily have an affiliation throughout the overlapping periods of #1 and #2?",
+            "Identify the organisation affiliated with Sicily within the timeframe defined by #1 and #2."
+        ]
+    }}
+]
+
+**Example 5:**
+Input: Nasim Hamir Affiliation To which organisation, equal Pasqual Maragall i Mira Affiliation To Socialists' Party of Catalonia, finishedby Roselyne Bachelot Affiliation To Council of Ministers?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "From when to when was Pasqual Maragall i Mira affiliated with the Socialists' Party of Catalonia?",
+            "What are the start and end dates of Pasqual Maragall i Mira's affiliation to the Socialists' Party of Catalonia?",
+            "Identify the exact duration of Pasqual Maragall i Mira's affiliation to the Socialists' Party of Catalonia."
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "When did Roselyne Bachelot end her affiliation with the Council of Ministers?",
+            "What is the end date of Roselyne Bachelot's affiliation to the Council of Ministers?",
+            "At what time did Roselyne Bachelot cease being affiliated with the Council of Ministers?"
+        ]
+    }},
+    {{
+        "subq_idx": 3,
+        "variants": [
+            "Which organisation was Nasim Hamir affiliated with that had the equal duration as #1 and finished at #2?",
+            "Identify the organisation whose affiliation with Nasim Hamir matched the start and end times of #1 and ended at #2.",
+            "To which organisation did Nasim Hamir have an affiliation that was concurrent with #1 and concluded with #2?"
+        ]
+    }}
+]
+
+**Example 6:**
+Input: Patricia de Lille Affiliation To which organisation, after Zainal Hazari Affiliation To Opposition Major Party (Out Of Government) (Bangladesh), after Mark Pryor Affiliation To Arkansas?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did Zainal Hazari end his affiliation with the Opposition Major Party (Out Of Government) (Bangladesh)?",
+            "What is the end date of Zainal Hazari's affiliation to the Opposition Major Party in Bangladesh?",
+            "At what time did Zainal Hazari cease being affiliated with the Opposition Major Party (Bangladesh)?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "When did Mark Pryor end his affiliation with Arkansas?",
+            "What is the end date of Mark Pryor's affiliation to Arkansas?",
+            "At what time did Mark Pryor cease being affiliated with Arkansas?"
+        ]
+    }},
+    {
+        "subq_idx": 3,
+        "variants": [
+            "Which organisation was Patricia de Lille affiliated with after both #1 and #2?",
+            "To which organisation did Patricia de Lille have an affiliation starting subsequent to #1 and #2?",
+            "Identify the organisation affiliated with Patricia de Lille following the dates #1 and #2."
+        ]
+    }}
+]
+
+**Example 7:**
+Input: Jaroslav Spisiak is ranking what based on the start time amony Jaroslav Spisiak Affiliation To Slovak Police, Michael David Chong Affiliation To Progressive Conservative Party of Canada and Graciela Fernández Meijide Affiliation To Ministry of Social Action?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "When did Jaroslav Spisiak start his affiliation with the Slovak Police?",
+            "What is the start date of Jaroslav Spisiak's affiliation to the Slovak Police?",
+            "At what time did Jaroslav Spisiak begin his affiliation with the Slovak Police?"
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "When did Michael David Chong start his affiliation with the Progressive Conservative Party of Canada?",
+            "What is the start date of Michael David Chong's affiliation to the Progressive Conservative Party of Canada?",
+            "At what time did Michael David Chong begin his affiliation with the Progressive Conservative Party of Canada?"
+        ]
+    }},
+    {{
+        "subq_idx": 3,
+        "variants": [
+            "When did Graciela Fernández Meijide start her affiliation with the Ministry of Social Action?",
+            "What is the start date of Graciela Fernández Meijide's affiliation to the Ministry of Social Action?",
+            "At what time did Graciela Fernández Meijide begin her affiliation with the Ministry of Social Action?"
+        ]
+    }}
+]
+
+**Example 8:**
+Input: How long is the total duration of Mark Malloch Brown Affiliation To Secretary of State for Foreign and Commonwealth Affairs, N.B. Rao Affiliation To Government (India) and Thomas Remengesau Affiliation To Government (Palau)?
+Output:
+[
+    {{
+        "subq_idx": 1,
+        "variants": [
+            "What is the duration of Mark Malloch Brown's affiliation with the Secretary of State for Foreign and Commonwealth Affairs?",
+            "For how long was Mark Malloch Brown affiliated to the Secretary of State for Foreign and Commonwealth Affairs?",
+            "Calculate the length of time Mark Malloch Brown held an affiliation to the Secretary of State for Foreign and Commonwealth Affairs."
+        ]
+    }},
+    {{
+        "subq_idx": 2,
+        "variants": [
+            "What is the duration of N.B. Rao's affiliation with the Government (India)?",
+            "For how long was N.B. Rao affiliated to the Government (India)?",
+            "Calculate the length of time N.B. Rao held an affiliation to the Government (India)."
+        ]
+    }},
+    {{
+        "subq_idx": 3,
+        "variants": [
+            "What is the duration of Thomas Remengesau's affiliation with the Government (Palau)?",
+            "For how long was Thomas Remengesau affiliated to the Government (Palau)?",
+            "Calculate the length of time Thomas Remengesau held an affiliation to the Government (Palau)."
+        ]
+    }}
+]
+
+# Input Data
+Please process the following new questions strictly adhering to the logic above:
+
+"""
+
+ic_infer = """# Role
+You are an expert Temporal Knowledge Graph Query Agent specialized in political and actor affiliation data. Your task is to answer complex questions based strictly on the provided "Relevant facts".
+
+# Task Instructions
+1.  **Analyze the Temporal Logic**: Determine how to connect the sub-questions based on the query type.
+    * **Symbolic Dates**: Handle `"beginning of time"` (treat as $-\infty$) and `"end of time"` (treat as $+\infty$).
+    * **Intersection ("at the same time")**: Find the overlap of intervals.
+        * Overlap([StartA, EndA], [StartB, EndB]) = [max(StartA, StartB), min(EndA, EndB)].
+    * **Union ("or")**: Merge intervals.
+    * **Duration Comparison**: Calculate length. If one is finite and the other is "beginning to end of time", the latter is longer.
+
+2.  **Filter & Match Facts**:
+    * Match entities in the query to the specific facts provided in the sub-questions.
+    * Discard facts that do not match the requested relationship or entity.
+
+3.  **Formulate Output**:
+    * Return a JSON object containing:
+        * `reason`: A step-by-step logical derivation explaining how the facts lead to the answer.
+        * `events`: The list of exact fact strings used. **CRITICAL**: If the question has $N$ sub-questions, you must select exactly one relevant fact per sub-question to form a complete reasoning chain.
+        * `answers`: A list of entities or time ranges.
+
+# Constraints
+* **Strict Adherence to Facts**: Do not use outside knowledge.
+* **Event Alignment**: The `events` list must correspond 1-to-1 with the sub-questions in the reasoning chain.
+* **Output Format**: JSON only.
+
+#Examples
+
+**Example 1:**
+**Raw question**: Who Affiliation To National Democratic Party from beginning of time to 2006-12-31?
+**Subquestion 1**: Who had an Affiliation To the National Democratic Party from beginning of time to 2006-12-31?
+**Relevant facts 1**:
+Andrus Ansip Affiliation To Estonian Reform Party from 2004-11-21 to end of time
+Mohamed Noor Affiliation To Opposition Major Party (Out Of Government) (Malaysia) from beginning of time to end of time
+Osama al-Ghazali Harb Affiliation To National Democratic Party from beginning of time to 2006-12-31
+Joseph Habineza Affiliation To Ministry of Sports and Culture from 2006-01-02 to 2011-01-02
+**Output**:
+{{
+    "reason": "The question asks for a person whose affiliation with the National Democratic Party spans exactly from 'beginning of time' to '2006-12-31'. Examining the facts, Osama al-Ghazali Harb matches this specific start and end date perfectly.",
+    "events": [
+        "Osama al-Ghazali Harb Affiliation To National Democratic Party from beginning of time to 2006-12-31"
+    ],
+    "answers": ["Osama al-Ghazali Harb"]
+}}
+
+**Example 2:**
+**Raw question**: At what point did Max Bradford cease his affiliation with the major governing party in New Zealand?
+**Subquestion 1**: At what point in time did Max Bradford cease his affiliation with the major governing party in New Zealand?
+**Relevant facts 1**:
+Max Bradford Affiliation To Government Major Party (In Government) (New Zealand) from 1960-11-26 to 1972-12-08
+Aliou Sow Affiliation To Ministry of Decentralisation and Local Government from 2009-12-03 to end of time
+Khodayyir Abbas Affiliation To Ministry of Health from 2003-09-01 to 2004-06-27
+Bhaskara Rao Affiliation To Government (India) from beginning of time to end of time
+**Output**:
+{{
+    "reason": "The question asks for the cessation point (end date) of Max Bradford's affiliation. The relevant fact shows his affiliation was from 1960-11-26 to 1972-12-08. Therefore, he ceased his affiliation on 1972-12-08.",
+    "events": [
+        "Max Bradford Affiliation To Government Major Party (In Government) (New Zealand) from 1960-11-26 to 1972-12-08"
+    ],
+    "answers": ["1972-12-08"]
+}}
+
+**Example 3:**
+**Raw question**: How long is the total duration of Atta Mohammed Nur Affiliation To Northern Alliance and Kennedy Sakeni Affiliation To Ministry of Home Affairs?
+**Subquestion 1**: What was the duration of Atta Mohammed Nur's affiliation to the Northern Alliance?
+**Relevant facts 1**:
+Association Of Former International Civil Servants Affiliation To Development IGOs (Non-Governmental Organizations) from beginning of time to end of time
+Atta Mohammed Nur Affiliation To Northern Alliance from 1988-01-01 to 2004-10-01
+Jim Knight Affiliation To Labour Party from beginning of time to end of time
+**Subquestion 2**: What was the duration of Kennedy Sakeni's affiliation to the Ministry of Home Affairs?
+**Relevant facts 2**:
+François Baroin Affiliation To Union for a Popular Movement from beginning of time to end of time
+Kennedy Sakeni Affiliation To Ministry of Home Affairs from 2011-09-23 to 2012-07-10
+José Endundo Bononge Affiliation To Cabinet (Democratic Republic of Congo) from 2008-10-26 to end of time
+Stefano Rodotà Affiliation To Legal (Italy) from beginning of time to end of time
+**Output**:
+{{
+    "reason": "We need to sum two durations. 1) Atta Mohammed Nur (1988-01-01 to 2004-10-01) is approx 16 years, 9 months. 2) Kennedy Sakeni (2011-09-23 to 2012-07-10) is approx 9 months, 17 days. Adding these intervals yields a total duration of roughly 17 years, 6 months, and 24 days.",
+    "events": [
+        "Atta Mohammed Nur Affiliation To Northern Alliance from 1988-01-01 to 2004-10-01",
+        "Kennedy Sakeni Affiliation To Ministry of Home Affairs from 2011-09-23 to 2012-07-10"
+    ],
+    "answers": ["17 years, 6 months, 24 days, 0 hours, 0 minutes, 0 seconds"]
+}}
+
+**Example 4:**
+**Raw question**: At the same time André Kimbuta Affiliation To People's Party for Reconstruction and Democracy, in which organisation Manila Times Affiliation To?
+**Subquestion 1**: At what time did André Kimbuta hold an affiliation to the People's Party for Reconstruction and Democracy?
+**Relevant facts 1**:
+André Kimbuta Affiliation To People's Party for Reconstruction and Democracy from beginning of time to end of time
+Malcolm Bligh Turnbull Affiliation To Lower House (Australia) from 2004-10-09 to end of time
+Lily Pérez Affiliation To Chamber of Deputies of Chile from 1998-03-11 to 2006-03-10
+**Subquestion 2**: Which organisation was the Manila Times affiliated with during the time #1?
+**Relevant facts 2**:
+Manila Times Affiliation To Print News (Philippines) from beginning of time to end of time
+Khodayyir Abbas Affiliation To Ministry of Health from 2003-09-01 to 2004-06-27
+Moussa Koussa Affiliation To Exiles (Libya) from 2011-03-31 to end of time
+**Output**:
+{{
+    "reason": "André Kimbuta's affiliation spans from 'beginning of time' to 'end of time'. We need to find the Manila Times' affiliation during this overlap. The fact shows Manila Times was affiliated to 'Print News (Philippines)' also from 'beginning of time' to 'end of time'. Since the intervals completely overlap, 'Print News (Philippines)' is the correct organization.",
+    "events": [
+        "Manila Times Affiliation To Print News (Philippines) from beginning of time to end of time",
+        "André Kimbuta Affiliation To People's Party for Reconstruction and Democracy from beginning of time to end of time"
+    ],
+    "answers": ["Print News (Philippines)"]
+}}
+
+**Example 5:**
+**Raw question**: Is the duration of José de Gregorio Affiliation To Central Bank of Chile shorter the duration of Hightech Payment Systems Affiliation To Consulting / Financial Services Business (Morocco)?
+**Subquestion 1**: What is the duration of José de Gregorio's affiliation with the Central Bank of Chile?
+**Relevant facts 1**:
+José de Gregorio Affiliation To Central Bank of Chile from 2003-12-06 to 2007-12-06
+Einars Repse Affiliation To Ministry of Finance from 2009-03-12 to 2010-11-03
+Suleimane Djassi Affiliation To Ministry of Tourism from 2003-10-02 to 2004-05-11
+Norman Chibamba Affiliation To Ministry of Community Development and Social Services from 2004-01-02 to 2005-01-01
+**Subquestion 2**: What is the duration of Hightech Payment Systems' affiliation with Consulting / Financial Services Business (Morocco)?
+**Relevant facts 2**:
+Hightech Payment Systems Affiliation To Consulting / Financial Services Business (Morocco) from beginning of time to end of time
+Douglas Devananda Affiliation To Unidentified Forces (Sri Lanka) from beginning of time to end of time
+Nayef bin Abdulaziz al-Saud Affiliation To Elite (Saudi Arabia) from beginning of time to end of time
+**Output**:
+{{
+    "reason": "José de Gregorio's duration is exactly 4 years (2003-12-06 to 2007-12-06). Hightech Payment Systems' duration is 'beginning of time to end of time', which represents an infinite or maximal duration. 4 years is strictly shorter than the infinite duration.",
+    "events": [
+        "José de Gregorio Affiliation To Central Bank of Chile from 2003-12-06 to 2007-12-06",
+        "Hightech Payment Systems Affiliation To Consulting / Financial Services Business (Morocco) from beginning of time to end of time"
+    ],
+    "answers": ["shorter"]
+}}
+
+**Example 6:**
+**Raw question**: From when to when, Mariama Sarr-Ceesay Affiliation To Alliance for Patriotic Reorientation and Construction, at the same time, António Manuel Mascarenhas Gomes Monteiro Affiliation To Government (Portugal), at the same time, Ricardo Arias Calderon Affiliation To Christian Democratic Party?
+**Subquestion 1**: When did Mariama Sarr-Ceesay hold an affiliation to the Alliance for Patriotic Reorientation and Construction?
+**Relevant facts 1**:
+Mariama Sarr-Ceesay Affiliation To Alliance for Patriotic Reorientation and Construction from beginning of time to end of time
+Judge Safair Affiliation To Judicial (India) from beginning of time to end of time
+Walfrido Silvino dos Mares Guia Neto Affiliation To Brazilian Labour Party from beginning of time to end of time
+**Subquestion 2**: What is the time period of António Manuel Mascarenhas Gomes Monteiro's affiliation to the Government (Portugal)?
+**Relevant facts 2**:
+António Manuel Mascarenhas Gomes Monteiro Affiliation To Government (Portugal) from 1991-03-22 to 2001-03-22
+Attorney General Ruddock Affiliation To Opposition Major Party (Out Of Government) (Australia) from beginning of time to 1939-04-25
+Manila Times Affiliation To Print News (Philippines) from beginning of time to end of time
+**Subquestion 3**: When did Ricardo Arias Calderon hold an affiliation to the Christian Democratic Party?
+**Relevant facts 3**:
+Ricardo Arias Calderon Affiliation To Christian Democratic Party from beginning of time to end of time
+Romárico Arroyo Affiliation To Cabinet (Mexico) from 1998-01-05 to 2000-11-30
+Basil Pesambili Mramba Affiliation To Party of the Revolution from beginning of time to end of time
+**Output**:
+{{
+    "reason": "We need the intersection of three time intervals: 1) Mariama: All Time; 2) António: 1991-03-22 to 2001-03-22; 3) Ricardo: All Time. The intersection of [All Time] AND [1991-2001] AND [All Time] is the most restrictive interval, which is [1991-03-22 to 2001-03-22].",
+    "events": [
+        "Mariama Sarr-Ceesay Affiliation To Alliance for Patriotic Reorientation and Construction from beginning of time to end of time",
+        "António Manuel Mascarenhas Gomes Monteiro Affiliation To Government (Portugal) from 1991-03-22 to 2001-03-22".
+        "Ricardo Arias Calderon Affiliation To Christian Democratic Party from beginning of time to end of time"
+    ],
+    "answers": ["(1991-03-22, 2001-03-22)"]
+}}
+
+**Example 7:**
+**Raw question**: Nasim Hamir Affiliation To which organisation, equal Pasqual Maragall i Mira Affiliation To Socialists' Party of Catalonia, finishedby Roselyne Bachelot Affiliation To Council of Ministers?
+**Subquestion 1**: From when to when was Pasqual Maragall i Mira affiliated with the Socialists' Party of Catalonia?
+**Relevant facts 1**:
+Pasqual Maragall i Mira Affiliation To Socialists' Party of Catalonia from beginning of time to end of time
+Shoeb Ali Affiliation To Police (India) from beginning of time to end of time
+Einars Repse Affiliation To Ministry of Finance from 2009-03-12 to 2010-11-03
+**Subquestion 2**: When did Roselyne Bachelot end her affiliation with the Council of Ministers?
+**Relevant facts 2**:
+Roselyne Bachelot Affiliation To Council of Ministers from 2007-05-18 to end of time
+Jigme Wangchuk Affiliation To Executive Office (Bhutan) from 1926-08-21 to 1952-03-30
+N.B. Rao Affiliation To Government (India) from beginning of time to end of time
+**Subquestion 3**: Which organisation was Nasim Hamir affiliated with that had the equal duration as #1 and finished at #2?
+**Relevant facts 3**:
+Nasim Hamir Affiliation To Movement for Multi-Party Democracy from beginning of time to end of time
+Botswana Mine Workers Union Affiliation To Botswana Federation of Trade Unions from beginning of time to end of time
+Jesusa Obono Engono Affiliation To Council of Ministers from 2004-06-14 to 2006-08-14
+**Output**:
+{{
+    "reason": "We need an affiliation for Nasim Hamir that is 'equal' to Pasqual's (beginning to end of time) AND 'finishedby' Roselyne's (end of time). Pasqual's interval is [beginning, end]. Roselyne's ends at [end]. Nasim Hamir's affiliation to 'Movement for Multi-Party Democracy' is [beginning, end]. This matches Pasqual's duration exactly (equal) and shares the same end time as Roselyne (finishedby).",
+    "events": [
+        "Pasqual Maragall i Mira Affiliation To Socialists' Party of Catalonia from beginning of time to end of time",
+        "Roselyne Bachelot Affiliation To Council of Ministers from 2007-05-18 to end of time",
+        "Nasim Hamir Affiliation To Movement for Multi-Party Democracy from beginning of time to end of time"
+    ],
+    "answers": ["Movement for Multi-Party Democracy"]
+}}
+
+"""
+
+ic_fallback = """# Role
+You are an expert Temporal Knowledge Graph Query Agent. Your task is to answer a complex question based strictly on the provided "Relevant facts".
+
+# Task Instructions
+1.  **Analyze the Question**: Determine the temporal logic required.
+    - **Intersection**: "at the same time" (Find overlap).
+    - **Union**: "or" (Merge time intervals).
+    - **Sequence**: "before", "after", "then" (Compare timestamps).
+    - **Duration**: "from when to when", "how long" (Calculate start and end or length).
+    - **Logic**: "equal", "finishedby", "starts" (Allen Interval Logic).
+2.  **Filter Facts**: The provided facts come from the question. Identify which facts correspond to the entities in the user's query. Discard irrelevant facts.
+3.  **Temporal Reasoning**: Perform the necessary calculations (min, max, comparison) on the dates.
+    - Handle "beginning of time" as negative infinity and "end of time" as positive infinity.
+4.  **Formulate Output**:
+    - Return a JSON object with:
+        - `reason`: A step-by-step derivation of the answer.
+        - `events`: A list of the specific fact strings from relevant facts used to derive the answer.
+        - `answers`: A list containing the final entities or normalized dates (YYYY-MM-DD).
+
+# Constraints
+- **Strict Adherence to Facts**: Do not use outside knowledge. If the facts do not support an answer, return [].
+- **Time Format**: All dates must be normalized to YYYY-MM-DD.
+- **Intersection Logic**: Overlap = [max(StartA, StartB), min(EndA, EndB)]. Condition: Start <= End.
+- **Union Logic**: If intervals overlap or touch, merge them: [min(StartA, StartB), max(EndA, EndB)].
+- **Event Alignment (CRITICAL)**: If the question involves $N$ logic steps or entities, the `events` list must represent the complete reasoning chain.
+- **Output Format**: JSON only.
+
+#Examples
+
+**Example 1:**
+**Relevant facts**:
+Andrus Ansip Affiliation To Estonian Reform Party from 2004-11-21 to end of time
+Mohamed Noor Affiliation To Opposition Major Party (Out Of Government) (Malaysia) from beginning of time to end of time
+Osama al-Ghazali Harb Affiliation To National Democratic Party from beginning of time to 2006-12-31
+Joseph Habineza Affiliation To Ministry of Sports and Culture from 2006-01-02 to 2011-01-02
+**Question**: Who Affiliation To National Democratic Party from beginning of time to 2006-12-31?
+**Output**:
+{{
+    "reason": "The question asks for a person whose affiliation with the National Democratic Party strictly spans from 'beginning of time' to '2006-12-31'. Scanning the facts, Osama al-Ghazali Harb's affiliation matches these start and end points exactly.",
+    "events": [
+        "Osama al-Ghazali Harb Affiliation To National Democratic Party from beginning of time to 2006-12-31"
+    ],
+    "answers": ["Osama al-Ghazali Harb"]
+}}
+
+**Example 2:**
+**Relevant facts**:
+Max Bradford Affiliation To Government Major Party (In Government) (New Zealand) from 1960-11-26 to 1972-12-08
+Aliou Sow Affiliation To Ministry of Decentralisation and Local Government from 2009-12-03 to end of time
+Khodayyir Abbas Affiliation To Ministry of Health from 2003-09-01 to 2004-06-27
+Bhaskara Rao Affiliation To Government (India) from beginning of time to end of time
+**Question**: At what point did Max Bradford cease his affiliation with the major governing party in New Zealand?
+**Output**:
+{{
+    "reason": "The question asks for the end date ('cease point') of Max Bradford's affiliation. The relevant fact states his affiliation was from 1960-11-26 to 1972-12-08. Therefore, the cessation date is 1972-12-08.",
+    "events": [
+        "Max Bradford Affiliation To Government Major Party (In Government) (New Zealand) from 1960-11-26 to 1972-12-08"
+    ],
+    "answers": ["1972-12-08"]
+}}
+
+**Example 3:**
+**Relevant facts**:
+Association Of Former International Civil Servants Affiliation To Development IGOs (Non-Governmental Organizations) from beginning of time to end of time
+Atta Mohammed Nur Affiliation To Northern Alliance from 1988-01-01 to 2004-10-01
+Jim Knight Affiliation To Labour Party from beginning of time to end of time
+François Baroin Affiliation To Union for a Popular Movement from beginning of time to end of time
+Kennedy Sakeni Affiliation To Ministry of Home Affairs from 2011-09-23 to 2012-07-10
+José Endundo Bononge Affiliation To Cabinet (Democratic Republic of Congo) from 2008-10-26 to end of time
+Stefano Rodotà Affiliation To Legal (Italy) from beginning of time to end of time
+**Question**: How long is the total duration of Atta Mohammed Nur Affiliation To Northern Alliance and Kennedy Sakeni Affiliation To Ministry of Home Affairs?
+**Output**:
+{{
+    "reason": "We calculate two durations: 1) Atta Mohammed Nur (1988-01-01 to 2004-10-01) is approx 16 years, 9 months. 2) Kennedy Sakeni (2011-09-23 to 2012-07-10) is approx 9 months, 17 days. Summing these intervals gives a total duration of roughly 17 years, 6 months, and 24 days.",
+    "events": [
+        "Atta Mohammed Nur Affiliation To Northern Alliance from 1988-01-01 to 2004-10-01",
+        "Kennedy Sakeni Affiliation To Ministry of Home Affairs from 2011-09-23 to 2012-07-10"
+    ],
+    "answers": ["17 years, 6 months, 24 days, 0 hours, 0 minutes, 0 seconds"]
+}}
+
+**Example 4:**
+**Relevant facts**:
+André Kimbuta Affiliation To People's Party for Reconstruction and Democracy from beginning of time to end of time
+Malcolm Bligh Turnbull Affiliation To Lower House (Australia) from 2004-10-09 to end of time
+Lily Pérez Affiliation To Chamber of Deputies of Chile from 1998-03-11 to 2006-03-10
+Manila Times Affiliation To Print News (Philippines) from beginning of time to end of time
+Khodayyir Abbas Affiliation To Ministry of Health from 2003-09-01 to 2004-06-27
+Moussa Koussa Affiliation To Exiles (Libya) from 2011-03-31 to end of time
+**Question**: At the same time André Kimbuta Affiliation To People's Party for Reconstruction and Democracy, in which organisation Manila Times Affiliation To?
+**Output**:
+{{
+    "reason": "André Kimbuta's affiliation is 'beginning of time' to 'end of time'. We look for the Manila Times' affiliation that overlaps with this. Manila Times was affiliated to 'Print News (Philippines)' also from 'beginning of time' to 'end of time'. Since the intervals fully overlap, this is the correct organization.",
+    "events": [
+        "Manila Times Affiliation To Print News (Philippines) from beginning of time to end of time",
+        "André Kimbuta Affiliation To People's Party for Reconstruction and Democracy from beginning of time to end of time"
+    ],
+    "answers": ["Print News (Philippines)"]
+}}
+
+**Example 5:**
+**Relevant facts**:
+José de Gregorio Affiliation To Central Bank of Chile from 2003-12-06 to 2007-12-06
+Einars Repse Affiliation To Ministry of Finance from 2009-03-12 to 2010-11-03
+Suleimane Djassi Affiliation To Ministry of Tourism from 2003-10-02 to 2004-05-11
+Norman Chibamba Affiliation To Ministry of Community Development and Social Services from 2004-01-02 to 2005-01-01
+Hightech Payment Systems Affiliation To Consulting / Financial Services Business (Morocco) from beginning of time to end of time
+Douglas Devananda Affiliation To Unidentified Forces (Sri Lanka) from beginning of time to end of time
+Nayef bin Abdulaziz al-Saud Affiliation To Elite (Saudi Arabia) from beginning of time to end of time
+**Question**: Is the duration of José de Gregorio Affiliation To Central Bank of Chile shorter the duration of Hightech Payment Systems Affiliation To Consulting / Financial Services Business (Morocco)?
+**Output**:
+{{
+    "reason": "José de Gregorio's duration is exactly 4 years (2003-2007). Hightech Payment Systems' duration spans from 'beginning of time' to 'end of time', effectively infinite. 4 years is strictly shorter than an infinite duration.",
+    "events": [
+        "José de Gregorio Affiliation To Central Bank of Chile from 2003-12-06 to 2007-12-06",
+        "Hightech Payment Systems Affiliation To Consulting / Financial Services Business (Morocco) from beginning of time to end of time"
+    ],
+    "answers": ["shorter"]
+}}
+
+**Example 6:**
+**Relevant facts**:
+Mariama Sarr-Ceesay Affiliation To Alliance for Patriotic Reorientation and Construction from beginning of time to end of time
+Judge Safair Affiliation To Judicial (India) from beginning of time to end of time
+Walfrido Silvino dos Mares Guia Neto Affiliation To Brazilian Labour Party from beginning of time to end of time
+António Manuel Mascarenhas Gomes Monteiro Affiliation To Government (Portugal) from 1991-03-22 to 2001-03-22
+Attorney General Ruddock Affiliation To Opposition Major Party (Out Of Government) (Australia) from beginning of time to 1939-04-25
+Manila Times Affiliation To Print News (Philippines) from beginning of time to end of time
+Ricardo Arias Calderon Affiliation To Christian Democratic Party from beginning of time to end of time
+Romárico Arroyo Affiliation To Cabinet (Mexico) from 1998-01-05 to 2000-11-30
+Basil Pesambili Mramba Affiliation To Party of the Revolution from beginning of time to end of time
+**Question**: From when to when, Mariama Sarr-Ceesay Affiliation To Alliance for Patriotic Reorientation and Construction, at the same time, António Manuel Mascarenhas Gomes Monteiro Affiliation To Government (Portugal), at the same time, Ricardo Arias Calderon Affiliation To Christian Democratic Party?
+**Output**:
+{{
+    "reason": "The question requires the intersection of three affiliations. Mariama and Ricardo both have affiliations from 'beginning of time' to 'end of time'. António's affiliation is from 1991-03-22 to 2001-03-22. The intersection of [All Time] AND [All Time] AND [1991-2001] is simply [1991-03-22 to 2001-03-22].",
+    "events": [
+        "Mariama Sarr-Ceesay Affiliation To Alliance for Patriotic Reorientation and Construction from beginning of time to end of time",
+        "António Manuel Mascarenhas Gomes Monteiro Affiliation To Government (Portugal) from 1991-03-22 to 2001-03-22".
+        "Ricardo Arias Calderon Affiliation To Christian Democratic Party from beginning of time to end of time"
+    ],
+    "answers": ["(1991-03-22, 2001-03-22)"]
+}}
+
+**Example 7:**
+**Relevant facts**:
+Pasqual Maragall i Mira Affiliation To Socialists' Party of Catalonia from beginning of time to end of time
+Shoeb Ali Affiliation To Police (India) from beginning of time to end of time
+Einars Repse Affiliation To Ministry of Finance from 2009-03-12 to 2010-11-03
+Roselyne Bachelot Affiliation To Council of Ministers from 2007-05-18 to end of time
+Jigme Wangchuk Affiliation To Executive Office (Bhutan) from 1926-08-21 to 1952-03-30
+N.B. Rao Affiliation To Government (India) from beginning of time to end of time
+Nasim Hamir Affiliation To Movement for Multi-Party Democracy from beginning of time to end of time
+Botswana Mine Workers Union Affiliation To Botswana Federation of Trade Unions from beginning of time to end of time
+Jesusa Obono Engono Affiliation To Council of Ministers from 2004-06-14 to 2006-08-14
+**Question**: Nasim Hamir Affiliation To which organisation, equal Pasqual Maragall i Mira Affiliation To Socialists' Party of Catalonia, finishedby Roselyne Bachelot Affiliation To Council of Ministers?
+**Output**:
+{{
+    "reason": "We need an affiliation for Nasim Hamir that is 'equal' to Pasqual's (starts beginning of time, ends end of time) AND 'finishedby' Roselyne's (ends end of time). Nasim Hamir's affiliation to 'Movement for Multi-Party Democracy' spans from beginning to end of time. This satisfies 'equal' with Pasqual and shares the 'end of time' finish with Roselyne.",
+    "events": [
+        "Pasqual Maragall i Mira Affiliation To Socialists' Party of Catalonia from beginning of time to end of time",
+        "Roselyne Bachelot Affiliation To Council of Ministers from 2007-05-18 to end of time",
+        "Nasim Hamir Affiliation To Movement for Multi-Party Democracy from beginning of time to end of time"
+    ],
+    "answers": ["Movement for Multi-Party Democracy"]
+}}
+
+"""

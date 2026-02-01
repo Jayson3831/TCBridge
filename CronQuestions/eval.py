@@ -24,13 +24,14 @@ def normalize_gold_events(gold_events):
     normalized_events = []
     for event in gold_events:
         parts = event.strip().split('|')
-        subject = parts[0]
-        predicate = parts[1]
-        obj = parts[2]
-        start_time = parts[3]
-        end_time = parts[4]
-        event_str = f"{subject} {predicate} {obj} from {start_time} to {end_time}"
-        normalized_events.append(normalize_text(event_str))
+        if len(parts) > 4:
+            subject = parts[0]
+            predicate = parts[1]
+            obj = parts[2]
+            start_time = parts[3]
+            end_time = parts[4] if len(parts) > 4 else start_time
+            event_str = f"{subject} {predicate} {obj} from {start_time} to {end_time}"
+            normalized_events.append(normalize_text(event_str))
     return normalized_events
 
 def mean_reciprocal_rank(rs):
