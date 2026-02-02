@@ -23,8 +23,9 @@ async def llm_invoke(messages: List[Dict], total_tokens: Dict[str, int]):
     try:
         # 获取结构化输出
         response_json = json.loads(response.choices[0].message.content)
-    except json.JSONDecodeError as e:
-        print(f"JSON Decode Error: {e}")
+    except Exception as e:
+        print(f"LLM Invoke Error: {e}")
+        print(f"Problematic content: {messages[-1]['content'][:200]}...")
         response_json = {}
 
     # 统计token用量

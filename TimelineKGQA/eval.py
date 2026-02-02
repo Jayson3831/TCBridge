@@ -1,9 +1,9 @@
 import os, sys
 import json
-import re
+import time
 import string
-from config import Config
-from collections import defaultdict
+from config import args
+from utils import get_result_paths
 from termcolor import colored
 
 
@@ -24,17 +24,13 @@ def normalize_gold_events(gold_events):
     normalized_events = []
     for event in gold_events:
         parts = event.strip().split('|')
-        if len(parts) >= 4:
+        if len(parts) > 4:
             subject = parts[0]
             predicate = parts[1]
             obj = parts[2]
             start_time = parts[3]
             end_time = parts[4] if len(parts) > 4 else start_time
-            
-            if start_time == end_time:
-                event_str = f"{subject} {predicate} {obj} on {start_time}"
-            else:
-                event_str = f"{subject} {predicate} {obj} from {start_time} to {end_time}"
+            event_str = f"{subject} {predicate} {obj} from {start_time} to {end_time}"
             normalized_events.append(normalize_text(event_str))
     return normalized_events
 
@@ -101,7 +97,7 @@ def hit_n(rs, n=1):
 
     return sum(hit_at_n(r) for r in rs) / len(rs)
 
-def save_failed_samples(ranks_list, trees, n=1, output_file=Config.ANALYSIS_FILE):
+def save_failed_samples(ranks_list, results, error_file, n):
     """
     保存 Hit@N 为 0 的样本以便分析。
     """
@@ -120,33 +116,28 @@ def save_failed_samples(ranks_list, trees, n=1, output_file=Config.ANALYSIS_FILE
         # 失败条件：前 k 个里面命中的数量小于预期 labels
         if sum(top_k) < labels:
             # 获取原始树信息
-            tree = trees[i]
-            node = tree[-1] # 根节点
+            result = results[i]
             
             failed_samples.append({
                 "idx": i,
-                "question": node.get("question_text", ""), # 注意有些文件字段是 question_text
-                "level": node.get("question_level", "unknown"),
+                "question": result['question'],
+                "level": result['qlevel'],
                 "labels_needed": labels,
                 "hits_found": sum(top_k),
-                "gold_events": node.get("events"),
-                "facts": node.get("facts"), # 虽然 facts 是全量，这里只展示前k个相关的
+                "gold_events": result['gold_events'],
+                "events": result['inference']['events'],
                 "rank_binary": rank_binary, # 展示命中情况，例如 [0, 1, 0, 0]
                 "cutoff_at": cutoff
             })
 
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, "w", encoding='utf-8') as f:
+    with open(error_file, "w", encoding='utf-8') as f:
         json.dump(failed_samples, f, indent=2, ensure_ascii=False)
-    
-    print(colored(f"Saved {len(failed_samples)} failed samples (Hit@{n}=0) to {output_file}", "yellow"))
-
 
 def log_metrics(ranks_list):
-    metrics = ["mrr", "hit_1", "hit_3", "hit_5", "hit_10"]
     levels = ["all", "simple", "medium", "complex"]
     level_to_labels = {"simple": 1, "medium": 2, "complex": 3}
 
+    metric_results = {}
     print("-" * 60)
     for level in levels:
         if level == "all":
@@ -167,31 +158,30 @@ def log_metrics(ranks_list):
 
         print(f"Level: {level.capitalize():<10} | Count: {count}")
         
-        results_str = []
-        for metric in metrics:
-            if metric == "mrr":
-                score = mean_reciprocal_rank(current_rs)
-            else:
-                n = int(metric.split("_")[1])
-                score = hit_n(current_rs, n=n)
-            results_str.append(f"{metric.upper()}: {score:.4f}")
+        mrr_score = mean_reciprocal_rank(current_rs)
+        hit_score = hit_n(current_rs, n=args.hit_k)
+
+        metric_results[level] = {
+            "mrr": mrr_score,
+            f"hit@{args.hit_k}": hit_score
+        }
         
-        print("  " + " | ".join(results_str))
+        print(f"mrr score: {mrr_score * 100:.2f}%\nhit@{args.hit_k} score: {hit_score * 100:.2f}%")
     print("-" * 60)
 
-def evaluate(result_file):
+    return metric_results
+
+def evaluate(result_file, error_file, eval_log_path, total_tokens=None):
     print(colored("Evaluating Results...", "green"))
     
     with open(result_file, 'r', encoding='utf-8') as f:
-        trees = json.load(f)
+        results = json.load(f)
 
     ranks_data = []
-    valid_trees = [] # 存储对应的 tree 数据用于失败分析
-    level_map = {"simple": 1, "medium": 2, "complex": 3}
-    for tree in trees:
-        node = tree[-1]
-        gold_events = node.get('events', [])
-        retrieved_facts = node.get('facts', [])
+    valid_results = [] # 存储对应的结果用于失败分析
+    for result in results:
+        events = result['inference']['events']
+        gold_events = result['gold_events']
 
         if not gold_events:
             continue
@@ -200,8 +190,8 @@ def evaluate(result_file):
         
         # 构建 0/1 Rank 列表
         rank_binary = []
-        for fact in retrieved_facts:
-            norm_fact = normalize_prediction(fact)
+        for event in events:
+            norm_fact = normalize_prediction(event)
             is_match = 0
             for g in norm_gold:
                 if g in norm_fact or norm_fact in g:
@@ -212,18 +202,45 @@ def evaluate(result_file):
         real_labels_count = len(gold_events)
 
         ranks_data.append({
-            "question": node.get('question'),
+            "question": result['question'],
             "rank": {
                 "rank": rank_binary,
                 "labels": real_labels_count
             }
         })
-        valid_trees.append(tree)
+        valid_results.append(result)
 
-    log_metrics(ranks_data)
+    save_failed_samples(ranks_data, valid_results, error_file, n=args.hit_k)
 
-    save_failed_samples(ranks_data, valid_trees, n=1, output_file=Config.ANALYSIS_FILE)
+    metric_results = log_metrics(ranks_data)
+    eval_result = {
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "config": {k: getattr(args, k) for k in [
+            "top_k", "rerank_top_k", "hit_k", "llm", "dataset", "sample"
+        ]},
+        "metrics": {key: value for key, value in metric_results.items()},
+        "total_tokens": dict(total_tokens) if total_tokens else None
+    }
+
+    # 读取已有日志
+    if os.path.exists(eval_log_path):
+        with open(eval_log_path, 'r') as log_f:
+            eval_logs = json.load(log_f)
+    else:
+        eval_logs = []
+
+    eval_logs.append(eval_result)
+
+    with open(eval_log_path, 'w') as log_f:
+        json.dump(eval_logs, log_f, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":
-    evaluate(Config.RESULT_FILE)
+    output_path, error_path, eval_log = get_result_paths(
+        args.dataset,
+        args.sample,
+        args.suffix,
+        top_k=args.top_k,
+        rerank_top_k=args.rerank_top_k,
+    )
+    evaluate(output_path, error_path, eval_log)
