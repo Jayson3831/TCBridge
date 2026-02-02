@@ -10,22 +10,22 @@ from typing import Optional, List, Dict
 client = AsyncOpenAI(api_key=args.api_key, base_url=args.base_url, max_retries=2, timeout=120.0)
 
 async def llm_invoke(messages: List[Dict], total_tokens: Dict[str, int]):
-    response = await client.chat.completions.create(
-        model=args.llm,
-        messages=messages,
-        temperature=args.temperature,
-        max_tokens=args.max_length,
-        timeout=120,
-        response_format={
-            'type': 'json_object'
-        }
-    )
     try:
+        response = await client.chat.completions.create(
+            model=args.llm,
+            messages=messages,
+            temperature=args.temperature,
+            max_tokens=args.max_length,
+            timeout=120,
+            response_format={
+                'type': 'json_object'
+            }
+        )
         # 获取结构化输出
         response_json = json.loads(response.choices[0].message.content)
     except Exception as e:
         print(f"LLM Invoke Error: {e}")
-        print(f"Problematic content: {messages[-1]['content'][:200]}...")
+        print(f"Problematic content: {messages[-1]['content'][:100]}...")
         response_json = {}
 
     # 统计token用量
