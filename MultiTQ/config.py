@@ -59,7 +59,7 @@ def parse_args():
                         help='Number of top results to rerank')
     parser.add_argument('--conf_threshold', type=float, default=0.6,
                         help='Threshold of confidence.')
-    parser.add_argument('--entropy_threshold', type=float, default=0.4,
+    parser.add_argument('--entropy_threshold', type=float, default=0.6,
                         help='Threshold of entropy.')
     parser.add_argument('--temp', type=float, default=1.0,
                         help='Temperature of faiss entropy.')

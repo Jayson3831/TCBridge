@@ -216,7 +216,7 @@ def evaluate(result_file, error_file, eval_log_path, total_tokens=None):
     eval_result = {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "config": {k: getattr(args, k) for k in [
-            "top_k", "rerank_top_k", "hit_k", "llm", "dataset", "sample"
+            "top_k", "conf_threshold", "entropy_threshold", "hit_k", "llm", "dataset", "sample"
         ]},
         "metrics": {key: value for key, value in metric_results.items()},
         "total_tokens": dict(total_tokens) if total_tokens else None

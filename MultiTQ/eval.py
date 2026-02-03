@@ -133,7 +133,7 @@ def evaluate(result_file, error_file, eval_log_path, total_tokens=None):
     eval_result = {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "config": {k: getattr(args, k) for k in [
-            "top_k", "rerank_top_k", "hit_k", "llm", "dataset", "sample"
+            "top_k", "conf_threshold", "entropy_threshold", "hit_k", "llm", "dataset", "sample"
         ]},
         "overall_hit": f"{sum(hit_list) * 100 / len(hit_list):.2f}%",
         "hit_by_answer_type": dict(hit_by_answer_type),

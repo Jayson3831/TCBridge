@@ -1,13 +1,68 @@
 import os
 import json
 import numpy as np
-from openai import AsyncOpenAI
+from pydantic import BaseModel
+from openai import AsyncOpenAI, AsyncAzureOpenAI
 from dateutil import parser
 from datetime import datetime
 from config import args
 from typing import Optional, List, Dict
 
 client = AsyncOpenAI(api_key=args.api_key, base_url=args.base_url, max_retries=2, timeout=120.0)
+
+azure_client = AsyncAzureOpenAI(
+    api_version="2024-12-01-preview",
+    azure_endpoint="https://rage0612.cognitiveservices.azure.com/",
+    api_key=os.getenv('AZURE_OPENAI_API_KEY'),
+)
+
+class decomposition(BaseModel):
+    subq_idx: int
+    variants: list[str]
+
+class inference(BaseModel):
+    reason: str
+    answers: list[str]
+
+async def azure_openai_dec(messages: List[Dict], total_tokens: Dict[str, int]):
+    try:
+        completion = azure_client.beta.chat.completions.parse(
+            model="gpt-4o-mini",
+            messages=messages,
+            response_format=decomposition
+        )
+        response = completion.choices[0].message.parsed
+
+        # 统计token用量
+        total_tokens['completion'] += response.usage.completion_tokens
+        total_tokens['prompt'] += response.usage.prompt_tokens
+        total_tokens['total'] += response.usage.total_tokens
+    except Exception as e:
+        print(f"LLM Invoke Error: {e}")
+        print(f"Problematic content: {messages[-1]['content'][:100]}...")
+        response = {}
+
+    return response
+
+async def azure_openai_inf(messages: List[Dict], total_tokens: Dict[str, int]):
+    try:
+        completion = azure_client.beta.chat.completions.parse(
+            model="gpt-4o-mini",
+            messages=messages,
+            response_format=inference
+        )
+        response = completion.choices[0].message.parsed
+
+        # 统计token用量
+        total_tokens['completion'] += response.usage.completion_tokens
+        total_tokens['prompt'] += response.usage.prompt_tokens
+        total_tokens['total'] += response.usage.total_tokens
+    except Exception as e:
+        print(f"LLM Invoke Error: {e}")
+        print(f"Problematic content: {messages[-1]['content'][:100]}...")
+        response = {}
+
+    return response
 
 async def llm_invoke(messages: List[Dict], total_tokens: Dict[str, int]):
     try:

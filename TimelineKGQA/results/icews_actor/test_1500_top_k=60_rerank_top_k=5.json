@@ -1,0 +1,70 @@
+[
+    {
+        "timestamp": "2026-02-02 14:01:22",
+        "config": {
+            "top_k": 60,
+            "rerank_top_k": 5,
+            "hit_k": 1,
+            "llm": "deepseek-chat",
+            "dataset": "icews_actor",
+            "sample": 1500
+        },
+        "metrics": {
+            "all": {
+                "mrr": 0.5814200559181688,
+                "hit@1": 0.5526666666666666
+            },
+            "simple": {
+                "mrr": 0.744045204288612,
+                "hit@1": 0.7302231237322515
+            },
+            "medium": {
+                "mrr": 0.5198931156484633,
+                "hit@1": 0.4896694214876033
+            },
+            "complex": {
+                "mrr": 0.5138528138528144,
+                "hit@1": 0.47346938775510206
+            }
+        },
+        "total_tokens": {
+            "completion": 817801,
+            "prompt": 13821925,
+            "total": 14639726
+        }
+    },
+    {
+        "timestamp": "2026-02-02 19:25:40",
+        "config": {
+            "top_k": 60,
+            "rerank_top_k": 5,
+            "hit_k": 1,
+            "llm": "deepseek-chat",
+            "dataset": "icews_actor",
+            "sample": 1500
+        },
+        "metrics": {
+            "all": {
+                "mrr": 0.5525148145400017,
+                "hit@1": 0.52
+            },
+            "simple": {
+                "mrr": 0.7317629202694022,
+                "hit@1": 0.7099391480730223
+            },
+            "medium": {
+                "mrr": 0.4861294826572604,
+                "hit@1": 0.4547325102880658
+            },
+            "complex": {
+                "mrr": 0.47435176507341525,
+                "hit@1": 0.4309278350515464
+            }
+        },
+        "total_tokens": {
+            "completion": 811911,
+            "prompt": 13810902,
+            "total": 14622813
+        }
+    }
+]

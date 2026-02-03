@@ -1,0 +1,182 @@
+[
+    {
+        "timestamp": "2026-01-31 18:53:45",
+        "config": {
+            "top_k": 60,
+            "rerank_top_k": 5,
+            "hit_k": 1,
+            "llm": "deepseek-chat",
+            "dataset": "multitq",
+            "sample": 4000
+        },
+        "overall_hit": "80.72%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 2090,
+                "total": 2793,
+                "acc": "74.83%"
+            },
+            "time": {
+                "hit": 1139,
+                "total": 1207,
+                "acc": "94.37%"
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 2589,
+                "total": 2857,
+                "acc": "90.62%"
+            },
+            "Multiple": {
+                "hit": 640,
+                "total": 1143,
+                "acc": "55.99%"
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 642,
+                "total": 682,
+                "acc": "94.13%"
+            },
+            "month": {
+                "hit": 383,
+                "total": 398,
+                "acc": "96.23%"
+            },
+            "year": {
+                "hit": 203,
+                "total": 211,
+                "acc": "96.21%"
+            }
+        },
+        "hit_by_before_after": {
+            "day": {
+                "hit": 508,
+                "total": 613,
+                "acc": "82.87%"
+            },
+            "month": {
+                "hit": 109,
+                "total": 128,
+                "acc": "85.16%"
+            },
+            "year": {
+                "hit": 45,
+                "total": 59,
+                "acc": "76.27%"
+            }
+        },
+        "hit_by_equal_multi": {
+            "month": {
+                "hit": 56,
+                "total": 81,
+                "acc": "69.14%"
+            },
+            "year": {
+                "hit": 76,
+                "total": 128,
+                "acc": "59.38%"
+            },
+            "day": {
+                "hit": 22,
+                "total": 29,
+                "acc": "75.86%"
+            }
+        },
+        "total_tokens": {
+            "completion": 1191281,
+            "prompt": 24364684,
+            "total": 25555965
+        }
+    },
+    {
+        "timestamp": "2026-01-31 19:22:34",
+        "config": {
+            "top_k": 60,
+            "rerank_top_k": 5,
+            "hit_k": 10,
+            "llm": "deepseek-chat",
+            "dataset": "multitq",
+            "sample": 4000
+        },
+        "overall_hit": "82.92%",
+        "hit_by_answer_type": {
+            "entity": {
+                "hit": 2172,
+                "total": 2793,
+                "acc": "77.77%"
+            },
+            "time": {
+                "hit": 1145,
+                "total": 1207,
+                "acc": "94.86%"
+            }
+        },
+        "hit_by_qlabel": {
+            "Single": {
+                "hit": 2646,
+                "total": 2857,
+                "acc": "92.61%"
+            },
+            "Multiple": {
+                "hit": 671,
+                "total": 1143,
+                "acc": "58.71%"
+            }
+        },
+        "hit_by_equal": {
+            "day": {
+                "hit": 648,
+                "total": 682,
+                "acc": "95.01%"
+            },
+            "month": {
+                "hit": 391,
+                "total": 398,
+                "acc": "98.24%"
+            },
+            "year": {
+                "hit": 207,
+                "total": 211,
+                "acc": "98.10%"
+            }
+        },
+        "hit_by_before_after": {
+            "day": {
+                "hit": 539,
+                "total": 613,
+                "acc": "87.93%"
+            },
+            "month": {
+                "hit": 115,
+                "total": 128,
+                "acc": "89.84%"
+            },
+            "year": {
+                "hit": 47,
+                "total": 59,
+                "acc": "79.66%"
+            }
+        },
+        "hit_by_equal_multi": {
+            "month": {
+                "hit": 65,
+                "total": 81,
+                "acc": "80.25%"
+            },
+            "year": {
+                "hit": 89,
+                "total": 128,
+                "acc": "69.53%"
+            },
+            "day": {
+                "hit": 23,
+                "total": 29,
+                "acc": "79.31%"
+            }
+        },
+        "total_tokens": null
+    }
+]

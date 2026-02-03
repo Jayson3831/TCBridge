@@ -1,0 +1,36 @@
+[
+    {
+        "timestamp": "2026-02-01 22:11:57",
+        "config": {
+            "top_k": 60,
+            "rerank_top_k": 5,
+            "hit_k": 1,
+            "llm": "deepseek-chat",
+            "dataset": "cron",
+            "sample": 1500
+        },
+        "metrics": {
+            "all": {
+                "mrr": 0.6114606308422199,
+                "hit@1": 0.5713333333333334
+            },
+            "simple": {
+                "mrr": 0.8376153213527353,
+                "hit@1": 0.806
+            },
+            "medium": {
+                "mrr": 0.42556743697479,
+                "hit@1": 0.378
+            },
+            "complex": {
+                "mrr": 0.5711991341991335,
+                "hit@1": 0.53
+            }
+        },
+        "total_tokens": {
+            "completion": 905432,
+            "prompt": 12746774,
+            "total": 13652206
+        }
+    }
+]
