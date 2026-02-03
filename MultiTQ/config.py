@@ -57,7 +57,7 @@ def parse_args():
                         help='Number of top results to retrieve')
     parser.add_argument('--rerank_top_k', type=int, default=5,
                         help='Number of top results to rerank')
-    parser.add_argument('--conf_threshold', type=float, default=0.6,
+    parser.add_argument('--conf_threshold', type=float, default=0.7,
                         help='Threshold of confidence.')
     parser.add_argument('--entropy_threshold', type=float, default=0.6,
                         help='Threshold of entropy.')

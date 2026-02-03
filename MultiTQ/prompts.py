@@ -27,134 +27,146 @@ For each question, you must generate a JSON object containing the decomposition.
 **Example 1:**
 Input: After the International Monetary Fund, with which country did Japan first express its intention to negotiate?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Japan express its intention to negotiate with the International Monetary Fund?",
-            "At what time did Japan express its intention to negotiate with the International Monetary Fund?",
-            "What is the date when Japan expressed its intention to negotiate with the International Monetary Fund?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "With which country did Japan express its intention to negotiate first after #1?",
-            "After #1, with which country did Japan first express its intention to negotiate?",
-            "Which country was the first that Japan expressed its intention to negotiate with after #1?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Japan express its intention to negotiate with the International Monetary Fund?",
+                "At what time did Japan express its intention to negotiate with the International Monetary Fund?",
+                "What is the date when Japan expressed its intention to negotiate with the International Monetary Fund?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "With which country did Japan express its intention to negotiate first after #1?",
+                "After #1, with which country did Japan first express its intention to negotiate?",
+                "Which country was the first that Japan expressed its intention to negotiate with after #1?"
+            ]
+        }
+    ]
+}
 
 **Example 2:**
 Input: Who was the first to visit France after the Royal Administration of Wallis and Futuna?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did the Royal Administration of Wallis and Futuna visit France?",
-            "At what time did the Royal Administration of Wallis and Futuna visit France?",
-            "What is the date when the Royal Administration of Wallis and Futuna visited France?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Who was the first to visit France after #1?",
-            "After #1, who was the first to visit France?",
-            "Who visited France first after #1?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did the Royal Administration of Wallis and Futuna visit France?",
+                "At what time did the Royal Administration of Wallis and Futuna visit France?",
+                "What is the date when the Royal Administration of Wallis and Futuna visited France?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Who was the first to visit France after #1?",
+                "After #1, who was the first to visit France?",
+                "Who visited France first after #1?"
+            ]
+        }
+    ]
+}
 
 **Example 3:**
 Input: After the Navy of the United States, which country did Iran accuse first?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Iran accuse the Navy of the United States?",
-            "At what time did Iran accuse the Navy of the United States?",
-            "What is the date when Iran accused the Navy of the United States?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Which country did Iran accuse first after #1?",
-            "After #1, which country did Iran accuse first?",
-            "Which country was the first accused by Iran after #1?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Iran accuse the Navy of the United States?",
+                "At what time did Iran accuse the Navy of the United States?",
+                "What is the date when Iran accused the Navy of the United States?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Which country did Iran accuse first after #1?",
+                "After #1, which country did Iran accuse first?",
+                "Which country was the first accused by Iran after #1?"
+            ]
+        }
+    ]
+}
 
 **Example 4:**
 Input: Who was the first to visit Japan after the Russian Union of Industrialists and Entrepreneurs?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did the Russian Union of Industrialists and Entrepreneurs visit Japan?",
-            "At what time did the Russian Union of Industrialists and Entrepreneurs visit Japan?",
-            "What is the date when the Russian Union of Industrialists and Entrepreneurs visited Japan?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Who was the first to visit Japan after #1?",
-            "After #1, who was the first to visit Japan?",
-            "Who visited Japan first after #1?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did the Russian Union of Industrialists and Entrepreneurs visit Japan?",
+                "At what time did the Russian Union of Industrialists and Entrepreneurs visit Japan?",
+                "What is the date when the Russian Union of Industrialists and Entrepreneurs visited Japan?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Who was the first to visit Japan after #1?",
+                "After #1, who was the first to visit Japan?",
+                "Who visited Japan first after #1?"
+            ]
+        },
+    ]
+}
 
 **Example 5:**
 Input: Who was the first to investigate France after Sean R. Parnell?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Sean R. Parnell investigate France?",
-            "At what time did Sean R. Parnell investigate France?",
-            "What is the date when Sean R. Parnell investigated France?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Who was the first to investigate France after #1?",
-            "After #1, who was the first to investigate France?",
-            "Who investigated France first after #1?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Sean R. Parnell investigate France?",
+                "At what time did Sean R. Parnell investigate France?",
+                "What is the date when Sean R. Parnell investigated France?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Who was the first to investigate France after #1?",
+                "After #1, who was the first to investigate France?",
+                "Who investigated France first after #1?"
+            ]
+        },
+    ]
+}
 
 **Example 6:**
 Input: Which country was the first to sign an agreement with South Korea after Eletrobras?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Eletrobras sign an agreement with South Korea?",
-            "At what time did Eletrobras sign an agreement with South Korea?",
-            "What is the date when Eletrobras signed an agreement with South Korea?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Which country was the first to sign an agreement with South Korea after #1?",
-            "After #1, which country was the first to sign an agreement with South Korea?",
-            "Which country signed an agreement with South Korea first after #1?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Eletrobras sign an agreement with South Korea?",
+                "At what time did Eletrobras sign an agreement with South Korea?",
+                "What is the date when Eletrobras signed an agreement with South Korea?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Which country was the first to sign an agreement with South Korea after #1?",
+                "After #1, which country was the first to sign an agreement with South Korea?",
+                "Which country signed an agreement with South Korea first after #1?"
+            ]
+        },
+    ]
+}
 
 # Input Data
 Please process the following new questions strictly adhering to the format above:
@@ -190,134 +202,146 @@ For each input question, you must generate a JSON object following these specifi
 **Example 1:**
 Input: Which country was the last to express optimism about the leader of Ukraine, before Iran?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Iran express optimism about the leader of Ukraine?",
-            "At what time did Iran express optimism about the leader of Ukraine?",
-            "What is the date when Iran expressed optimism about the leader of Ukraine?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Which country was the last to express optimism about the leader of Ukraine before #1?",
-            "Before #1, which country was the last to express optimism about the leader of Ukraine?",
-            "Which nation expressed optimism about the leader of Ukraine last before #1?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Iran express optimism about the leader of Ukraine?",
+                "At what time did Iran express optimism about the leader of Ukraine?",
+                "What is the date when Iran expressed optimism about the leader of Ukraine?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Which country was the last to express optimism about the leader of Ukraine before #1?",
+                "Before #1, which country was the last to express optimism about the leader of Ukraine?",
+                "Which nation expressed optimism about the leader of Ukraine last before #1?"
+            ]
+        }
+    ]
+}
 
 **Example 2:**
 Input: Before France, who last wished to meet with Nuri al-Maliki?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did France wish to meet with Nuri al-Maliki?",
-            "At what time did France wish to meet with Nuri al-Maliki?",
-            "What is the date when France wished to meet with Nuri al-Maliki?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Who last wished to meet with Nuri al-Maliki before #1?",
-            "Before #1, who last wished to meet with Nuri al-Maliki?",
-            "Who was the last to wish to meet with Nuri al-Maliki before #1?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did France wish to meet with Nuri al-Maliki?",
+                "At what time did France wish to meet with Nuri al-Maliki?",
+                "What is the date when France wished to meet with Nuri al-Maliki?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Who last wished to meet with Nuri al-Maliki before #1?",
+                "Before #1, who last wished to meet with Nuri al-Maliki?",
+                "Who was the last to wish to meet with Nuri al-Maliki before #1?"
+            ]
+        }
+    ]
+}
 
 **Example 3:**
 Input: Who was the last country to be attacked with small arms and light weapons by the Brazilian military before Colombia?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When was Colombia attacked with small arms and light weapons by the Brazilian military?",
-            "At what time was Colombia attacked with small arms and light weapons by the Brazilian military?",
-            "What is the date when Colombia was attacked with small arms and light weapons by the Brazilian military?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Which country was the last to be attacked with small arms and light weapons by the Brazilian military before #1?",
-            "Before #1, which country was the last to be attacked with small arms and light weapons by the Brazilian military?",
-            "Which nation was attacked with small arms and light weapons by the Brazilian military last before #1?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When was Colombia attacked with small arms and light weapons by the Brazilian military?",
+                "At what time was Colombia attacked with small arms and light weapons by the Brazilian military?",
+                "What is the date when Colombia was attacked with small arms and light weapons by the Brazilian military?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Which country was the last to be attacked with small arms and light weapons by the Brazilian military before #1?",
+                "Before #1, which country was the last to be attacked with small arms and light weapons by the Brazilian military?",
+                "Which nation was attacked with small arms and light weapons by the Brazilian military last before #1?"
+            ]
+        }
+    ]
+}
 
 **Example 4:**
 Input: Before Tony Blair, which country last did France decline?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did France decline Tony Blair?",
-            "At what time did France decline Tony Blair?",
-            "What is the date when France declined Tony Blair?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Which country did France decline last before #1?",
-            "Before #1, which country did France decline last?",
-            "Which country was the last that France declined before #1?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did France decline Tony Blair?",
+                "At what time did France decline Tony Blair?",
+                "What is the date when France declined Tony Blair?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Which country did France decline last before #1?",
+                "Before #1, which country did France decline last?",
+                "Which country was the last that France declined before #1?"
+            ]
+        },
+    ]
+}
 
 **Example 5:**
 Input: Who was the last person Winston Peters wanted to meet before Timor-Leste?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variations": [
-            "When did Winston Peters want to meet Timor-Leste?",
-            "At what time did Winston Peters want to meet Timor-Leste?",
-            "What is the date when Winston Peters wanted to meet Timor-Leste?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Who was the last person Winston Peters wanted to meet before #1?",
-            "Before #1, who was the last person Winston Peters wanted to meet?",
-            "Who did Winston Peters want to meet last before #1?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variations": [
+                "When did Winston Peters want to meet Timor-Leste?",
+                "At what time did Winston Peters want to meet Timor-Leste?",
+                "What is the date when Winston Peters wanted to meet Timor-Leste?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Who was the last person Winston Peters wanted to meet before #1?",
+                "Before #1, who was the last person Winston Peters wanted to meet?",
+                "Who did Winston Peters want to meet last before #1?"
+            ]
+        },
+    ]
+}
 
 **Example 6:**
 Input: Before Ali Muhammad Mujawar, which country last recommended Japan?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Ali Muhammad Mujawar recommend Japan?",
-            "At what time did Ali Muhammad Mujawar recommend Japan?",
-            "What is the date when Ali Muhammad Mujawar recommended Japan?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Which country last recommended Japan before #1?",
-            "Before #1, which country last recommended Japan?",
-            "Which country was the last to recommend Japan before #1?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Ali Muhammad Mujawar recommend Japan?",
+                "At what time did Ali Muhammad Mujawar recommend Japan?",
+                "What is the date when Ali Muhammad Mujawar recommended Japan?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Which country last recommended Japan before #1?",
+                "Before #1, which country last recommended Japan?",
+                "Which country was the last to recommend Japan before #1?"
+            ]
+        },
+    ]
+}
 
 # Input Data
 Please process the following new questions strictly adhering to the format above:
@@ -360,96 +384,106 @@ You will receive questions that fall into two distinct subtypes. You must identi
 **Example 1 (Subtype A - Explicit Time / First):**
 Input: Who was the first to request a meeting with Togo in 2005?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "Who was the first to request a meeting with Togo in 2005?",
-            "In 2005, who was the first to ask for a meeting with Togo?",
-            "Who submitted the first request to meet with Togo during the year 2005?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "Who was the first to request a meeting with Togo in 2005?",
+                "In 2005, who was the first to ask for a meeting with Togo?",
+                "Who submitted the first request to meet with Togo during the year 2005?"
+            ]
+        }
+    ]
+}
 
 **Example 2 (Subtype A - Explicit Time / Last):**
 Input: Which country last praised Iran in 2009?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "Which country last praised Iran in 2009?",
-            "In 2009, which country was the last to praise Iran?",
-            "Which nation was the last to praise Iran in the year 2009?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "Which country last praised Iran in 2009?",
+                "In 2009, which country was the last to praise Iran?",
+                "Which nation was the last to praise Iran in the year 2009?"
+            ]
+        }
+    ]
+}
 
 **Example 3 (Subtype B - Relative Time / Same Year):**
 Input: Who hosted the visit of Abdelkader Messahel to Mauritania in the same year?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Abdelkader Messahel visit Mauritania?",
-            "In which year did Abdelkader Messahel visit Mauritania?",
-            "What is the date of Abdelkader Messahel's visit to Mauritania?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Who hosted the visit of Abdelkader Messahel to Mauritania in #1?",
-            "In the year #1, who hosted the visit of Abdelkader Messahel to Mauritania?",
-            "Who was the host for Abdelkader Messahel's visit to Mauritania in #1?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Abdelkader Messahel visit Mauritania?",
+                "In which year did Abdelkader Messahel visit Mauritania?",
+                "What is the date of Abdelkader Messahel's visit to Mauritania?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Who hosted the visit of Abdelkader Messahel to Mauritania in #1?",
+                "In the year #1, who hosted the visit of Abdelkader Messahel to Mauritania?",
+                "Who was the host for Abdelkader Messahel's visit to Mauritania in #1?"
+            ]
+        }
+    ]
+}
 
 **Example 4 (Subtype B - Relative Time / Same Month):**
 Input: Who praised Iran in the same month as Nacer Mehal?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Nacer Mehal praise Iran?",
-            "In which month did Nacer Mehal praise Iran?",
-            "What is the date when Nacer Mehal praised Iran?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Who praised Iran in the same month as #1?",
-            "In the month of #1, who praised Iran?",
-            "Who offered praise to Iran in #1?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Nacer Mehal praise Iran?",
+                "In which month did Nacer Mehal praise Iran?",
+                "What is the date when Nacer Mehal praised Iran?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Who praised Iran in the same month as #1?",
+                "In the month of #1, who praised Iran?",
+                "Who offered praise to Iran in #1?"
+            ]
+        }
+    ]
+}
     
 **Example 5 (Subtype B - Relative Time / Same Day):**
 Input: Which country did the envoy of Sudan want to meet on the same day of Qatar?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did the envoy of Sudan want to meet Qatar?",
-            "On which day did the envoy of Sudan want to meet Qatar?",
-            "What is the date when the envoy of Sudan wanted to meet Qatar?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Which country did the envoy of Sudan want to meet on #1?",
-            "On the day #1, which country did the envoy of Sudan want to meet?",
-            "Which nation did the envoy of Sudan want to meet on #1?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did the envoy of Sudan want to meet Qatar?",
+                "On which day did the envoy of Sudan want to meet Qatar?",
+                "What is the date when the envoy of Sudan wanted to meet Qatar?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Which country did the envoy of Sudan want to meet on #1?",
+                "On the day #1, which country did the envoy of Sudan want to meet?",
+                "Which nation did the envoy of Sudan want to meet on #1?"
+            ]
+        }
+    ]
+}
 
 # Input Data
 Please process the following new questions strictly adhering to the logic above (identify if Subtype A or B automatically):
@@ -491,88 +525,98 @@ You will receive questions that fall into two distinct subtypes based on the nat
 **Example 1 (Subtype A - Relative / Before):**
 Input: Who rejected Iran before the citizens of State Actor did?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did the citizens of State Actor reject Iran?",
-            "What is the date when the citizens of State Actor rejected Iran?",
-            "At what time did the citizens of State Actor reject Iran?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Before #1, who rejected Iran?",
-            "Who rejected Iran prior to #1?",
-            "Who rejected Iran earlier than #1?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did the citizens of State Actor reject Iran?",
+                "What is the date when the citizens of State Actor rejected Iran?",
+                "At what time did the citizens of State Actor reject Iran?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Before #1, who rejected Iran?",
+                "Who rejected Iran prior to #1?",
+                "Who rejected Iran earlier than #1?"
+            ]
+        },
+    ]
+}
 
 **Example 2 (Subtype A - Relative / After):**
 Input: After Japan, who made South Korea suffer from conventional military forces?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Japan make South Korea suffer from conventional military forces?",
-            "What is the date when Japan made South Korea suffer from conventional military forces?",
-            "At what time did Japan make South Korea suffer from conventional military forces?"
-        ]
-    }},
-    {{
-        "subq_idx": 2,
-        "variants": [
-            "Who made South Korea suffer from conventional military forces after #1?",
-            "After #1, who made South Korea suffer from conventional military forces?",
-            "Who attacked South Korea with conventional forces subsequent to #1?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Japan make South Korea suffer from conventional military forces?",
+                "What is the date when Japan made South Korea suffer from conventional military forces?",
+                "At what time did Japan make South Korea suffer from conventional military forces?"
+            ]
+        },
+        {
+            "subq_idx": 2,
+            "variants": [
+                "Who made South Korea suffer from conventional military forces after #1?",
+                "After #1, who made South Korea suffer from conventional military forces?",
+                "Who attacked South Korea with conventional forces subsequent to #1?"
+            ]
+        },
+    ]
+}
 
 **Example 3 (Subtype B - Explicit Time / After):**
 Input: Which country did Qatar appeal to after April 2011?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "Which country did Qatar appeal to after 2011-04?",
-            "After 2011-04, to which nation did Qatar make an appeal?",
-            "After 2011-04, which country received an appeal from Qatar?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "Which country did Qatar appeal to after 2011-04?",
+                "After 2011-04, to which nation did Qatar make an appeal?",
+                "After 2011-04, which country received an appeal from Qatar?"
+            ]
+        },
+    ]
+}
 
 **Example 4 (Subtype B - Explicit Time / Before):**
 Input: Before 14 October 2015, who made Burundi suffer from conventional military forces?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "Who made Burundi suffer from conventional military forces before 2015-10-14?",
-            "Who subjected Burundi to conventional military forces before 2015-10-14?",
-            "Who used conventional military forces against Burundi before 2015-10-14?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "Who made Burundi suffer from conventional military forces before 2015-10-14?",
+                "Who subjected Burundi to conventional military forces before 2015-10-14?",
+                "Who used conventional military forces against Burundi before 2015-10-14?"
+            ]
+        }
+    ]
+}
 
 **Example 5 (Subtype B - Explicit Time / Before):**
 Input: With which country did Qatar sign formal agreements before 15 January 2008?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "With which country did Qatar sign formal agreements before 2008-01-15?",
-            "Which countries signed formal agreements with Qatar before 2008-01-15?",
-            "Prior to 2008-01-15, with which nation did Qatar sign formal agreements?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "With which country did Qatar sign formal agreements before 2008-01-15?",
+                "Which countries signed formal agreements with Qatar before 2008-01-15?",
+                "Prior to 2008-01-15, with which nation did Qatar sign formal agreements?"
+            ]
+        }
+    ]
+}
 
 # Input Data
 Please process the following new questions strictly adhering to the logic above (identify if Subtype A or B automatically):
@@ -604,30 +648,34 @@ Since these questions refer to a single event without external dependencies, **n
 **Example 1:**
 Input: When did Iran praise South Africa for the first time?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Iran praise South Africa for the first time?",
-            "At what time did Iran first praise South Africa?",
-            "On what date did Iran initially praise South Africa?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Iran praise South Africa for the first time?",
+                "At what time did Iran first praise South Africa?",
+                "On what date did Iran initially praise South Africa?"
+            ]
+        }
+    ]
+}
 
 **Example 2:**
 Input: When was the last time Hashim Thaçi spoke optimistically about Japan?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When was the last time Hashim Thaçi spoke optimistically about Japan?",
-            "When did Hashim Thaçi most recently express optimism about Japan?",
-            "At what time did Hashim Thaçi last voice confidence in Japan?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When was the last time Hashim Thaçi spoke optimistically about Japan?",
+                "When did Hashim Thaçi most recently express optimism about Japan?",
+                "At what time did Hashim Thaçi last voice confidence in Japan?"
+            ]
+        }
+    ]
+}
 
 # Input Data
 Please process the following new questions strictly adhering to the logic above:
@@ -663,44 +711,50 @@ You will receive questions that fall into two simple categories. Since these are
 **Example 1 (Subtype B - Action known, find Time):**
 Input: When did Qatar pay a visit to Barack Obama?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "When did Qatar pay a visit to Barack Obama?",
-            "At what time did Qatar visit Barack Obama?",
-            "What is the date of the visit paid by Qatar to Barack Obama?"
-        ]
-    }},
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "When did Qatar pay a visit to Barack Obama?",
+                "At what time did Qatar visit Barack Obama?",
+                "What is the date of the visit paid by Qatar to Barack Obama?"
+            ]
+        },
+    ]
+}
 
 **Example 2 (Subtype A - Time known, find Entity):**
 Input: Which country negotiated with Japan on 19 April 2005?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "Which country negotiated with Japan on 2005-04-19?",
-            "On 2005-04-19, which nation held negotiations with Japan?",
-            "What country engaged in negotiations with Japan on the date 2005-04-19?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "Which country negotiated with Japan on 2005-04-19?",
+                "On 2005-04-19, which nation held negotiations with Japan?",
+                "What country engaged in negotiations with Japan on the date 2005-04-19?"
+            ]
+        }
+    ]
+}
 
 **Example 3 (Subtype A - Time known, find Entity):**
 Input: Who visited France in 2009-05?
 Output:
-[
-    {{
-        "subq_idx": 1,
-        "variants": [
-            "Who visited France in 2009-05?",
-            "Who made a visit to France in 2009-05?",
-            "France host a visit to whom in 2009-05?"
-        ]
-    }}
-]
+{
+    "subquestions": [
+        {
+            "subq_idx": 1,
+            "variants": [
+                "Who visited France in 2009-05?",
+                "Who made a visit to France in 2009-05?",
+                "France host a visit to whom in 2009-05?"
+            ]
+        }
+    ]
+}
 
 # Input Data
 Please process the following new questions strictly adhering to the logic above:
@@ -751,10 +805,10 @@ China Host a visit Nicos Anastasiades in 2015-10-19.
 China Host a visit Nicos Anastasiades in 2015-10-18.
 Nicos Anastasiades Host a visit Angela Merkel in 2014-05-06.
 **Output**:
-{{
+{
 	"reason": "The relevant fact shows 'European Central Bank Host a visit Nicos Anastasiades' occurred on 2013-07-03. The question asks for the exact month.",
 	"answers": ["2013-07"]
-}}
+}
 
 **Example 2**
 **Raw question**: After the UN Security Council, to whom did Tony Blair first express optimism?
@@ -770,10 +824,10 @@ Tony Blair Make optimistic comment Government (Germany) in 2005-10-11.
 Tony Blair Express intent to meet or negotiate Elizabeth II in 2005-04-05.
 Tony Blair Express intent to meet or negotiate Iran in 2005-11-23.
 **Output**:
-{{
+{
 	"reason": "First, the anchor event (Blair optimism to UN Security Council) occurred on 2005-09-13. I need to find who Tony Blair made an optimistic comment to *after* this date. Comparing the facts: African Union (Jan 2005) is before. Optimism to Government (Germany) occurred on 2005-10-11. This is the first instance after Sep 13.",
 	"answers": ["Government (Germany)"]
-}}
+}
 
 **Example 3**
 **Raw question**: In what year did the women of Australia first accuse the Lawyer/Attorney of Australia?
@@ -785,10 +839,10 @@ Lawyer/Attorney (Australia) Accuse Women (Australia) in 2013-07-31.
 Lawyer/Attorney (Australia) Accuse Women (Australia) in 2013-03-26.
 Lawyer/Attorney (Australia) Accuse Women (Australia) in 2012-06-26.
 **Output**:
-{{
+{
     "reason": "The question asks when 'Women (Australia)' accused 'Lawyer/Attorney (Australia)'. Most facts show the Lawyer accusing the Women. There is only one fact where Women are the subject accusing the Lawyer: 'Women (Australia) Accuse Lawyer/Attorney (Australia) in 2014-03-11'. The year is 2014.",
 	"answers": ["2014"]
-}}
+}
 
 **Example 4**
 **Raw question**: Who was the last person Roh Moo Hyun wanted to negotiate with before the head of government of Peru?
@@ -807,10 +861,10 @@ Roh Moo Hyun Express intent to meet or negotiate Japan in 2005-09-22.
 Roh Moo Hyun Express intent to meet or negotiate Mexico in 2005-08-22.
 Roh Moo Hyun Express intent to meet or negotiate Mexico in 2005-08-23.
 **Output**:
-{{
+{
 	"reason": "The anchor event is Roh Moo Hyun negotiating with Head of Government (Peru) on 2005-10-31. I need the latest event *before* this date. Japan (Nov 21) and South Korea (Nov 05) are after. Among those before, South Korea on 2005-10-26 is closer to 10-31 than Japan (Sep 22) or other South Korea dates.",
 	"answers": ["South Korea"]
-}}
+}
 
 **Example 5**
 **Raw question**: Who did the citizens of Norway want to negotiate with after 14 June 2006?
@@ -823,10 +877,10 @@ Citizen (Norway) Express intent to meet or negotiate South Korea in 2007-05-07.
 Citizen (Norway) Express intent to meet or negotiate Iraq in 2014-10-30.
 Citizen (North Korea) Express intent to meet or negotiate Japan in 2006-04-06.
 **Output**:
-{{
+{
 	"reason": "The time constraint is strictly 'after 2006-06-14'. Checking Citizen (Norway) intentions: Education (Norway) is *on* the date (not after). Anders Breivik (2012), South Korea (2007), and Iraq (2014) are all after the date.",
 	"answers": ["Anders Breivik", "South Korea", "Iraq"]
-}}
+}
 
 **Example 6**
 **Raw question**: Who gave a condemnation of Boko Haram in the same month as the Ministry of Iran?
@@ -848,10 +902,10 @@ Citizen (Saudi Arabia) Criticize or denounce Boko Haram in 2014-05-10.
 African Union Criticize or denounce Boko Haram in 2015-01-13.
 Chris Olukolade Criticize or denounce Boko Haram in 2014-03-15.
 **Output**:
-{{
+{
 	"reason": "The Ministry (Iran) condemned Boko Haram in 2014-05. I need to find other entities who 'Criticize or denounce' Boko Haram in May 2014. Matches: UN Security Council, Barack Obama, Iran, ANC Youth League, Citizen (Nigeria), Citizen (Saudi Arabia), Education (Nigeria). Excluded 'Al-Shabaab' (Praise) and 'Media (Nigeria)' (April).",
 	"answers": ["UN Security Council", "Barack Obama", "Iran", "ANC Youth League", "Citizen (Nigeria)", "Citizen (Saudi Arabia)", "Education (Nigeria)"]
-}}
+}
 
 **Example 7**
 **Raw question**: With whom did Wen Jiabao first express interest in cooperation in 2006?
@@ -866,10 +920,10 @@ China Consult Wen Jiabao in 2006-02-25.
 China Consult Wen Jiabao in 2006-03-10.
 Wen Jiabao Investigate China in 2006-07-23.
 **Output**:
-{{
+{
 	"reason": "The question specifies the action 'express interest in cooperation' in 2006. While there are earlier events involving 'Consult' or 'Investigate', the only fact explicitly matching 'Express intent to cooperate' is with Angela Merkel on 2006-03-02.",
 	"answers": ["Angela Merkel"]
-}}
+}
 
 **Example 8**
 **Raw question**: Who criticised the business of Argentina in the same year of the Senate of Argentina?
@@ -886,10 +940,10 @@ Lawyer/Attorney (Argentina) Criticize or denounce Cristina Fernández de Kirchne
 National Action Party Criticize or denounce Mexico in 2012-04-11.
 Lawmaker (Argentina) Criticize or denounce Daniel Scioli in 2011-04-14.
 **Output**:
-{{
+{
 	"reason": "The Senate of Argentina criticized Business (Argentina) in 2011. I need to find others who criticized 'Business (Argentina)' in 2011. Cristina Fernández de Kirchner did so on 2011-04-19. Other facts involve different targets (China, National Action Party) or different years (2012, 2015).",
 	"answers": ["Cristina Fernández de Kirchner"]
-}}
+}
 
 """
 

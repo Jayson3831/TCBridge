@@ -1,5 +1,6 @@
 import os
 import json
+import asyncio
 import numpy as np
 from pydantic import BaseModel
 from openai import AsyncOpenAI, AsyncAzureOpenAI
@@ -8,88 +9,71 @@ from datetime import datetime
 from config import args
 from typing import Optional, List, Dict
 
-client = AsyncOpenAI(api_key=args.api_key, base_url=args.base_url, max_retries=2, timeout=120.0)
+if 'gpt' in args.llm:
+    # azure_openai 格式
+    client = AsyncAzureOpenAI(
+        api_version="2024-12-01-preview",
+        azure_endpoint="https://rage0612.cognitiveservices.azure.com/",
+        api_key=os.getenv('AZURE_OPENAI_API_KEY'),
+    )
+else:
+    client = AsyncOpenAI(api_key=args.api_key, base_url=args.base_url, max_retries=2, timeout=120.0)
 
-azure_client = AsyncAzureOpenAI(
-    api_version="2024-12-01-preview",
-    azure_endpoint="https://rage0612.cognitiveservices.azure.com/",
-    api_key=os.getenv('AZURE_OPENAI_API_KEY'),
-)
+async def llm_invoke(messages: List[Dict], total_tokens: Dict[str, int], max_retries: int = 5):
+    """
+    LLM调用函数，带有自动重试机制处理速率限制
 
-class decomposition(BaseModel):
-    subq_idx: int
-    variants: list[str]
+    Args:
+        messages: 消息列表
+        total_tokens: token统计字典
+        max_retries: 最大重试次数（默认5次）
+    """
+    retry_count = 0
+    base_delay = 5  # 基础延迟时间（秒）
 
-class inference(BaseModel):
-    reason: str
-    answers: list[str]
+    while retry_count < max_retries:
+        try:
+            completions = await client.chat.completions.create(
+                model=args.llm,
+                messages=messages,
+                temperature=args.temperature,
+                max_tokens=args.max_length,
+                timeout=120,
+                response_format={
+                    'type': 'json_object'
+                }
+            )
+            # 获取结构化输出
+            response = json.loads(completions.choices[0].message.content)
 
-async def azure_openai_dec(messages: List[Dict], total_tokens: Dict[str, int]):
-    try:
-        completion = azure_client.beta.chat.completions.parse(
-            model="gpt-4o-mini",
-            messages=messages,
-            response_format=decomposition
-        )
-        response = completion.choices[0].message.parsed
+            # 统计token用量
+            total_tokens['completion'] += completions.usage.completion_tokens
+            total_tokens['prompt'] += completions.usage.prompt_tokens
+            total_tokens['total'] += completions.usage.total_tokens
 
-        # 统计token用量
-        total_tokens['completion'] += response.usage.completion_tokens
-        total_tokens['prompt'] += response.usage.prompt_tokens
-        total_tokens['total'] += response.usage.total_tokens
-    except Exception as e:
-        print(f"LLM Invoke Error: {e}")
-        print(f"Problematic content: {messages[-1]['content'][:100]}...")
-        response = {}
+            return response
 
-    return response
+        except Exception as e:
+            error_str = str(e)
+            # 检查是否是速率限制错误
+            if '429' in error_str or 'RateLimitReached' in error_str:
+                retry_count += 1
+                if retry_count >= max_retries:
+                    print(f"LLM Invoke Error: Max retries ({max_retries}) exceeded for rate limit")
+                    print(f"Problematic content: {messages[-1]['content'][:100]}...")
+                    return {}
 
-async def azure_openai_inf(messages: List[Dict], total_tokens: Dict[str, int]):
-    try:
-        completion = azure_client.beta.chat.completions.parse(
-            model="gpt-4o-mini",
-            messages=messages,
-            response_format=inference
-        )
-        response = completion.choices[0].message.parsed
+                # 指数退避：每次重试延迟时间翻倍
+                delay = base_delay * (2 ** (retry_count - 1))
+                print(f"Rate limit reached. Waiting {delay} seconds before retry {retry_count}/{max_retries}...")
+                await asyncio.sleep(delay)
+            else:
+                # 其他错误直接返回
+                print(f"LLM Invoke Error: {e}")
+                print(f"Problematic content: {messages[-1]['content'][:100]}...")
+                return {}
 
-        # 统计token用量
-        total_tokens['completion'] += response.usage.completion_tokens
-        total_tokens['prompt'] += response.usage.prompt_tokens
-        total_tokens['total'] += response.usage.total_tokens
-    except Exception as e:
-        print(f"LLM Invoke Error: {e}")
-        print(f"Problematic content: {messages[-1]['content'][:100]}...")
-        response = {}
-
-    return response
-
-async def llm_invoke(messages: List[Dict], total_tokens: Dict[str, int]):
-    try:
-        response = await client.chat.completions.create(
-            model=args.llm,
-            messages=messages,
-            temperature=args.temperature,
-            max_tokens=args.max_length,
-            timeout=120,
-            response_format={
-                'type': 'json_object'
-            }
-        )
-        # 获取结构化输出
-        response_json = json.loads(response.choices[0].message.content)
-
-        # 统计token用量
-        total_tokens['completion'] += response.usage.completion_tokens
-        total_tokens['prompt'] += response.usage.prompt_tokens
-        total_tokens['total'] += response.usage.total_tokens
-
-    except Exception as e:
-        print(f"LLM Invoke Error: {e}")
-        print(f"Problematic content: {messages[-1]['content'][:100]}...")
-        response_json = {}
-
-    return response_json
+    return {}
 
 async def tcbridge_module(ref_tokens, curq, allq, retriever, reranker_lock):
     # 逐一处理所有占位符

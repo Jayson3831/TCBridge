@@ -137,14 +137,20 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
     time_level = data['time_level']
     qlabel = data['qlabel']
 
-    # 问题类型标记
-    time_constraint = "before" if "before" in qtype else "after" if "after" in qtype else None
+    # 消融实验3：移除分解逻辑
+    reason = ''
+    answers = []
+    dec_questions = []
 
     # 问题分解
     dec_prompt = getattr(prompts, qtype)
     dec_messages = [{"role": "system", "content": dec_prompt},
                     {"role": "user", "content": question}]
-    dec_response = await llm_invoke(dec_messages, total_tokens)
+    response = await llm_invoke(dec_messages, total_tokens)
+    if isinstance(response, dict):
+        dec_response = response.get('subquestions', [])
+    else:
+        return None
 
     if not dec_response:
         print(colored(f"Decomposition failed for question: {question}", "red"))
@@ -158,6 +164,8 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
             print(colored(f"Expected 3 variants for subquestion: {sub_decq.get('subq_idx')}", "red"))
             continue
 
+        # 消融实验1：不采用最优子问题选择器，永远选择第一个变体
+        # sub_decq['best_subq'] = variants[0]
         best_subq, _ = selector.select_single(question, variants)
         sub_decq['best_subq'] = best_subq
 
@@ -165,6 +173,8 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
     for decq in dec_questions:
         # 找占位符
         cur_question = decq['best_subq']
+
+        # 消融实验2：移除 bridge 模块
         ref_tokens = re.findall(r"#\d+", cur_question)
         if ref_tokens:
             cur_question = await bridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock)
@@ -190,7 +200,7 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
     reason = inf_response.get('reason', 'No reason generated.')
     answers = inf_response.get('answers', [])
 
-    # fallback
+    # fallback (消融实验4：移除fallback)
     if not answers:
         fallback_facts = await retriever.get_faiss_facts(question, args.top_k)
         if fallback_facts:
@@ -264,7 +274,9 @@ async def main():
 
     async def process_with_limit(data):
         async with semaphore:
-            return await process_single_question(data, selector, retriever, total_tokens, reranker_lock)
+            result = await process_single_question(data, selector, retriever, total_tokens, reranker_lock)
+            await asyncio.sleep(1)
+            return result
 
     # 并行处理所有问题
     tasks = [process_with_limit(data) for data in datas]

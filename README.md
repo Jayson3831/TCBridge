@@ -14,8 +14,8 @@ A comprehensive framework for **Temporal Knowledge Graph Question Answering (TKG
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/tcbridge.git
-cd tcbridge
+git clone https://github.com/Jayson3831/TCBridge.git
+cd TCBridge
 
 # Create virtual environment
 python -m venv venv
@@ -47,7 +47,7 @@ DEEPSEEK_API_KEY=your_api_key_here
 
 ```bash
 cd MultiTQ
-python src.py --dataset multitq --dataset_type test --sample 500
+python src.py --dataset multitq --sample 500 --llm deepseek-chat --api_key 'your_api_key' --base_url https://api.deepseek.com --temperature 0 --top_k 60 --conf_threshold 0.7 --entropy_threshold 0.6 --temp 1.0 --concurrent_limit 8 --hit_k 1
 ```
 
 ### TimelineKGQA Datasets
@@ -56,10 +56,10 @@ python src.py --dataset multitq --dataset_type test --sample 500
 cd TimelineKGQA
 
 # CronQuestions dataset
-python src.py --dataset cron --dataset_type test --sample 500
+python src.py --dataset cron --sample 500 --llm deepseek-chat --api_key 'your_api_key' --base_url https://api.deepseek.com --temperature 0 --top_k 60 --conf_threshold 0.7 --entropy_threshold 0.6 --temp 1.0 --concurrent_limit 8 --hit_k 1
 
 # ICEWS Actor dataset
-python src.py --dataset icews_actor --dataset_type test --sample 500
+python src.py --dataset icews_actor --sample 500 --llm deepseek-chat --api_key 'your_api_key' --base_url https://api.deepseek.com --temperature 0 --top_k 60 --conf_threshold 0.7 --entropy_threshold 0.6 --temp 1.0 --concurrent_limit 8 --hit_k 1
 ```
 
 ### Command Line Arguments
@@ -73,7 +73,7 @@ python src.py --dataset icews_actor --dataset_type test --sample 500
 | `--sample` | Number of samples | 500 |
 | `--top_k` | Top-k retrieval results | 60 |
 | `--rerank_top_k` | Top-k re-ranking results | 5 |
-| `--conf_threshold` | Threshold of confidence | 0.6 |
+| `--conf_threshold` | Threshold of confidence | 0.7 |
 | `--entropy_threshold` | Threshold of entropy | 0.6 |
 | `--temp` | Temperature of faiss entropy | 1.0 |
 | `--concurrent_limit` | Concurrent request limit | 8 |
