@@ -129,7 +129,7 @@ class BestSubquestionSelector:
         return best_subqs[0], best_idxs[0].item()
 
 
-async def process_single_question(data, selector, retriever, total_tokens, reranker_lock):
+async def process_single_question(data, selector, retriever, total_tokens, reranker_lock, reranker_stats):
     """处理单个问题的完整流程"""
     question = data['question']
     qtype = data['qtype']
@@ -164,9 +164,19 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
             print(colored(f"Expected 3 variants for subquestion: {sub_decq.get('subq_idx')}", "red"))
             continue
 
-        # 消融实验1：不采用最优子问题选择器，永远选择第一个变体
-        # sub_decq['best_subq'] = variants[0]
-        best_subq, _ = selector.select_single(question, variants)
+        # 消融实验：子问题选择器
+        if args.ablation == 'no_selector_cosine':
+            # 消融 1a：用余弦相似度替代训练分类器选择变体
+            q_emb = selector._encode([question])
+            v_embs = selector._encode(variants)
+            best_idx = torch.argmax(F.cosine_similarity(q_emb, v_embs, dim=1)).item()
+            best_subq = variants[best_idx]
+        elif args.ablation == 'no_selector_single':
+            # 消融 1b：单候选，永远选择第一个变体
+            best_subq = variants[0]
+        else:
+            # 默认：使用训练好的 ConcatBCEClassifier 选择变体
+            best_subq, _ = selector.select_single(question, variants)
         sub_decq['best_subq'] = best_subq
 
     # 相关事件检索
@@ -177,7 +187,7 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
         # 消融实验2：移除 bridge 模块
         ref_tokens = re.findall(r"#\d+", cur_question)
         if ref_tokens:
-            cur_question = await bridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock)
+            cur_question = await bridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock, reranker_stats)
             decq['best_subq'] = cur_question
 
         # 子问题事件检索
@@ -232,11 +242,12 @@ async def main():
     reranker_lock = asyncio.Lock()
 
     # 加载最优选择器
-    minilm = SentenceTransformer(args.minilm, device='cuda')
-    model = ConcatBCEClassifier(embedding_dim=384, dropout=0.3).to('cuda')
-    model.load_state_dict(torch.load(args.best_model, map_location='cuda'))
+    device = f'cuda:{args.gpu_id}'
+    minilm = SentenceTransformer(args.minilm, device=device)
+    model = ConcatBCEClassifier(embedding_dim=384, dropout=0.3).to(device)
+    model.load_state_dict(torch.load(args.best_model, map_location=device))
     model.eval()
-    selector = BestSubquestionSelector(model, device='cuda', encoder=minilm)
+    selector = BestSubquestionSelector(model, device=device, encoder=minilm)
 
     # 加载检索器
     retriever = Retrieval_BGE(
@@ -268,13 +279,19 @@ async def main():
         "total": 0
     }
 
+    # 统计 reranker 调用次数
+    reranker_stats = {
+        "total_ops": 0,
+        "reranker_calls": 0
+    }
+
     # 并发限制
     concurrent_limit = getattr(args, 'concurrent_limit', 8)
     semaphore = asyncio.Semaphore(concurrent_limit)
 
     async def process_with_limit(data):
         async with semaphore:
-            result = await process_single_question(data, selector, retriever, total_tokens, reranker_lock)
+            result = await process_single_question(data, selector, retriever, total_tokens, reranker_lock, reranker_stats)
             await asyncio.sleep(1)
             return result
 
@@ -290,12 +307,22 @@ async def main():
     print(f"\n{failed_dec} questions failed during decomposition.")
     print("\n===============================================\n")
     print(f"Total tokens used: {total_tokens}")
+    if reranker_stats['total_ops'] > 0:
+        reranker_pct = reranker_stats['reranker_calls'] / reranker_stats['total_ops'] * 100
+        print(f"Reranker called {reranker_stats['reranker_calls']}/{reranker_stats['total_ops']} times ({reranker_pct:.1f}%)")
+    else:
+        print("Reranker: no opportunities (no bridge operations with valid scores)")
     print("\n===============================================\n")
+
+    # 消融实验标识自动加入 suffix
+    suffix = args.suffix
+    if args.ablation != 'none':
+        suffix = f"{args.ablation}_{suffix}" if suffix else args.ablation
 
     output_path, error_path, result_path = get_result_paths(
         args.dataset,
         args.sample,
-        args.suffix,
+        suffix,
         top_k=args.top_k,
         rerank_top_k=args.rerank_top_k,
     )

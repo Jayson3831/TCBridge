@@ -101,7 +101,7 @@ async def tcbridge_module(ref_tokens, curq, allq, retriever, reranker_lock):
 
     return curq
 
-async def bridge_module(ref_tokens, curq, allq, retriever, reranker_lock):
+async def bridge_module(ref_tokens, curq, allq, retriever, reranker_lock, reranker_stats=None):
     for ref_token in ref_tokens:
         ref_idx = int(ref_token[1:])
         if ref_idx < 0 or ref_idx > len(allq):
@@ -114,16 +114,56 @@ async def bridge_module(ref_tokens, curq, allq, retriever, reranker_lock):
 
         # 计算置信度和全局熵，决定是否采用精排。
         if ref_scores and len(ref_scores) > 1:
+            if reranker_stats is not None:
+                reranker_stats['total_ops'] += 1
+
             f_conf, f_entropy = calculate_metrics(ref_scores, args.temp)
 
-            if f_conf > args.conf_threshold and f_entropy < args.entropy_threshold:
+            if args.ablation == 'no_bridge_reranker':
+                # 消融 2a：移除 reranker，永远使用 FAISS 原始结果
                 top_facts = ref_facts
                 top_scores = ref_scores
+            elif args.ablation == 'no_gate_conf_only':
+                # 消融 2c-1：仅用置信度门控
+                if f_conf > args.conf_threshold:
+                    top_facts = ref_facts
+                    top_scores = ref_scores
+                else:
+                    async with reranker_lock:
+                        reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
+                    top_facts = reranked['facts']
+                    top_scores = reranked['scores']
+                    if reranker_stats is not None:
+                        reranker_stats['reranker_calls'] += 1
+            elif args.ablation == 'no_gate_entropy_only':
+                # 消融 2c-2：仅用熵门控
+                if f_entropy < args.entropy_threshold:
+                    top_facts = ref_facts
+                    top_scores = ref_scores
+                else:
+                    async with reranker_lock:
+                        reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
+                    top_facts = reranked['facts']
+                    top_scores = reranked['scores']
+                    if reranker_stats is not None:
+                        reranker_stats['reranker_calls'] += 1
             else:
-                async with reranker_lock:
-                    reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
-                top_facts = reranked['facts']
-                top_scores = reranked['scores']
+                # 默认：级联门控
+                # Step 1: 置信度判断 — top-1 是否明显占主导
+                if f_conf > args.conf_threshold:
+                    top_facts = ref_facts
+                    top_scores = ref_scores
+                # Step 2: 熵判断 — 分布是否集中（top-1 仍有相对优势）
+                elif f_entropy < args.entropy_threshold:
+                    top_facts = ref_facts
+                    top_scores = ref_scores
+                else:
+                    async with reranker_lock:
+                        reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
+                    top_facts = reranked['facts']
+                    top_scores = reranked['scores']
+                    if reranker_stats is not None:
+                        reranker_stats['reranker_calls'] += 1
 
         # 语义重构（替换占位符）
         relevant_date = parse_date_string(top_facts[0]) if ref_facts else None
@@ -143,9 +183,14 @@ def calculate_metrics(scores, temp=1.0):
     entropy = -np.sum(probs * np.log(probs + 1e-9))
     h_norm = entropy / np.log(len(scores))
 
-    # 2. Confidence
+    # 2. Confidence：标准差归一化后的 sigmoid
     delta_s = scores[0] - scores[1]
-    conf = 1 / (1 + np.exp(-delta_s)) # Sigmoid
+    std_score = np.std(scores)
+    if std_score > 1e-9:
+        delta_s_norm = delta_s / std_score
+    else:
+        delta_s_norm = 0.0
+    conf = 1 / (1 + np.exp(-delta_s_norm))
 
     return conf, h_norm
 

@@ -13,11 +13,11 @@ def parse_args():
                         help='Path to BGE encoder model')
     parser.add_argument('--reranker_model', type=str, default='BAAI/bge-reranker-v2-m3',
                         help='Path to reranker model')
-    parser.add_argument('--llm', type=str, default='deepseek-chat',
+    parser.add_argument('--llm', type=str, default='deepseek-v3.2:stable',
                         help='LLM model')
-    parser.add_argument('--api_key', type=str, default=os.getenv('DEEPSEEK_API_KEY'),
+    parser.add_argument('--api_key', type=str, default=os.getenv('VECTOR_API_KEY'),
                         help='API key for llm')
-    parser.add_argument('--base_url', type=str, default='https://api.deepseek.com',
+    parser.add_argument('--base_url', type=str, default='https://api.vectorengine.ai/v1',
                         help='Base URL for llm API')
 
     # Data settings
@@ -63,6 +63,12 @@ def parse_args():
                         help='Threshold of entropy.')
     parser.add_argument('--temp', type=float, default=1.0,
                         help='Temperature of faiss entropy.')
+
+    # Ablation experiment
+    parser.add_argument('--ablation', type=str, default='none',
+                        choices=['none', 'no_selector_cosine', 'no_selector_single',
+                                 'no_bridge_reranker', 'no_gate_conf_only', 'no_gate_entropy_only'],
+                        help='Ablation experiment type')
 
     # Other parameters
     parser.add_argument('--sample', type=int, default=500,

@@ -65,15 +65,16 @@ class Retrieval_BGE:
         quantizer = faiss.IndexFlatIP(self.embedding_size)
         index = faiss.IndexIVFFlat(quantizer, self.embedding_size, n_clusters, faiss.METRIC_INNER_PRODUCT)
         index.nprobe = nprobe
-        if self.device == 'cuda':
+        if 'cuda' in self.device:
+            gpu_id = int(self.device.split(':')[-1]) if ':' in self.device else 0
             ngpu = 1
             resources = [faiss.StandardGpuResources() for _ in range(ngpu)]
             vres = faiss.GpuResourcesVector()
             vdev = faiss.Int32Vector()
             for i, res in zip(range(ngpu), resources):
-                vdev.push_back(i)
+                vdev.push_back(gpu_id + i)
                 vres.push_back(res)
-            index_gpu = faiss.index_cpu_to_gpu_multiple(vres, vdev, index)          
+            index_gpu = faiss.index_cpu_to_gpu_multiple(vres, vdev, index)
             return index_gpu
         else:
             return index
