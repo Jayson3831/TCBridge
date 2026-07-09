@@ -159,6 +159,9 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
     # 选择最佳子问题变体
     dec_questions = deepcopy(dec_response)
     for sub_decq in dec_questions:
+        if not isinstance(sub_decq, dict):
+            print(colored(f"Unexpected subquestion type: {type(sub_decq).__name__}, skipping", "red"))
+            continue
         variants = sub_decq.get('variants', [])
         if len(variants) != 3:
             print(colored(f"Expected 3 variants for subquestion: {sub_decq.get('subq_idx')}", "red"))

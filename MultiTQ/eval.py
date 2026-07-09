@@ -48,99 +48,111 @@ def eval_hit(prediction, answers):
 
 def evaluate(result_file, error_file, eval_log_path, total_tokens=None):
     print(colored("Evaluating Results...", "green"))
-    
+
     with open(result_file, 'r') as f:
         results = json.load(f)
-        
-    error_results = []
-    hit_list = []
-    hit_by_answer_type = defaultdict(lambda: {"hit": 0, "total": 0})
-    hit_by_qlabel = defaultdict(lambda: {"hit": 0, "total": 0})
-    hit_by_equal = defaultdict(lambda: {"hit": 0, "total": 0})
-    hit_by_before_after = defaultdict(lambda: {"hit": 0, "total": 0})
-    hit_by_equal_multi = defaultdict(lambda: {"hit": 0, "total": 0})
+
+    error_results_at1 = []
+    hit_at1_list = []
+    hit_at10_list = []
+    hit_by_answer_type_at1 = defaultdict(lambda: {"hit": 0, "total": 0})
+    hit_by_answer_type_at10 = defaultdict(lambda: {"hit": 0, "total": 0})
+    hit_by_qlabel_at1 = defaultdict(lambda: {"hit": 0, "total": 0})
+    hit_by_qlabel_at10 = defaultdict(lambda: {"hit": 0, "total": 0})
+    hit_by_equal_at1 = defaultdict(lambda: {"hit": 0, "total": 0})
+    hit_by_equal_at10 = defaultdict(lambda: {"hit": 0, "total": 0})
+    hit_by_before_after_at1 = defaultdict(lambda: {"hit": 0, "total": 0})
+    hit_by_before_after_at10 = defaultdict(lambda: {"hit": 0, "total": 0})
+    hit_by_equal_multi_at1 = defaultdict(lambda: {"hit": 0, "total": 0})
+    hit_by_equal_multi_at10 = defaultdict(lambda: {"hit": 0, "total": 0})
     print(len(results))
 
     for result in results:
         predictions = result["inference"]["answers"]
-        topk_preds = predictions[:args.hit_k]
-
         gold = result["gold_answers"]
         qlabel = result["qlabel"]
         qtype = result["qtype"]
         answer_type = result["answer_type"]
         time_level = result["time_level"]
-        hit = eval_hit(topk_preds, gold)
 
-        if hit == 0:
-            error_results.append(result)
+        # Hit@1 和 Hit@10 同时计算
+        hit1 = eval_hit(predictions[:1], gold)
+        hit10 = eval_hit(predictions[:10], gold)
 
-        hit_list.append(hit)
-        hit_by_answer_type[answer_type]["hit"] += hit
-        hit_by_answer_type[answer_type]["total"] += 1
-        hit_by_qlabel[qlabel]["hit"] += hit
-        hit_by_qlabel[qlabel]["total"] += 1
+        if hit1 == 0:
+            error_results_at1.append(result)
+
+        hit_at1_list.append(hit1)
+        hit_at10_list.append(hit10)
+
+        hit_by_answer_type_at1[answer_type]["hit"] += hit1
+        hit_by_answer_type_at1[answer_type]["total"] += 1
+        hit_by_answer_type_at10[answer_type]["hit"] += hit10
+        hit_by_answer_type_at10[answer_type]["total"] += 1
+
+        hit_by_qlabel_at1[qlabel]["hit"] += hit1
+        hit_by_qlabel_at1[qlabel]["total"] += 1
+        hit_by_qlabel_at10[qlabel]["hit"] += hit10
+        hit_by_qlabel_at10[qlabel]["total"] += 1
+
         if qtype == "equal":
-            hit_by_equal[time_level]["hit"] += hit
-            hit_by_equal[time_level]["total"] += 1
+            hit_by_equal_at1[time_level]["hit"] += hit1
+            hit_by_equal_at1[time_level]["total"] += 1
+            hit_by_equal_at10[time_level]["hit"] += hit10
+            hit_by_equal_at10[time_level]["total"] += 1
         elif qtype == "before_after":
-            hit_by_before_after[time_level]["hit"] += hit
-            hit_by_before_after[time_level]["total"] += 1
+            hit_by_before_after_at1[time_level]["hit"] += hit1
+            hit_by_before_after_at1[time_level]["total"] += 1
+            hit_by_before_after_at10[time_level]["hit"] += hit10
+            hit_by_before_after_at10[time_level]["total"] += 1
         elif qtype == "equal_multi":
-            hit_by_equal_multi[time_level]["hit"] += hit
-            hit_by_equal_multi[time_level]["total"] += 1
-    print(f"Overall Hit: {sum(hit_list) * 100 / len(hit_list):.2f}% ({sum(hit_list)}/{len(hit_list)})")
-    print("Hit by Answer Type:")
-    for atype, stats in hit_by_answer_type.items():
-        hit, total = stats["hit"], stats["total"]
-        acc = hit * 100 / total if total > 0 else 0.0
-        stats['acc'] = f"{acc:.2f}%"
-        print(f"  {atype}: {acc:.2f}% ({hit}/{total})")
+            hit_by_equal_multi_at1[time_level]["hit"] += hit1
+            hit_by_equal_multi_at1[time_level]["total"] += 1
+            hit_by_equal_multi_at10[time_level]["hit"] += hit10
+            hit_by_equal_multi_at10[time_level]["total"] += 1
 
-    # 输出按 qlabel 分类的命中率
-    print("Hit by QLabel:")
-    for qlabel, stats in hit_by_qlabel.items():
-        hit, total = stats["hit"], stats["total"]
-        acc = hit * 100 / total if total > 0 else 0.0
-        stats['acc'] = f"{acc:.2f}%"
-        print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
+    def print_section(title, at1_dict, at10_dict):
+        print(title)
+        for key in at1_dict:
+            h1, t1 = at1_dict[key]["hit"], at1_dict[key]["total"]
+            h10, t10 = at10_dict[key]["hit"], at10_dict[key]["total"]
+            acc1 = h1 * 100 / t1 if t1 > 0 else 0.0
+            acc10 = h10 * 100 / t10 if t10 > 0 else 0.0
+            at1_dict[key]['acc'] = f"{acc1:.2f}%"
+            at10_dict[key]['acc'] = f"{acc10:.2f}%"
+            print(f"  {key}: Hit@1={acc1:.2f}% ({h1}/{t1})  Hit@10={acc10:.2f}% ({h10}/{t10})")
 
-    print("Hit by Equal:")
-    for qlabel, stats in hit_by_equal.items():
-        hit, total = stats["hit"], stats["total"]
-        acc = hit * 100 / total if total > 0 else 0.0
-        stats['acc'] = f"{acc:.2f}%"
-        print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
+    overall_hit1 = sum(hit_at1_list) * 100 / len(hit_at1_list)
+    overall_hit10 = sum(hit_at10_list) * 100 / len(hit_at10_list)
+    print(f"Overall: Hit@1={overall_hit1:.2f}% ({sum(hit_at1_list)}/{len(hit_at1_list)})  Hit@10={overall_hit10:.2f}% ({sum(hit_at10_list)}/{len(hit_at10_list)})")
 
-    print("Hit by Before_after:")
-    for qlabel, stats in hit_by_before_after.items():
-        hit, total = stats["hit"], stats["total"]
-        acc = hit * 100 / total if total > 0 else 0.0
-        stats['acc'] = f"{acc:.2f}%"
-        print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
-
-    print("Hit by Equal_Multi:")
-    for qlabel, stats in hit_by_equal_multi.items():
-        hit, total = stats["hit"], stats["total"]
-        acc = hit * 100 / total if total > 0 else 0.0
-        stats['acc'] = f"{acc:.2f}%"
-        print(f"  {qlabel}: {acc:.2f}% ({hit}/{total})")
+    print_section("By Answer Type:", hit_by_answer_type_at1, hit_by_answer_type_at10)
+    print_section("By QLabel:", hit_by_qlabel_at1, hit_by_qlabel_at10)
+    print_section("By Equal:", hit_by_equal_at1, hit_by_equal_at10)
+    print_section("By Before_after:", hit_by_before_after_at1, hit_by_before_after_at10)
+    print_section("By Equal_Multi:", hit_by_equal_multi_at1, hit_by_equal_multi_at10)
 
     with open(error_file, 'w') as ef:
-        json.dump(error_results, ef, ensure_ascii=False, indent=4)
+        json.dump(error_results_at1, ef, ensure_ascii=False, indent=4)
 
     # 构建结果字典
     eval_result = {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "config": {k: getattr(args, k) for k in [
-            "top_k", "conf_threshold", "entropy_threshold", "hit_k", "llm", "dataset", "sample"
+            "top_k", "conf_threshold", "entropy_threshold", "llm", "dataset", "sample"
         ]},
-        "overall_hit": f"{sum(hit_list) * 100 / len(hit_list):.2f}%",
-        "hit_by_answer_type": dict(hit_by_answer_type),
-        "hit_by_qlabel": dict(hit_by_qlabel),
-        "hit_by_equal": dict(hit_by_equal),
-        "hit_by_before_after": dict(hit_by_before_after),
-        "hit_by_equal_multi": dict(hit_by_equal_multi),
+        "overall_hit_at1": f"{overall_hit1:.2f}%",
+        "overall_hit_at10": f"{overall_hit10:.2f}%",
+        "hit_by_answer_type_at1": dict(hit_by_answer_type_at1),
+        "hit_by_answer_type_at10": dict(hit_by_answer_type_at10),
+        "hit_by_qlabel_at1": dict(hit_by_qlabel_at1),
+        "hit_by_qlabel_at10": dict(hit_by_qlabel_at10),
+        "hit_by_equal_at1": dict(hit_by_equal_at1),
+        "hit_by_equal_at10": dict(hit_by_equal_at10),
+        "hit_by_before_after_at1": dict(hit_by_before_after_at1),
+        "hit_by_before_after_at10": dict(hit_by_before_after_at10),
+        "hit_by_equal_multi_at1": dict(hit_by_equal_multi_at1),
+        "hit_by_equal_multi_at10": dict(hit_by_equal_multi_at10),
         "total_tokens": dict(total_tokens) if total_tokens else None
     }
 
