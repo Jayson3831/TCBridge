@@ -52,6 +52,15 @@ def parse_args():
     parser.add_argument('--nprobe', type=int, default=10,
                         help='Number of clusters to probe during FAISS search')
 
+    # bridge module
+    parser.add_argument('--bridge_type', type=str, default='threshold',
+                        choices=['threshold', 'permutation'],
+                        help='Bridge 门控类型：threshold=原置信度+熵级联门控, permutation=置换检验门控')
+    parser.add_argument('--perm_alpha', type=float, default=0.01,
+                        help='置换检验显著性水平（仅 bridge_type=permutation 时生效）')
+    parser.add_argument('--perm_n', type=int, default=100,
+                        help='置换检验置换次数（仅 bridge_type=permutation 时生效）')
+
     # hyperparameters
     parser.add_argument('--top_k', type=int, default=60,
                         help='Number of top results to retrieve')

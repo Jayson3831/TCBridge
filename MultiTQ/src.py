@@ -15,6 +15,7 @@ import torch.nn.functional as F
 import torch.nn as nn
 from config import args
 from utils import *
+from utils import bridge_module_perm
 import prompts
 from Retriever import Retrieval_BGE
 from eval import evaluate
@@ -190,7 +191,10 @@ async def process_single_question(data, selector, retriever, total_tokens, reran
         # 消融实验2：移除 bridge 模块
         ref_tokens = re.findall(r"#\d+", cur_question)
         if ref_tokens:
-            cur_question = await bridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock, reranker_stats)
+            if args.bridge_type == 'permutation':
+                cur_question = await bridge_module_perm(ref_tokens, cur_question, dec_questions, retriever, reranker_lock, reranker_stats)
+            else:
+                cur_question = await bridge_module(ref_tokens, cur_question, dec_questions, retriever, reranker_lock, reranker_stats)
             decq['best_subq'] = cur_question
 
         # 子问题事件检索

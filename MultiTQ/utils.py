@@ -194,6 +194,79 @@ def calculate_metrics(scores, temp=1.0):
 
     return conf, h_norm
 
+def should_rerank(scores, n_perm=100, alpha=0.05):
+    """
+    置换检验（Permutation Test）：判断 FAISS 检索的 top-1 是否统计显著地优于其余候选。
+    - 若 top-1 显著领先（p < alpha）→ 检索质量已够好 → 不需要 rerank → 返回 False
+    - 若 top-1 不显著 → 检索结果不够可靠 → 需要 rerank → 返回 True
+
+    Args:
+        scores: FAISS 返回的相似度分数列表（已按降序排列）
+        n_perm: 置换次数（越大 p-value 估计越准，100 已够用）
+        alpha: 显著性水平（默认 0.01）
+
+    Returns:
+        need_rerank: bool
+    """
+    scores = np.array(scores)
+    if len(scores) < 2:
+        return False
+
+    observed_gap = scores[0] - np.mean(scores[1:])
+
+    # 批量置换：对 scores 做 n_perm 次随机排列，计算每次的 gap
+    permuted = np.array([np.random.permutation(scores) for _ in range(n_perm)])
+    perm_gaps = permuted[:, 0] - permuted[:, 1:].mean(axis=1)
+
+    # p-value: 置换中 gap >= observed_gap 的比例
+    # p-value 小 → top-1 显著领先 → 不需要 rerank
+    p_value = np.mean(perm_gaps >= observed_gap)
+
+    return p_value >= alpha
+
+
+async def bridge_module_perm(ref_tokens, curq, allq, retriever, reranker_lock, reranker_stats=None):
+    """
+    基于置换检验的自适应重排序门控（Permutation-based Adaptive Reranking Gate）。
+    用统计显著性检验替代固定置信度/熵阈值，自动判断是否需要调用 reranker。
+    """
+    for ref_token in ref_tokens:
+        ref_idx = int(ref_token[1:])
+        if ref_idx < 0 or ref_idx > len(allq):
+            continue
+
+        ref_subq = next((subq for subq in allq if subq['subq_idx'] == ref_idx), allq[ref_idx - 1])
+        refq = ref_subq['best_subq']
+        ref_facts = ref_subq['facts']
+        ref_scores = ref_subq['similarities']
+
+        if ref_scores and len(ref_scores) > 1:
+            if reranker_stats is not None:
+                reranker_stats['total_ops'] += 1
+
+            if args.ablation == 'no_bridge_reranker':
+                top_facts = ref_facts
+                top_scores = ref_scores
+            else:
+                if should_rerank(ref_scores, n_perm=args.perm_n, alpha=args.perm_alpha):
+                    async with reranker_lock:
+                        reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
+                    top_facts = reranked['facts']
+                    top_scores = reranked['scores']
+                    if reranker_stats is not None:
+                        reranker_stats['reranker_calls'] += 1
+                else:
+                    top_facts = ref_facts
+                    top_scores = ref_scores
+
+        # 语义重构（替换占位符）
+        relevant_date = parse_date_string(top_facts[0]) if ref_facts else None
+        if relevant_date:
+            curq = curq.replace(ref_token, relevant_date)
+
+    return curq
+
+
 async def tc_rerank(question, events, time_constraint):
     """
     time_constraint: 'before', 'after', or None
