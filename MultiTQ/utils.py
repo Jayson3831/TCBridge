@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import asyncio
 import numpy as np
 from pydantic import BaseModel
@@ -129,24 +130,28 @@ async def bridge_module(ref_tokens, curq, allq, retriever, reranker_lock, rerank
                     top_facts = ref_facts
                     top_scores = ref_scores
                 else:
+                    t0 = time.time()
                     async with reranker_lock:
                         reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
-                    top_facts = reranked['facts']
-                    top_scores = reranked['scores']
                     if reranker_stats is not None:
                         reranker_stats['reranker_calls'] += 1
+                        reranker_stats['reranker_elapsed'] += time.time() - t0
+                    top_facts = reranked['facts']
+                    top_scores = reranked['scores']
             elif args.ablation == 'no_gate_entropy_only':
                 # 消融 2c-2：仅用熵门控
                 if f_entropy < args.entropy_threshold:
                     top_facts = ref_facts
                     top_scores = ref_scores
                 else:
+                    t0 = time.time()
                     async with reranker_lock:
                         reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
-                    top_facts = reranked['facts']
-                    top_scores = reranked['scores']
                     if reranker_stats is not None:
                         reranker_stats['reranker_calls'] += 1
+                        reranker_stats['reranker_elapsed'] += time.time() - t0
+                    top_facts = reranked['facts']
+                    top_scores = reranked['scores']
             else:
                 # 默认：级联门控
                 # Step 1: 置信度判断 — top-1 是否明显占主导
@@ -158,12 +163,14 @@ async def bridge_module(ref_tokens, curq, allq, retriever, reranker_lock, rerank
                     top_facts = ref_facts
                     top_scores = ref_scores
                 else:
+                    t0 = time.time()
                     async with reranker_lock:
                         reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
-                    top_facts = reranked['facts']
-                    top_scores = reranked['scores']
                     if reranker_stats is not None:
                         reranker_stats['reranker_calls'] += 1
+                        reranker_stats['reranker_elapsed'] += time.time() - t0
+                    top_facts = reranked['facts']
+                    top_scores = reranked['scores']
 
         # 语义重构（替换占位符）
         relevant_date = parse_date_string(top_facts[0]) if ref_facts else None
@@ -247,14 +254,25 @@ async def bridge_module_perm(ref_tokens, curq, allq, retriever, reranker_lock, r
             if args.ablation == 'no_bridge_reranker':
                 top_facts = ref_facts
                 top_scores = ref_scores
+            elif args.ablation == 'always_rerank':
+                t0 = time.time()
+                async with reranker_lock:
+                    reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
+                if reranker_stats is not None:
+                    reranker_stats['reranker_calls'] += 1
+                    reranker_stats['reranker_elapsed'] += time.time() - t0
+                top_facts = reranked['facts']
+                top_scores = reranked['scores']
             else:
                 if should_rerank(ref_scores, n_perm=args.perm_n, alpha=args.perm_alpha):
+                    t0 = time.time()
                     async with reranker_lock:
                         reranked = await retriever.rerank_facts(refq, ref_facts, rerank_top_k=args.rerank_top_k)
-                    top_facts = reranked['facts']
-                    top_scores = reranked['scores']
                     if reranker_stats is not None:
                         reranker_stats['reranker_calls'] += 1
+                        reranker_stats['reranker_elapsed'] += time.time() - t0
+                    top_facts = reranked['facts']
+                    top_scores = reranked['scores']
                 else:
                     top_facts = ref_facts
                     top_scores = ref_scores

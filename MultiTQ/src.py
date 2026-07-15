@@ -286,10 +286,11 @@ async def main():
         "total": 0
     }
 
-    # 统计 reranker 调用次数
+    # 统计 reranker 调用次数和耗时
     reranker_stats = {
         "total_ops": 0,
-        "reranker_calls": 0
+        "reranker_calls": 0,
+        "reranker_elapsed": 0.0
     }
 
     # 并发限制
@@ -316,7 +317,9 @@ async def main():
     print(f"Total tokens used: {total_tokens}")
     if reranker_stats['total_ops'] > 0:
         reranker_pct = reranker_stats['reranker_calls'] / reranker_stats['total_ops'] * 100
+        avg_latency = reranker_stats['reranker_elapsed'] / reranker_stats['reranker_calls'] if reranker_stats['reranker_calls'] > 0 else 0
         print(f"Reranker called {reranker_stats['reranker_calls']}/{reranker_stats['total_ops']} times ({reranker_pct:.1f}%)")
+        print(f"Reranker total latency: {reranker_stats['reranker_elapsed']:.2f}s, avg per call: {avg_latency*1000:.1f}ms")
     else:
         print("Reranker: no opportunities (no bridge operations with valid scores)")
     print("\n===============================================\n")
