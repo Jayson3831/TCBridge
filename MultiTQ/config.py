@@ -53,7 +53,7 @@ def parse_args():
                         help='Number of clusters to probe during FAISS search')
 
     # bridge module
-    parser.add_argument('--bridge_type', type=str, default='threshold',
+    parser.add_argument('--bridge_type', type=str, default='permutation',
                         choices=['threshold', 'permutation'],
                         help='Bridge 门控类型：threshold=原置信度+熵级联门控, permutation=置换检验门控')
     parser.add_argument('--perm_alpha', type=float, default=0.03,

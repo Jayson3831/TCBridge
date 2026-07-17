@@ -297,7 +297,8 @@ async def main():
     total_tokens = {
         "completion": 0,
         "prompt": 0,
-        "total": 0
+        "total": 0,
+        "calls": 0
     }
 
     # 统计 reranker 调用次数和耗时

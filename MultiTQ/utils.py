@@ -51,6 +51,7 @@ async def llm_invoke(messages: List[Dict], total_tokens: Dict[str, int], max_ret
             total_tokens['completion'] += completions.usage.completion_tokens
             total_tokens['prompt'] += completions.usage.prompt_tokens
             total_tokens['total'] += completions.usage.total_tokens
+            total_tokens['calls'] += 1
 
             return response
 
