@@ -132,6 +132,15 @@ class BestSubquestionSelector:
 
 async def process_single_question(data, selector, retriever, total_tokens, reranker_lock, reranker_stats):
     """处理单个问题的完整流程"""
+    try:
+        return await _process_single_question_impl(data, selector, retriever, total_tokens, reranker_lock, reranker_stats)
+    except Exception as e:
+        print(colored(f"Error processing question: {data.get('question', '?')[:80]}... → {e}", "red"))
+        return None
+
+
+async def _process_single_question_impl(data, selector, retriever, total_tokens, reranker_lock, reranker_stats):
+    """process_single_question 的实际实现（被 try/except 包裹）"""
     question = data['question']
     qtype = data['qtype']
     answer_type = data['answer_type']
@@ -274,10 +283,15 @@ async def main():
     else:
         with open(f'../Datasets/{args.dataset}/questions/{args.dataset_type}.json', 'r') as file:
             load_data = json.load(file)
+        if args.sample >= len(load_data):
+            # sample 大于等于全量，直接使用原始数据，不抽样
+            datas = load_data
+            print(f"Using full dataset: {len(datas)} samples (no sampling)")
+        else:
             random.seed(42)
             datas = random.sample(load_data, args.sample)
-        with open(sample_path, 'w') as file:
-            json.dump(datas, file, indent=4)
+            with open(sample_path, 'w') as file:
+                json.dump(datas, file, indent=4)
 
     # 统计 tokens 用量（使用可变对象在协程间共享）
     total_tokens = {
@@ -293,22 +307,62 @@ async def main():
         "reranker_elapsed": 0.0
     }
 
+    # 断点续传：加载已完成的 checkpoint
+    output_path, error_path, result_path = get_result_paths(
+        args.dataset, args.sample,
+        args.suffix, top_k=args.top_k, rerank_top_k=args.rerank_top_k,
+    )
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    os.makedirs(os.path.dirname(error_path), exist_ok=True)
+    os.makedirs(os.path.dirname(result_path), exist_ok=True)
+
+    checkpoint_path = output_path.replace('.json', '_checkpoint.json')
+    done_questions = set()
+    checkpoint_results = []
+    if os.path.exists(checkpoint_path):
+        with open(checkpoint_path, 'r') as f:
+            checkpoint_results = json.load(f)
+        done_questions = {r['question'] for r in checkpoint_results}
+        print(colored(f"Resuming from checkpoint: {len(done_questions)}/{len(datas)} questions already done.", "yellow"))
+
+    # 过滤掉已完成的问题
+    remaining_datas = [d for d in datas if d['question'] not in done_questions]
+    if not remaining_datas:
+        print(colored("All questions already processed, skipping.", "yellow"))
+    else:
+        print(f"Remaining questions to process: {len(remaining_datas)}")
+
     # 并发限制
     concurrent_limit = getattr(args, 'concurrent_limit', 8)
     semaphore = asyncio.Semaphore(concurrent_limit)
+    checkpoint_lock = asyncio.Lock()
+    completed_count = [0]  # 可变计数器
 
     async def process_with_limit(data):
         async with semaphore:
             result = await process_single_question(data, selector, retriever, total_tokens, reranker_lock, reranker_stats)
-            await asyncio.sleep(1)
+            # 增量保存 checkpoint
+            if result is not None:
+                async with checkpoint_lock:
+                    checkpoint_results.append(result)
+                    completed_count[0] += 1
+                    if completed_count[0] % 500 == 0:
+                        with open(checkpoint_path, 'w') as f:
+                            json.dump(checkpoint_results, f, ensure_ascii=False)
+                        print(colored(f"  [checkpoint] saved {completed_count[0]} results", "cyan"))
             return result
 
     # 并行处理所有问题
-    tasks = [process_with_limit(data) for data in datas]
-    results_raw = await tqdm_asyncio.gather(*tasks, desc="Processing questions concurrently")
+    if remaining_datas:
+        tasks = [process_with_limit(data) for data in remaining_datas]
+        results_raw = await tqdm_asyncio.gather(*tasks, desc="Processing questions concurrently")
 
-    # 过滤掉失败的结果（None）
-    results = [r for r in results_raw if r is not None]
+    # 最终 checkpoint 保存
+    with open(checkpoint_path, 'w') as f:
+        json.dump(checkpoint_results, f, ensure_ascii=False)
+
+    # 汇总结果
+    results = checkpoint_results
     failed_dec = len(datas) - len(results)
 
     # 保存所有结果
