@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Experiment outputs
+**/outputs/
+**/errors/
+**/results/
+**/outputs-02/
+**/errors-02/
+**/results-02/
+**/experiment_logs/
+**/docs/
+
+# Checkpoints
+*_checkpoint.json
+**/checkpoint*.json
+
+# FAISS index
+**/index/
+
+# Model weights
+*.pth
+
+# Datasets (large)
+Datasets/
+
+# Analysis scripts
+MultiTQ/analyze_results.py
+MultiTQ/deep_analysis.py
+MultiTQ/detailed_error_analysis.py
+MultiTQ/error_cases.json
+MultiTQ/error_cases_summary.py
+MultiTQ/check_entropy_range.py
+MultiTQ/ANALYSIS_REPORT.md
+MultiTQ/run_conf_search.sh
+MultiTQ/run_entropy_search.sh
+MultiTQ/run_temp_search.sh
+MultiTQ/run_temp_verify.sh
+MultiTQ/run_topk_search.sh
+
+# Temp scripts
+WORKFLOW.md
+test_llm.py
+
+# Environment
+.env
